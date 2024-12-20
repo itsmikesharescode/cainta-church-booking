@@ -34,8 +34,123 @@ export type Database = {
   }
   public: {
     Tables: {
+      cert_requests_tb: {
+        Row: {
+          church_id: number
+          created_at: string
+          date_available: string | null
+          id: number
+          name: string
+          price: number
+          reference_id: string
+          time_available_end: string | null
+          time_available_start: string | null
+          user_id: string
+        }
+        Insert: {
+          church_id: number
+          created_at?: string
+          date_available?: string | null
+          id?: number
+          name: string
+          price: number
+          reference_id: string
+          time_available_end?: string | null
+          time_available_start?: string | null
+          user_id: string
+        }
+        Update: {
+          church_id?: number
+          created_at?: string
+          date_available?: string | null
+          id?: number
+          name?: string
+          price?: number
+          reference_id?: string
+          time_available_end?: string | null
+          time_available_start?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cert_requests_tb_church_id_fkey"
+            columns: ["church_id"]
+            isOneToOne: false
+            referencedRelation: "churches_tb"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cert_requests_tb_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_tb"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      churches_tb: {
+        Row: {
+          address: string
+          close_time: string
+          created_at: string
+          events: Json
+          id: number
+          name: string
+          open_time: string
+          photo_link: string
+        }
+        Insert: {
+          address: string
+          close_time: string
+          created_at?: string
+          events: Json
+          id?: number
+          name: string
+          open_time: string
+          photo_link: string
+        }
+        Update: {
+          address?: string
+          close_time?: string
+          created_at?: string
+          events?: Json
+          id?: number
+          name?: string
+          open_time?: string
+          photo_link?: string
+        }
+        Relationships: []
+      }
+      finished_payments_tb: {
+        Row: {
+          church_id: string
+          created_at: string
+          id: number
+          reservation_id: string
+          user_id: string
+          xendit_callback: Json
+        }
+        Insert: {
+          church_id?: string
+          created_at?: string
+          id?: number
+          reservation_id?: string
+          user_id?: string
+          xendit_callback: Json
+        }
+        Update: {
+          church_id?: string
+          created_at?: string
+          id?: number
+          reservation_id?: string
+          user_id?: string
+          xendit_callback?: Json
+        }
+        Relationships: []
+      }
       reservations_tb: {
         Row: {
+          church_id: number
           created_at: string
           date: string
           event_name: string
@@ -49,6 +164,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          church_id: number
           created_at?: string
           date: string
           event_name: string
@@ -62,6 +178,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          church_id?: number
           created_at?: string
           date?: string
           event_name?: string
@@ -75,6 +192,13 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "reservations_tb_church_id_fkey"
+            columns: ["church_id"]
+            isOneToOne: false
+            referencedRelation: "churches_tb"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "reservations_tb_user_id_fkey"
             columns: ["user_id"]
