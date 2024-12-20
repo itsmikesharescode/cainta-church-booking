@@ -20,11 +20,11 @@
         </div>
 
         <div class="flex items-center justify-end gap-2.5">
-          <Button size="sm">
+          <Button href="/reserve?id=123456" size="sm">
             <CalendarCheck />
             Reveserve Now!
           </Button>
-          <Button size="sm">
+          <Button href="/request?id=123456" size="sm">
             <FileCheck2 />
             Request Certificate
           </Button>

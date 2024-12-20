@@ -68,12 +68,16 @@ const authGuard: Handle = async ({ event, resolve }) => {
     .map((item) => item.url)
     .includes(path);
 
-  if (user && matchingUserRoutes) {
+  const matchingRequestReserve = ['/reserve', '/request'].includes(path);
+
+  if ((user && matchingUserRoutes) || (user && matchingRequestReserve)) {
     const { role } = user.user_metadata;
     if (role !== 'user') redirect(303, '/admin/dashboard');
   }
 
   if (!user && matchingUserRoutes) redirect(303, '/');
+
+  if (!user && matchingRequestReserve) redirect(303, '/?auth=login');
 
   return resolve(event);
 };
