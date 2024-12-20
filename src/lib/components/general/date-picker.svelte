@@ -7,10 +7,10 @@
   import * as Popover from '$lib/components/ui/popover/index.js';
 
   interface Props {
-    value: string;
+    selected: string;
   }
 
-  let { value = $bindable() }: Props = $props();
+  let { selected = $bindable() }: Props = $props();
 
   const df = new DateFormatter('en-US', {
     dateStyle: 'long'
@@ -18,12 +18,12 @@
 </script>
 
 <!--@component
-  Mike's date picker; it only returns a value in string
+  Mike's date picker; it only returns a selected in string
 
   Example usage:
   ```svelte
   <DatePicker 
-    bind:value={value}
+    bind:selected={value}
   />
   ```
 -->
@@ -35,19 +35,19 @@
         variant="outline"
         class={cn(
           'w-[240px] justify-start text-left font-normal',
-          !value && 'text-muted-foreground'
+          !selected && 'text-muted-foreground'
         )}
         {...props}
       >
         <CalendarIcon />
-        {value ? df.format(new Date(value)) : 'Pick a date'}
+        {selected ? df.format(new Date(selected)) : 'Pick a date'}
       </Button>
     {/snippet}
   </Popover.Trigger>
   <Popover.Content class="w-auto p-0" align="start">
     <Calendar
       onValueChange={(v) => {
-        value = String(v);
+        selected = String(v);
       }}
       type="single"
     />
