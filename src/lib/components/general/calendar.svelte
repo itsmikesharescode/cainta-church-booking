@@ -1,7 +1,6 @@
 <script lang="ts">
   // Import necessary dependencies
   import { browser } from '$app/environment'; // For checking if code is running in browser
-  import { convertTo24Hour, findConflicts } from '$lib'; // Utility functions
   import { Calendar } from '@fullcalendar/core'; // FullCalendar main component
   import dayGridPlugin from '@fullcalendar/daygrid'; // For month/week grid view
   import timeGridPlugin from '@fullcalendar/timegrid'; // For detailed time grid view
@@ -17,7 +16,7 @@
   let calendarEl: HTMLElement;
 
   // Function to transform subject schedules into FullCalendar event format
-  const transformSchedulesToEvents = (subjects: any[]) => {
+  /*  const transformSchedulesToEvents = (subjects: any[]) => {
     const events = [];
     // Map days to their corresponding numeric values (0-6)
     const daysMap: Record<string, number> = {
@@ -65,7 +64,7 @@
       }
     }
     return events;
-  };
+  }; */
 
   // Generate consistent pastel colors based on subject ID
   const generatePastelColor = (seed: string) => {
@@ -93,7 +92,7 @@
       nowIndicator: true,
       slotMinTime: '06:00:00',
       slotMaxTime: '22:00:00',
-      events: transformSchedulesToEvents(subjects || []),
+      /* events: transformSchedulesToEvents(subjects || []), */
       height: 'auto',
       allDayText: '',
       slotDuration: '00:15:00',
@@ -110,7 +109,7 @@
         meridiem: 'short'
       },
       // Custom event rendering for conflicting events
-      eventDidMount: (info) => {
+      eventDidMount: (info: any) => {
         if (info.event.extendedProps.isConflicting) {
           const element = info.el;
           element.style.border = '2px solid red';
@@ -133,11 +132,11 @@
   });
 
   // Reactive declaration to compute schedule conflicts
-  const conflicts = $derived(findConflicts(subjects || []));
+  /* const conflicts = $derived(findConflicts(subjects || [])); */
 </script>
 
 <!-- Display conflict warnings if any conflicts exist -->
-{#if conflicts.length > 0}
+<!-- {#if conflicts.length > 0}
   <div class="mt-4 rounded-md border border-red-200 bg-red-50 p-4">
     <h3 class="mb-2 text-sm font-semibold text-red-800">Schedule Conflicts Detected:</h3>
     <ul class="list-disc pl-5">
@@ -148,7 +147,7 @@
       {/each}
     </ul>
   </div>
-{/if}
+{/if} -->
 
 <!-- Calendar container element -->
 <div bind:this={calendarEl} class="mt-4"></div>
