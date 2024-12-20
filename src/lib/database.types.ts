@@ -157,6 +157,7 @@ export type Database = {
           final_time: string
           id: number
           initial_time: string
+          message: string
           number_of_guest: number
           price: number
           reference_id: string
@@ -171,6 +172,7 @@ export type Database = {
           final_time: string
           id?: number
           initial_time: string
+          message: string
           number_of_guest: number
           price: number
           reference_id: string
@@ -185,6 +187,7 @@ export type Database = {
           final_time?: string
           id?: number
           initial_time?: string
+          message?: string
           number_of_guest?: number
           price?: number
           reference_id?: string

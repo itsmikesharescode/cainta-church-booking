@@ -178,7 +178,8 @@ CREATE TABLE IF NOT EXISTS "public"."reservations_tb" (
     "user_id" "uuid" NOT NULL,
     "status" character varying NOT NULL,
     "price" numeric NOT NULL,
-    "church_id" bigint NOT NULL
+    "church_id" bigint NOT NULL,
+    "message" "text" NOT NULL
 );
 
 
