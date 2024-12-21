@@ -31,9 +31,13 @@
   });
 
   const { form: formData, enhance, submitting } = form;
+
+  $effect(() => {
+    return () => console.log('CLEANED REQ');
+  });
 </script>
 
-<form method="POST" action="?/loginEvent" use:enhance>
+<form method="POST" action="?/requestEvent" use:enhance>
   <Form.Field {form} name="name">
     <Form.Control>
       {#snippet children({ props })}

@@ -22,7 +22,7 @@ export const actions: Actions = {
   },
 
   requestEvent: async ({ locals: { supabase, user }, request }) => {
-    const form = await superValidate(request, zod(reservationSchema));
+    const form = await superValidate(request, zod(requestSchema));
 
     if (!form.valid) return fail(400, { form });
 
