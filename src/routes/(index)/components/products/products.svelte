@@ -24,10 +24,6 @@
             <CalendarCheck />
             Reveserve Now!
           </Button>
-          <Button href="/request?id=123456" size="sm">
-            <FileCheck2 />
-            Request Certificate
-          </Button>
         </div>
       </div>
     </section>

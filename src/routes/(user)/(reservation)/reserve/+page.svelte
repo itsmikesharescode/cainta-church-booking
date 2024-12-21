@@ -1,6 +1,7 @@
 <script lang="ts">
   import ReservationForm from './reservation-form/reservation-form.svelte';
   import Calendar from '$lib/components/general/calendar.svelte';
+  import RequestForm from './request-form/request-form.svelte';
   const { data } = $props();
 </script>
 
@@ -11,5 +12,6 @@
 
   <section>
     <ReservationForm reservationForm={data.reservationForm} />
+    <RequestForm requestForm={data.requestForm} />
   </section>
 </main>
