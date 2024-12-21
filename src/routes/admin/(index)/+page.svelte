@@ -1,5 +1,7 @@
 <script lang="ts">
   import LineChart from './components/charts/line-chart.svelte';
+  import Table from './components/table/components/table.svelte';
+  import { columns } from './components/table/components/columns';
 
   const generateRandomData = (numEntries: number) => {
     const data = [];
@@ -17,8 +19,8 @@
   const sampleData = generateRandomData(100);
 </script>
 
-<main class="container min-h-screen">
-  <div class="grid grid-cols-2">
+<main class="container flex min-h-screen flex-col gap-10 py-10">
+  <section class="grid grid-cols-2">
     <div class="relative max-h-[30dvh]">
       <LineChart title="Reservation this month" data={sampleData} />
     </div>
@@ -26,5 +28,9 @@
     <div class="relative max-h-[30dvh]">
       <LineChart title="Request this month" data={sampleData} />
     </div>
-  </div>
+  </section>
+
+  <section>
+    <Table data={[]} {columns} />
+  </section>
 </main>
