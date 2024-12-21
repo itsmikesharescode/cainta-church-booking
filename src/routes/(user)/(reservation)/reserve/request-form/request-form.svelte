@@ -47,7 +47,7 @@
           searchPlaceholder="Search something..."
           emptySeachMsg="No item found"
           hasLabel={true}
-          contentStyle="w-[300px] p-0"
+          contentStyle="w-[300px] sm:w-[450px] p-0"
           bind:selected={$formData.name}
           selections={[
             { id: '1', label: 'Svelte is fun', value: 'svelte' },

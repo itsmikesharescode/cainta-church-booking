@@ -21,7 +21,7 @@
 </script>
 
 <main class="container grid min-h-screen gap-10 py-10 md:grid-cols-[3fr,2fr]">
-  <section class="">
+  <section class="overflow-auto">
     <Calendar reservations={[]} />
   </section>
 

@@ -18,7 +18,7 @@ export const actions: Actions = {
 
     if (!form.valid) return fail(400, { form });
 
-    console.log(form.data);
+    console.log(`${supabase}, ${user}`);
   },
 
   requestEvent: async ({ locals: { supabase, user }, request }) => {
@@ -26,6 +26,6 @@ export const actions: Actions = {
 
     if (!form.valid) return fail(400, { form });
 
-    console.log(form.data);
+    console.log(`${supabase}, ${user}`);
   }
 };

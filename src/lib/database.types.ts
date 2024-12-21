@@ -137,26 +137,29 @@ export type Database = {
       }
       finished_payments_tb: {
         Row: {
+          cert_request_id: string | null
           church_id: string
           created_at: string
           id: number
-          reservation_id: string
+          reservation_id: string | null
           user_id: string
           xendit_callback: Json
         }
         Insert: {
-          church_id?: string
+          cert_request_id?: string | null
+          church_id: string
           created_at?: string
           id?: number
-          reservation_id?: string
-          user_id?: string
+          reservation_id?: string | null
+          user_id: string
           xendit_callback: Json
         }
         Update: {
+          cert_request_id?: string | null
           church_id?: string
           created_at?: string
           id?: number
-          reservation_id?: string
+          reservation_id?: string | null
           user_id?: string
           xendit_callback?: Json
         }

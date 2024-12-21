@@ -12,6 +12,10 @@ export const userRoutes = [
     name: 'Cert Requests'
   },
   {
+    url: '/payments',
+    name: 'Payment Records'
+  },
+  {
     url: '/manage-account',
     name: 'Manage Account'
   }
