@@ -3,6 +3,8 @@
   import Table from './components/table/components/table.svelte';
   import { columns } from './components/table/components/columns';
 
+  const { data } = $props();
+
   const generateRandomData = (numEntries: number) => {
     const data = [];
     const startDate = new Date('2024-10-22');
@@ -31,6 +33,6 @@
   </section>
 
   <section>
-    <Table data={[]} {columns} />
+    <Table data={[]} {columns} createChurchForm={data.createChurchForm} />
   </section>
 </main>
