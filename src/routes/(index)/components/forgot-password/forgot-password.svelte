@@ -54,7 +54,7 @@
     <Dialog.Header>
       <Dialog.Title>Forgot Password</Dialog.Title>
       <Dialog.Description>
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusantium, dolores.
+        Please enter your email address to receive a password reset link.
       </Dialog.Description>
     </Dialog.Header>
 

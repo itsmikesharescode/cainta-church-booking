@@ -69,7 +69,7 @@ const authGuard: Handle = async ({ event, resolve }) => {
     .map((item) => item.url)
     .includes(path);
 
-  const matchingRequestReserve = ['/reserve', '/request'].includes(path);
+  const matchingRequestReserve = ['/reserve'].includes(path);
 
   if ((user && matchingUserRoutes) || (user && matchingRequestReserve)) {
     const { role } = user.user_metadata;
