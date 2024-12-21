@@ -9,6 +9,7 @@ declare global {
       safeGetSession: () => Promise<{ session: Session | null; user: User | null }>;
       session: Session | null;
       user: User | null;
+      transformImage: (file: File, options: ImageProcessOptions) => Promise<File | null>;
     }
     interface PageData {
       session: Session | null;
