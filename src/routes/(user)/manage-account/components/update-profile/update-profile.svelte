@@ -37,6 +37,10 @@
 </script>
 
 <div class="flex max-w-lg flex-col gap-2.5">
+  <span class="text-sm text-muted-foreground">
+    If you already have an existing profile photo and you updated it, it will appear in 3 minutes
+    due to caching.
+  </span>
   <form method="POST" enctype="multipart/form-data" action="?/updateProfileEvent" use:enhance>
     <Form.Field {form} name="image">
       <Form.Control>

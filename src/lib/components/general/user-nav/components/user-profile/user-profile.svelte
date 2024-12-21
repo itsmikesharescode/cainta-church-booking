@@ -3,13 +3,17 @@
   import * as Popover from '$lib/components/ui/popover/index.js';
   import Logout from '$lib/components/general/logout.svelte';
   import { page } from '$app/state';
+  import { PUBLIC_SUPABASE_STORAGE } from '$env/static/public';
 </script>
 
 <Popover.Root>
   <Popover.Trigger class="group flex items-center gap-2.5">
     <Avatar.Root>
-      <Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" />
-      <Avatar.Fallback>CN</Avatar.Fallback>
+      <Avatar.Image
+        src={`${PUBLIC_SUPABASE_STORAGE}/${page.data.user?.user_metadata.avatar_link}`}
+        alt="profile photo"
+      />
+      <Avatar.Fallback>{page.data.user?.user_metadata.firstname[0].toUpperCase()}</Avatar.Fallback>
     </Avatar.Root>
 
     <div class="">
@@ -23,8 +27,12 @@
   <Popover.Content class="w-fit">
     <div class="flex items-center gap-2.5">
       <Avatar.Root class="size-28">
-        <Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" />
-        <Avatar.Fallback>CN</Avatar.Fallback>
+        <Avatar.Image
+          src={`${PUBLIC_SUPABASE_STORAGE}/${page.data.user?.user_metadata.avatar_link}`}
+          alt="profile photo"
+        />
+        <Avatar.Fallback>{page.data.user?.user_metadata.firstname[0].toUpperCase()}</Avatar.Fallback
+        >
       </Avatar.Root>
 
       <div class="flex flex-col gap-2.5">
