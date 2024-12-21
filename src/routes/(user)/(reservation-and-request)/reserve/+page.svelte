@@ -1,28 +1,11 @@
 <script lang="ts">
-  import ComboBox from '$lib/components/general/combo-box.svelte';
+  import PhotoUploader from '$lib/components/general/photo-uploader.svelte';
 
-  let selected = $state('');
-
-  let selections = [
-    {
-      id: '1',
-      label: 'Hi',
-      value: 'HSDASD'
-    },
-    {
-      id: '2',
-      label: 'Hello',
-      value: 'HELLO'
-    },
-    {
-      id: '3',
-      label: 'Greetings',
-      value: 'GREETING'
-    }
-  ];
+  let file = $state<File>();
 </script>
 
 <main class="min-h-screen">
-  <ComboBox hasLabel bind:selected {selections} />
-  {selected}
+  <div class="mx-auto max-w-[600px] p-10">
+    <PhotoUploader bind:singleFile={file} />
+  </div>
 </main>
