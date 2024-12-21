@@ -2,12 +2,15 @@
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import Button from '../../ui/button/button.svelte';
-  import { userRoutes } from '$lib';
+  import { adminRoutes, userRoutes } from '$lib';
   import UserProfile from './components/user-profile/user-profile.svelte';
 
   const routes = $derived.by(() => {
     if (page.data.user) {
-      return userRoutes;
+      const { role } = page.data.user.user_metadata;
+
+      if (role === 'user') return userRoutes;
+      else if (role === 'admin') return adminRoutes;
     }
 
     return [{ url: '/', name: 'Home' }];

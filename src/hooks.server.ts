@@ -71,14 +71,19 @@ const authGuard: Handle = async ({ event, resolve }) => {
 
   const matchingRequestReserve = ['/reserve'].includes(path);
 
-  if ((user && matchingUserRoutes) || (user && matchingRequestReserve)) {
+  if ((user && matchingUserRoutes) || (user && matchingRequestReserve) || (user && path === '/')) {
     const { role } = user.user_metadata;
-    if (role !== 'user') redirect(303, '/admin/dashboard');
+    if (role !== 'user') redirect(303, '/admin');
   }
 
   if (!user && matchingUserRoutes) redirect(303, '/');
 
   if (!user && matchingRequestReserve) redirect(303, '/?auth=login');
+
+  if (user && path.startsWith('/admin')) {
+    const { role } = user.user_metadata;
+    if (role !== 'admin') redirect(303, '/');
+  }
 
   return resolve(event);
 };

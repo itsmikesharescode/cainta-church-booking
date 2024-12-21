@@ -23,7 +23,7 @@ export const userRoutes = [
 
 export const adminRoutes = [
   {
-    url: '/admin/dashboard',
+    url: '/admin',
     name: 'Dashboard'
   },
   {
