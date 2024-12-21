@@ -84,14 +84,17 @@ const authGuard: Handle = async ({ event, resolve }) => {
 };
 
 const auxilary: Handle = async ({ event, resolve }) => {
-  event.locals.transformImage = async (file, options) => {
+  event.locals.transformImage = async (
+    file,
+    options?: { maxSizeInMB?: number; maxWidth?: number; maxHeight?: number; quality?: number }
+  ) => {
     try {
       if (!file) {
         console.error('transformImage: No file provided');
         return null;
       }
 
-      const { maxSizeInMB = 1, maxWidth = 400, maxHeight = 400, quality = 80 } = options;
+      const { maxSizeInMB = 1, maxWidth = 400, maxHeight = 400, quality = 80 } = options || {};
 
       const buffer = Buffer.from(await file.arrayBuffer());
       let processedImage;

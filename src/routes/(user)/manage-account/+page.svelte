@@ -3,6 +3,7 @@
   import UpdateEmail from './components/update-email/update-email.svelte';
   import UpdateInformation from './components/update-information/update-information.svelte';
   import UpdatePassword from './components/update-password/update-password.svelte';
+  import UpdateProfile from './components/update-profile/update-profile.svelte';
   const { data } = $props();
 
   const selections = [
@@ -38,6 +39,7 @@
 
   <section>
     {#if page.url.searchParams.get('switch') === 'information'}
+      <UpdateProfile updateProfileForm={data.updateProfileForm} />
       <UpdateInformation updateInformationForm={data.updateInformationForm} />
     {:else if page.url.searchParams.get('switch') === 'password'}
       <UpdatePassword updatePasswordForm={data.updatePasswordForm} />
