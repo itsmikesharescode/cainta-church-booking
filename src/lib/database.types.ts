@@ -91,6 +91,8 @@ export type Database = {
       churches_tb: {
         Row: {
           address: string
+          certs: Json
+          church_id: number
           close_time: string
           created_at: string
           events: Json
@@ -101,6 +103,8 @@ export type Database = {
         }
         Insert: {
           address: string
+          certs: Json
+          church_id: number
           close_time: string
           created_at?: string
           events: Json
@@ -111,6 +115,8 @@ export type Database = {
         }
         Update: {
           address?: string
+          certs?: Json
+          church_id?: number
           close_time?: string
           created_at?: string
           events?: Json
@@ -119,7 +125,15 @@ export type Database = {
           open_time?: string
           photo_link?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "churches_tb_church_id_fkey"
+            columns: ["church_id"]
+            isOneToOne: false
+            referencedRelation: "churches_tb"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       finished_payments_tb: {
         Row: {

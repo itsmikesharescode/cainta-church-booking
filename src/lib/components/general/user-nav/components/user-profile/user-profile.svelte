@@ -13,7 +13,9 @@
         src={`${PUBLIC_SUPABASE_STORAGE}/${page.data.user?.user_metadata.avatar_link}`}
         alt="profile photo"
       />
-      <Avatar.Fallback>{page.data.user?.user_metadata.firstname[0].toUpperCase()}</Avatar.Fallback>
+      <Avatar.Fallback class="border-2 border-muted-foreground"
+        >{page.data.user?.user_metadata.firstname[0].toUpperCase()}</Avatar.Fallback
+      >
     </Avatar.Root>
 
     <div class="">
@@ -31,7 +33,8 @@
           src={`${PUBLIC_SUPABASE_STORAGE}/${page.data.user?.user_metadata.avatar_link}`}
           alt="profile photo"
         />
-        <Avatar.Fallback>{page.data.user?.user_metadata.firstname[0].toUpperCase()}</Avatar.Fallback
+        <Avatar.Fallback class="border-2 border-muted-foreground"
+          >{page.data.user?.user_metadata.firstname[0].toUpperCase()}</Avatar.Fallback
         >
       </Avatar.Root>
 

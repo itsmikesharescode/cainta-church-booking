@@ -71,6 +71,51 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA "extensions";
 
 
 
+
+CREATE OR REPLACE FUNCTION "public"."on_auth_user_created"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$
+declare
+  role text;
+begin
+  role = new.raw_user_meta_data ->> 'role'; 
+
+  insert into public.users_tb (user_id, user_meta_data)
+  values (
+    new.id,
+    new.raw_user_meta_data
+  );
+  insert into public.roles_tb (user_id, role) values(new.id, role);
+  return new;
+
+end;
+$$;
+
+
+ALTER FUNCTION "public"."on_auth_user_created"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."on_auth_user_updated"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$
+begin
+
+  update public.users_tb
+  set user_meta_data = new.raw_user_meta_data
+  where user_id = new.id;
+  return new;
+
+  update public.roles_tb
+  set role = new.raw_user_meta_data ->> 'role'
+  where user_id = new.id;
+  return new;
+
+end;
+$$;
+
+
+ALTER FUNCTION "public"."on_auth_user_updated"() OWNER TO "postgres";
+
 SET default_tablespace = '';
 
 SET default_table_access_method = "heap";
@@ -116,7 +161,9 @@ CREATE TABLE IF NOT EXISTS "public"."churches_tb" (
     "photo_link" "text" NOT NULL,
     "address" "text" NOT NULL,
     "open_time" time without time zone NOT NULL,
-    "close_time" time without time zone NOT NULL
+    "close_time" time without time zone NOT NULL,
+    "church_id" bigint NOT NULL,
+    "certs" "jsonb" NOT NULL
 );
 
 
@@ -266,6 +313,11 @@ ALTER TABLE ONLY "public"."cert_requests_tb"
 
 ALTER TABLE ONLY "public"."cert_requests_tb"
     ADD CONSTRAINT "cert_requests_tb_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."users_tb"("user_id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."churches_tb"
+    ADD CONSTRAINT "churches_tb_church_id_fkey" FOREIGN KEY ("church_id") REFERENCES "public"."churches_tb"("id") ON DELETE CASCADE;
 
 
 
@@ -502,6 +554,18 @@ GRANT USAGE ON SCHEMA "public" TO "service_role";
 
 
 
+
+
+
+GRANT ALL ON FUNCTION "public"."on_auth_user_created"() TO "anon";
+GRANT ALL ON FUNCTION "public"."on_auth_user_created"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."on_auth_user_created"() TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."on_auth_user_updated"() TO "anon";
+GRANT ALL ON FUNCTION "public"."on_auth_user_updated"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."on_auth_user_updated"() TO "service_role";
 
 
 
