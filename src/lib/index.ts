@@ -35,6 +35,10 @@ export const adminRoutes = [
     name: 'Cert Requests'
   },
   {
+    url: '/admin/payments',
+    name: 'Payments'
+  },
+  {
     url: '/admin/manage-accounts',
     name: 'Manage Accounts'
   }
