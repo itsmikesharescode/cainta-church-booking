@@ -132,7 +132,7 @@
     </Form.Field>
   </div>
 
-  <Form.Field {form} name="final_time">
+  <Form.Field {form} name="message">
     <Form.Control>
       {#snippet children({ props })}
         <Form.Label>Message</Form.Label>

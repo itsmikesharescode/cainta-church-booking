@@ -1,6 +1,6 @@
 <script lang="ts">
   import CalendarIcon from 'lucide-svelte/icons/calendar';
-  import { DateFormatter, type DateValue } from '@internationalized/date';
+  import { DateFormatter, getLocalTimeZone, type DateValue } from '@internationalized/date';
   import { cn } from '$lib/utils.js';
   import { Button } from '$lib/components/ui/button/index.js';
   import { Calendar } from '$lib/components/ui/calendar/index.js';
@@ -44,7 +44,7 @@
         {...props}
       >
         <CalendarIcon />
-        {selected ? df.format(new Date(selected)) : 'Pick a date'}
+        {value ? df.format(value?.toDate(getLocalTimeZone())) : 'Pick a date'}
       </Button>
     {/snippet}
   </Popover.Trigger>

@@ -79,7 +79,9 @@
         role="combobox"
         aria-expanded={open}
       >
-        {selectedValue?.label || placeholder}
+        <span class={selectedValue ? '' : 'text-muted-foreground'}
+          >{selectedValue?.label || placeholder}</span
+        >
         <ChevronsUpDown class="ml-2 size-4 shrink-0 opacity-50" />
       </Button>
     {/snippet}
