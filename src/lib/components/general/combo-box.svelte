@@ -65,9 +65,6 @@
       { id: '1', label: 'Svelte is fun', value: 'svelte' },
       { id: '2', label: 'React is meh', value: 'react' }
     ]}
-    hasLabel={true}
-    placeholder="Select an option"
-    
   />
   ```
 -->
@@ -82,12 +79,17 @@
         role="combobox"
         aria-expanded={open}
       >
-        {selectedValue?.value || placeholder}
+        {selectedValue?.label || placeholder}
         <ChevronsUpDown class="ml-2 size-4 shrink-0 opacity-50" />
       </Button>
     {/snippet}
   </Popover.Trigger>
-  <Popover.Content class={cn('w-[200px] p-0', contentStyle)}>
+  <Popover.Content
+    onInteractOutside={() => {
+      open = false;
+    }}
+    class={cn('w-[200px] p-0', contentStyle)}
+  >
     <Command.Root>
       <Command.Input placeholder={searchPlaceholder} />
       <Command.List>
@@ -112,11 +114,11 @@
               />
               {#if hasLabel}
                 <div class="flex flex-col">
-                  <span>{selection.value}</span>
-                  <span class="font-light text-muted-foreground">{selection.label}</span>
+                  <span>{selection.label}</span>
+                  <span class="font-light text-muted-foreground">{selection.value}</span>
                 </div>
               {:else}
-                <span>{selection.value}</span>
+                <span>{selection.label}</span>
               {/if}
             </Command.Item>
           {/each}
