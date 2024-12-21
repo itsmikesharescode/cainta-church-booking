@@ -14,11 +14,17 @@
     return data;
   };
 
-  const sampleData = generateRandomData(5);
+  const sampleData = generateRandomData(100);
 </script>
 
 <main class="container min-h-screen">
-  <div class="h-[30dvh]">
-    <LineChart data={sampleData} />
+  <div class="grid grid-cols-2">
+    <div class="relative max-h-[30dvh]">
+      <LineChart title="Reservation this month" data={sampleData} />
+    </div>
+
+    <div class="relative max-h-[30dvh]">
+      <LineChart title="Request this month" data={sampleData} />
+    </div>
   </div>
 </main>

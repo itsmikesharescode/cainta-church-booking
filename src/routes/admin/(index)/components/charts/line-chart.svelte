@@ -1,6 +1,5 @@
 <script lang="ts">
   import { tick } from 'svelte';
-  import { browser } from '$app/environment';
   import type { Chart } from 'chart.js';
 
   type ChartDataPoint = {
@@ -10,17 +9,16 @@
 
   interface Props {
     data: ChartDataPoint[];
+    title: string;
   }
 
-  const { data }: Props = $props();
+  const { data, title }: Props = $props();
 
   let chartContainer: HTMLCanvasElement | null = null;
   let chart: Chart | null = null;
 
   $effect(() => {
     tick().then(async () => {
-      if (!browser || !chartContainer) return;
-
       const {
         Chart,
         LineController,
@@ -51,7 +49,7 @@
         Filler
       );
 
-      const ctx = chartContainer.getContext('2d');
+      const ctx = chartContainer?.getContext('2d');
       if (!ctx) return;
 
       const labels = data.map((item) => item.date);
@@ -70,12 +68,14 @@
               data: values,
               borderColor: 'rgba(75, 192, 192, 1)',
               backgroundColor: 'rgba(75, 192, 192, 0.2)',
-              tension: 0.4
+              tension: 0.6,
+              fill: true
             }
           ]
         },
         options: {
           responsive: true,
+          maintainAspectRatio: false,
           interaction: {
             intersect: false,
             mode: 'index'
@@ -87,12 +87,20 @@
             },
             title: {
               display: true,
-              text: 'Sample Line Chart'
+              text: title,
+              font: { size: 20 }
             },
             tooltip: {
               enabled: true,
               callbacks: {
                 label: (context) => `Value: ${context.raw}`
+              },
+              padding: 10,
+              bodyFont: {
+                size: 20
+              },
+              titleFont: {
+                size: 18
               }
             },
             zoom: {
@@ -123,20 +131,7 @@
               }
             }
           },
-          scales: {
-            x: {
-              title: {
-                display: true,
-                text: 'Date'
-              }
-            },
-            y: {
-              title: {
-                display: true,
-                text: 'Value'
-              }
-            }
-          },
+
           onHover: (event, activeElements, chartInstance) => {
             if (!event || !chartInstance) return;
 
@@ -192,11 +187,4 @@
   });
 </script>
 
-<canvas bind:this={chartContainer}></canvas>
-
-<style>
-  canvas {
-    width: 100% !important;
-    height: 100% !important;
-  }
-</style>
+<canvas class="h-full w-full" bind:this={chartContainer}></canvas>
