@@ -3,10 +3,12 @@ import type { Actions, PageServerLoad } from './$types';
 import { zod } from 'sveltekit-superforms/adapters';
 import { createChurchSchema } from './components/create-church/schema';
 import { fail } from '@sveltejs/kit';
+import streamChurches from '$lib/db_calls/streamChurches';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   return {
-    createChurchForm: await superValidate(zod(createChurchSchema))
+    createChurchForm: await superValidate(zod(createChurchSchema)),
+    getChurches: streamChurches(supabase)
   };
 };
 

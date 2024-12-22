@@ -4,3 +4,6 @@ export { default as TableColumnHeader } from './table-column-header.svelte';
 export { default as TableToolbar } from './table-toolbar.svelte';
 export { default as TablePagination } from './table-pagination.svelte';
 export { default as TableViewOptions } from './table-view-options.svelte';
+export { default as TableDisplayChurchName } from './table-display-church-name.svelte';
+export { default as TableDispplayEvents } from './table-display-events.svelte';
+export { default as TableDisplayCerts } from './table-display-certificates.svelte';

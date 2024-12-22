@@ -1,8 +1,15 @@
 import type { ColumnDef } from '@tanstack/table-core';
 import { createRawSnippet } from 'svelte';
 import type { DashboardPageTable } from '../data/schemas';
-import { TableColumnHeader, TableRowActions } from './index.js';
+import {
+  TableColumnHeader,
+  TableRowActions,
+  TableDisplayChurchName,
+  TableDispplayEvents,
+  TableDisplayCerts
+} from './index.js';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/render-helpers.js';
+import { format24hrTo12hrAMPM } from '$lib/utils';
 
 export const columns: ColumnDef<DashboardPageTable, unknown>[] = [
   {
@@ -14,15 +21,7 @@ export const columns: ColumnDef<DashboardPageTable, unknown>[] = [
         title: 'Church Name'
       });
     },
-    cell: ({ row }) => {
-      const churchNameSnippet = createRawSnippet<[string]>((getName) => {
-        return {
-          render: () => `<div class="w-full">${getName()}</div>`
-        };
-      });
-
-      return renderSnippet(churchNameSnippet, row.getValue('name'));
-    },
+    cell: ({ row }) => renderComponent(TableDisplayChurchName<DashboardPageTable>, { row }),
     enableSorting: true,
     enableHiding: true
   },
@@ -36,15 +35,7 @@ export const columns: ColumnDef<DashboardPageTable, unknown>[] = [
         title: 'Available Events'
       });
     },
-    cell: ({ row }) => {
-      const eventsSnippet = createRawSnippet<[string]>((getEvents) => {
-        return {
-          render: () => `<div class="w-full">${getEvents()}</div>`
-        };
-      });
-
-      return renderSnippet(eventsSnippet, row.getValue('events'));
-    },
+    cell: ({ row }) => renderComponent(TableDispplayEvents<DashboardPageTable>, { row }),
     enableSorting: true,
     enableHiding: true
   },
@@ -58,15 +49,7 @@ export const columns: ColumnDef<DashboardPageTable, unknown>[] = [
         title: 'Available Certificates'
       });
     },
-    cell: ({ row }) => {
-      const certificatesSnippet = createRawSnippet<[string]>((getCertificates) => {
-        return {
-          render: () => `<div class="w-full">${getCertificates()}</div>`
-        };
-      });
-
-      return renderSnippet(certificatesSnippet, row.getValue('certs'));
-    },
+    cell: ({ row }) => renderComponent(TableDisplayCerts<DashboardPageTable>, { row }),
     enableSorting: true,
     enableHiding: true
   },
@@ -105,7 +88,7 @@ export const columns: ColumnDef<DashboardPageTable, unknown>[] = [
     cell: ({ row }) => {
       const openTimeSnippet = createRawSnippet<[string]>((getOpenTime) => {
         return {
-          render: () => `<div class="w-full truncate">${getOpenTime()}</div>`
+          render: () => `<div class="w-full truncate">${format24hrTo12hrAMPM(getOpenTime())}</div>`
         };
       });
 
@@ -127,7 +110,7 @@ export const columns: ColumnDef<DashboardPageTable, unknown>[] = [
     cell: ({ row }) => {
       const toTimeSnippet = createRawSnippet<[string]>((getCloseTime) => {
         return {
-          render: () => `<div class="w-full">${getCloseTime()}</div>`
+          render: () => `<div class="w-full">${format24hrTo12hrAMPM(getCloseTime())}</div>`
         };
       });
 
@@ -149,7 +132,8 @@ export const columns: ColumnDef<DashboardPageTable, unknown>[] = [
     cell: ({ row }) => {
       const createdAtSnippet = createRawSnippet<[string]>((getCreatedAt) => {
         return {
-          render: () => `<div class="w-full">${getCreatedAt()}</div>`
+          render: () =>
+            `<div class="w-full">${new Date(getCreatedAt()).toLocaleDateString()} @ ${new Date(getCreatedAt()).toLocaleTimeString()}</div>`
         };
       });
 
