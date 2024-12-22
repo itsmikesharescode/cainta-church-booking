@@ -10,6 +10,8 @@
   import Button from '$lib/components/ui/button/button.svelte';
   import CreateEvents from './create-events/create-events.svelte';
   import CreateCerts from './create-certs/create-certs.svelte';
+  import { page } from '$app/state';
+  import { goto } from '$app/navigation';
 
   interface Props {
     createChurchForm: SuperValidated<Infer<CreateChurchSchema>>;
@@ -36,16 +38,17 @@
 
   const { form: formData, enhance, submitting } = form;
 
-  let open = $state(false);
+  let open = $derived(page.url.searchParams.get('modal') === 'create-church');
 </script>
 
-<Button onclick={() => (open = true)}>Add Church</Button>
+<Button onclick={() => goto('?modal=create-church')}>Add Church</Button>
 
 <Dialog.Root
   onOpenChange={() => {
     form.reset();
+    goto('/admin', { noScroll: true });
   }}
-  bind:open
+  {open}
 >
   <Dialog.Content>
     <Dialog.Header>
@@ -55,7 +58,7 @@
       </Dialog.Description>
     </Dialog.Header>
 
-    <form method="POST" action="?/loginEvent" use:enhance>
+    <form method="POST" action="?/createChurchEvent" use:enhance>
       <Form.Field {form} name="events">
         <Form.Control>
           {#snippet children({ props })}
@@ -79,6 +82,17 @@
 
         <Form.FieldErrors />
       </Form.Field>
+
+      <!-- <Form.Field {form} name="email">
+        <Form.Control>
+          {#snippet children({ props })}
+            <Form.Label>Email</Form.Label>
+            <Input {...props} bind:value={$formData.email} placeholder="Enter your email" />
+          {/snippet}
+        </Form.Control>
+
+        <Form.FieldErrors />
+      </Form.Field> -->
 
       <Form.Button size="sm" disabled={$submitting} class="relative">
         {#if $submitting}

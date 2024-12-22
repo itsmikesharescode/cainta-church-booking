@@ -8,7 +8,7 @@
 </script>
 
 <script lang="ts">
-  import * as Popover from '$lib/components/ui/popover/index.js';
+  import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
   import { Input } from '$lib/components/ui/input/index.js';
   import { Label } from '$lib/components/ui/label/index.js';
   import Button from '$lib/components/ui/button/button.svelte';
@@ -89,8 +89,8 @@
   };
 </script>
 
-<Popover.Root bind:open>
-  <Popover.Trigger
+<DropdownMenu.Root bind:open>
+  <DropdownMenu.Trigger
     class="flex min-h-9 w-full flex-wrap items-center gap-2.5 rounded-md border border-input bg-transparent px-3 py-1 text-left text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
   >
     {#if stringValue}
@@ -98,10 +98,10 @@
         <Badge>{event.name}</Badge>
       {/each}
     {:else}
-      <span class="text-muted-foreground">Enter events</span>
+      <span class="text-muted-foreground">Enter names</span>
     {/if}
-  </Popover.Trigger>
-  <Popover.Content class="flex w-[300px] flex-col p-0 sm:w-[400px]">
+  </DropdownMenu.Trigger>
+  <DropdownMenu.Content class="flex w-[300px] flex-col p-0 sm:w-[400px]">
     <ScrollArea class=" relative h-[400px] px-5">
       <section class="my-5 flex flex-col gap-2.5">
         {#each eventLists.getEvents() as event, index (event)}
@@ -167,5 +167,5 @@
         </div>
       </div>
     </ScrollArea>
-  </Popover.Content>
-</Popover.Root>
+  </DropdownMenu.Content>
+</DropdownMenu.Root>
