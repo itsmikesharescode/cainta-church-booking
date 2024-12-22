@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 export const updateChurchSchema = z.object({
   id: z.number(),
+  image_path: z.string(),
   image: z
     .instanceof(File, { message: 'Please upload a file.' })
     .refine((f) => f.size < 3_000_000, 'Max 3 MB upload size.'),

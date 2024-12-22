@@ -44,14 +44,18 @@
 
   const file = fileProxy(form, 'image');
 
+  const activeRow = $derived(tableState.getActiveRow());
+
   $effect(() => {
     if (tableState.getShowUpdate()) {
-      $formData.name = tableState.getActiveRow()?.name ?? '';
-      $formData.address = tableState.getActiveRow()?.address ?? '';
-      $formData.certs = JSON.stringify(tableState.getActiveRow()?.certs ?? '');
-      $formData.events = JSON.stringify(tableState.getActiveRow()?.events ?? '');
-      $formData.open_time = tableState.getActiveRow()?.open_time ?? '';
-      $formData.close_time = tableState.getActiveRow()?.close_time ?? '';
+      $formData.id = activeRow?.id ?? 0;
+      $formData.image_path = activeRow?.photo_link ?? '';
+      $formData.name = activeRow?.name ?? '';
+      $formData.address = activeRow?.address ?? '';
+      $formData.certs = JSON.stringify(activeRow?.certs ?? '');
+      $formData.events = JSON.stringify(activeRow?.events ?? '');
+      $formData.open_time = activeRow?.open_time ?? '';
+      $formData.close_time = activeRow?.close_time ?? '';
       return () => {
         form.reset();
       };
@@ -60,10 +64,10 @@
 </script>
 
 <Dialog.Root
-  onOpenChange={(x) => {
+  onOpenChange={(alwaysFalse) => {
     form.reset();
     tableState.setActiveRow(null);
-    tableState.setShowUpdate(x);
+    tableState.setShowUpdate(alwaysFalse);
   }}
   open={tableState.getShowUpdate()}
 >
@@ -73,6 +77,11 @@
     </Dialog.Header>
 
     <form method="POST" enctype="multipart/form-data" action="?/updateChurchEvent" use:enhance>
+      <input type="hidden" name="id" bind:value={$formData.id} />
+      <input type="hidden" name="image_path" bind:value={$formData.image_path} />
+      <p class="text-center text-sm text-muted-foreground">
+        Updating church image may take 3 minutes to reappear due to caching.
+      </p>
       <Form.Field {form} name="image">
         <Form.Control>
           {#snippet children({ props })}
