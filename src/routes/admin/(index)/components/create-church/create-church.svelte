@@ -9,6 +9,7 @@
   import LoaderCircle from 'lucide-svelte/icons/loader-circle';
   import Button from '$lib/components/ui/button/button.svelte';
   import CreateEvents from './create-events/create-events.svelte';
+  import CreateCerts from './create-certs/create-certs.svelte';
 
   interface Props {
     createChurchForm: SuperValidated<Infer<CreateChurchSchema>>;
@@ -71,7 +72,8 @@
         <Form.Control>
           {#snippet children({ props })}
             <Form.Label class="flex items-center justify-between">Certificates</Form.Label>
-            <Input {...props} bind:value={$formData.certs} placeholder="Enter your password" />
+            <CreateCerts bind:stringValue={$formData.certs} />
+            <input type="hidden" name={props.name} bind:value={$formData.certs} />
           {/snippet}
         </Form.Control>
 
