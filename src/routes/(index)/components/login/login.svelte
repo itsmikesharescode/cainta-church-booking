@@ -57,7 +57,7 @@
     <Dialog.Header>
       <Dialog.Title>Log in your account</Dialog.Title>
       <Dialog.Description>
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusantium, dolores.
+        Please enter your credentials to log in to your account.
       </Dialog.Description>
     </Dialog.Header>
 

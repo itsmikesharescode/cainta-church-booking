@@ -44,6 +44,7 @@ export const actions: Actions = {
       options: {
         data: {
           role: 'user',
+          email: form.data.email,
           firstname: form.data.firstname,
           lastname: form.data.lastname,
           mobile_number: form.data.mobile_number

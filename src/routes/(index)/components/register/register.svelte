@@ -57,7 +57,7 @@
     <Dialog.Header>
       <Dialog.Title>Register your account</Dialog.Title>
       <Dialog.Description>
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusantium, dolores.
+        Please fill in the details below to create your account.
       </Dialog.Description>
     </Dialog.Header>
 

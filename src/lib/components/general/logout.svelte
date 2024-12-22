@@ -4,7 +4,7 @@
   import Button from '../ui/button/button.svelte';
   import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
   import LoaderCircle from 'lucide-svelte/icons/loader-circle';
-  import { invalidateAll } from '$app/navigation';
+  import { goto } from '$app/navigation';
 
   let loader = $state(false);
 
@@ -16,7 +16,7 @@
     if (error) return toast.error(error.message);
 
     toast.success('Thank you! comeback again.');
-    await invalidateAll();
+    goto('/');
     return;
   };
 
