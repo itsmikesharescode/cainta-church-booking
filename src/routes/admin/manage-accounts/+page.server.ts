@@ -4,10 +4,16 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { createAccountSchema } from './components/create-account/schema';
 import { fail } from '@sveltejs/kit';
 import streamAccounts from '$lib/db_calls/streamAccounts';
+import { updateEmailSchema } from './components/update-account/update-email/schema';
+import { updateInfoSchema } from './components/update-account/update-info/schema';
+import { updatePasswordSchema } from './components/update-account/update-password/schema';
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   return {
     createAccountForm: await superValidate(zod(createAccountSchema)),
+    updateEmailForm: await superValidate(zod(updateEmailSchema)),
+    updateInfoForm: await superValidate(zod(updateInfoSchema)),
+    updatePasswordForm: await superValidate(zod(updatePasswordSchema)),
     getAccounts: streamAccounts(supabase)
   };
 };
@@ -36,5 +42,52 @@ export const actions: Actions = {
       form,
       msg: `Account for ${form.data.firstname} ${form.data.lastname} successfully created.`
     };
+  },
+
+  updateEmailEvent: async ({ locals: { supabaseAdmin }, request }) => {
+    const form = await superValidate(request, zod(updateEmailSchema));
+    if (!form.valid) return fail(400, { form });
+
+    const { error } = await supabaseAdmin.auth.admin.updateUserById(form.data.user_id, {
+      email: form.data.email,
+      user_metadata: {
+        email: form.data.email
+      }
+    });
+
+    if (error) return fail(401, { form, msg: error.message });
+    return { form, msg: 'Email successfully updated.' };
+  },
+
+  updateInfoEvent: async ({ locals: { supabaseAdmin }, request }) => {
+    const form = await superValidate(request, zod(updateInfoSchema));
+
+    if (!form.valid) return fail(400, { form });
+
+    const { error } = await supabaseAdmin.auth.admin.updateUserById(form.data.user_id, {
+      user_metadata: {
+        firstname: form.data.firstname,
+        lastname: form.data.lastname,
+        mobile_number: form.data.mobile_number
+      }
+    });
+
+    if (error) return fail(401, { form, msg: error.message });
+
+    return { form, msg: 'Information successfully updated.' };
+  },
+
+  updatePasswordEvent: async ({ locals: { supabaseAdmin }, request }) => {
+    const form = await superValidate(request, zod(updatePasswordSchema));
+
+    if (!form.valid) return fail(400, { form });
+
+    const { error } = await supabaseAdmin.auth.admin.updateUserById(form.data.user_id, {
+      password: form.data.password
+    });
+
+    if (error) return fail(401, { msg: error.message });
+
+    return { form, msg: 'Password successfully updated.' };
   }
 };

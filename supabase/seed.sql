@@ -376,6 +376,10 @@ CREATE POLICY "Allow insert if auth" ON "public"."reservations_tb" FOR INSERT TO
 
 
 
+CREATE POLICY "Allow select if admin" ON "public"."users_tb" FOR SELECT TO "authenticated" USING ("public"."is_admin"());
+
+
+
 CREATE POLICY "Allow update if auth and exist" ON "public"."reservations_tb" FOR UPDATE TO "authenticated" USING (("public"."is_user"() AND ("auth"."uid"() = "user_id"))) WITH CHECK (("public"."is_user"() AND ("auth"."uid"() = "user_id")));
 
 

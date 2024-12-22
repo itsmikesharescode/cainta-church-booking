@@ -5,6 +5,7 @@
   import CreateAccount from './components/create-account/create-account.svelte';
   import { Skeleton } from '$lib/components/ui/skeleton/index.js';
   import { z } from 'zod';
+  import UpdateAccount from './components/update-account/update-account.svelte';
 
   const { data } = $props();
 
@@ -44,3 +45,8 @@
 </main>
 
 <CreateAccount createAccountForm={data.createAccountForm} />
+<UpdateAccount
+  updateEmailForm={data.updateEmailForm}
+  updateInfoForm={data.updateInfoForm}
+  updatePasswordForm={data.updatePasswordForm}
+/>
