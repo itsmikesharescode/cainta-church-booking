@@ -4,8 +4,7 @@
   import { cn } from '$lib/utils.js';
   import { Button } from '$lib/components/ui/button/index.js';
   import { Calendar } from '$lib/components/ui/calendar/index.js';
-  import * as Popover from '$lib/components/ui/popover/index.js';
-
+  import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
   interface Props {
     selected: string;
   }
@@ -32,8 +31,8 @@
   ```
 -->
 
-<Popover.Root bind:open>
-  <Popover.Trigger class="flex w-full items-center justify-start">
+<DropdownMenu.Root bind:open>
+  <DropdownMenu.Trigger class="flex w-full items-center justify-start">
     {#snippet child({ props })}
       <Button
         variant="outline"
@@ -47,8 +46,8 @@
         {value ? df.format(value?.toDate(getLocalTimeZone())) : 'Pick a date'}
       </Button>
     {/snippet}
-  </Popover.Trigger>
-  <Popover.Content onInteractOutside={() => (open = false)} class="w-auto p-0" align="start">
+  </DropdownMenu.Trigger>
+  <DropdownMenu.Content class="w-auto p-0">
     <Calendar
       bind:value
       onValueChange={(v) => {
@@ -56,5 +55,5 @@
       }}
       type="single"
     />
-  </Popover.Content>
-</Popover.Root>
+  </DropdownMenu.Content>
+</DropdownMenu.Root>

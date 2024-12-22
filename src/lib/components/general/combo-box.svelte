@@ -7,11 +7,11 @@
 </script>
 
 <script lang="ts">
+  import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
   import Check from 'lucide-svelte/icons/check';
   import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
   import { tick } from 'svelte';
   import * as Command from '$lib/components/ui/command/index.js';
-  import * as Popover from '$lib/components/ui/popover/index.js';
   import { Button } from '$lib/components/ui/button/index.js';
   import { cn } from '$lib/utils.js';
   import type { ClassValue } from 'clsx';
@@ -69,8 +69,8 @@
   ```
 -->
 
-<Popover.Root bind:open>
-  <Popover.Trigger bind:ref={triggerRef}>
+<DropdownMenu.Root bind:open>
+  <DropdownMenu.Trigger bind:ref={triggerRef}>
     {#snippet child({ props })}
       <Button
         variant="outline"
@@ -85,13 +85,8 @@
         <ChevronsUpDown class="ml-2 size-4 shrink-0 opacity-50" />
       </Button>
     {/snippet}
-  </Popover.Trigger>
-  <Popover.Content
-    onInteractOutside={() => {
-      open = false;
-    }}
-    class={cn('w-[200px] p-0', contentStyle)}
-  >
+  </DropdownMenu.Trigger>
+  <DropdownMenu.Content class={cn('w-[200px] p-0', contentStyle)}>
     <Command.Root>
       <Command.Input placeholder={searchPlaceholder} />
       <Command.List>
@@ -127,5 +122,5 @@
         </Command.Group>
       </Command.List>
     </Command.Root>
-  </Popover.Content>
-</Popover.Root>
+  </DropdownMenu.Content>
+</DropdownMenu.Root>

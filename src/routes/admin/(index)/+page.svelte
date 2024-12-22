@@ -3,6 +3,8 @@
   import Table from './components/table/components/table.svelte';
   import { columns } from './components/table/components/columns';
   import { Skeleton } from '$lib/components/ui/skeleton/index.js';
+  import UpdateChurch from './components/update-church/update-church.svelte';
+  import { initTableState } from './components/table/tableState.svelte';
 
   const { data } = $props();
 
@@ -20,6 +22,8 @@
   };
 
   const sampleData = generateRandomData(100);
+
+  initTableState();
 </script>
 
 <main class="container flex min-h-screen flex-col gap-10 py-10">
@@ -55,3 +59,5 @@
     {/await}
   </section>
 </main>
+
+<UpdateChurch updateChurchForm={data.updateChurchForm} />

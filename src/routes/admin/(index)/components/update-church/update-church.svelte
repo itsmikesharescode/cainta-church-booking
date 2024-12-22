@@ -3,35 +3,35 @@
   import * as Form from '$lib/components/ui/form/index.js';
   import { Input } from '$lib/components/ui/input/index.js';
   import { toast } from 'svelte-sonner';
-  import { createChurchSchema, type CreateChurchSchema } from './schema';
+  import { updateChurchSchema, type UpdateChurchSchema } from './schema';
   import { type SuperValidated, type Infer, superForm, fileProxy } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import LoaderCircle from 'lucide-svelte/icons/loader-circle';
-  import Button from '$lib/components/ui/button/button.svelte';
   import CreateEvents from './create-events/create-events.svelte';
   import CreateCerts from './create-certs/create-certs.svelte';
-  import { page } from '$app/state';
-  import { goto } from '$app/navigation';
   import PhotoUploader from '$lib/components/general/photo-uploader.svelte';
   import ComboBox from '$lib/components/general/combo-box.svelte';
   import { createTimeRange } from '$lib/utils';
+  import { useTableState } from '../table/tableState.svelte';
 
   interface Props {
-    createChurchForm: SuperValidated<Infer<CreateChurchSchema>>;
+    updateChurchForm: SuperValidated<Infer<UpdateChurchSchema>>;
   }
 
-  const { createChurchForm }: Props = $props();
+  const { updateChurchForm }: Props = $props();
+  const tableState = useTableState();
 
-  const form = superForm(createChurchForm, {
-    validators: zodClient(createChurchSchema),
-    id: 'create-church-form',
+  const form = superForm(updateChurchForm, {
+    validators: zodClient(updateChurchSchema),
+    id: 'update-church-form',
     onUpdate: async ({ result }) => {
       const { status, data } = result;
 
       switch (status) {
         case 200:
           toast.success(data.msg);
-          await goto('/admin');
+          tableState.setActiveRow(null);
+          tableState.setShowUpdate(false);
           break;
         case 401:
           toast.error(data.msg);
@@ -42,26 +42,37 @@
 
   const { form: formData, enhance, submitting } = form;
 
-  let open = $derived(page.url.searchParams.get('modal') === 'create-church');
-
   const file = fileProxy(form, 'image');
+
+  $effect(() => {
+    if (tableState.getShowUpdate()) {
+      $formData.name = tableState.getActiveRow()?.name ?? '';
+      $formData.address = tableState.getActiveRow()?.address ?? '';
+      $formData.certs = JSON.stringify(tableState.getActiveRow()?.certs ?? '');
+      $formData.events = JSON.stringify(tableState.getActiveRow()?.events ?? '');
+      $formData.open_time = tableState.getActiveRow()?.open_time ?? '';
+      $formData.close_time = tableState.getActiveRow()?.close_time ?? '';
+      return () => {
+        form.reset();
+      };
+    }
+  });
 </script>
 
-<Button onclick={() => goto('?modal=create-church')}>Add Church</Button>
-
 <Dialog.Root
-  onOpenChange={() => {
+  onOpenChange={(x) => {
     form.reset();
-    goto('/admin', { noScroll: true });
+    tableState.setActiveRow(null);
+    tableState.setShowUpdate(x);
   }}
-  {open}
+  open={tableState.getShowUpdate()}
 >
   <Dialog.Content>
     <Dialog.Header>
-      <Dialog.Title>Create Church</Dialog.Title>
+      <Dialog.Title>Update Church</Dialog.Title>
     </Dialog.Header>
 
-    <form method="POST" enctype="multipart/form-data" action="?/createChurchEvent" use:enhance>
+    <form method="POST" enctype="multipart/form-data" action="?/updateChurchEvent" use:enhance>
       <Form.Field {form} name="image">
         <Form.Control>
           {#snippet children({ props })}
@@ -165,7 +176,7 @@
               <LoaderCircle class="size-4 animate-spin" />
             </div>
           {/if}
-          Add Church
+          Update Church
         </Form.Button>
       </div>
     </form>

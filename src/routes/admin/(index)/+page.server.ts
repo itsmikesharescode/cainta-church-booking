@@ -4,10 +4,12 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { createChurchSchema } from './components/create-church/schema';
 import { fail } from '@sveltejs/kit';
 import streamChurches from '$lib/db_calls/streamChurches';
+import { updateChurchSchema } from './components/update-church/schema';
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   return {
     createChurchForm: await superValidate(zod(createChurchSchema)),
+    updateChurchForm: await superValidate(zod(updateChurchSchema)),
     getChurches: streamChurches(supabase)
   };
 };
@@ -42,5 +44,13 @@ export const actions: Actions = {
     if (insertErr) return fail(401, withFiles({ form, msg: insertErr.message }));
 
     return withFiles({ form, msg: 'Church Successfully uploaded.' });
+  },
+
+  updateChurchEvent: async ({ locals: { supabase }, request }) => {
+    const form = await superValidate(request, zod(updateChurchSchema));
+
+    if (!form.valid) return fail(400, withFiles({ form }));
+
+    console.log(form.data);
   }
 };
