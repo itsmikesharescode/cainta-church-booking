@@ -4,11 +4,8 @@
 
 <script lang="ts" generics="TData">
   import Ellipsis from 'lucide-svelte/icons/ellipsis';
-  import FileMinus from 'lucide-svelte/icons/file-minus';
-  import Delete from 'lucide-svelte/icons/delete';
-  import NotebookPen from 'lucide-svelte/icons/notebook-pen';
-  import Pen from 'lucide-svelte/icons/pen';
-  import Check from 'lucide-svelte/icons/check';
+  import FilePenLine from 'lucide-svelte/icons/file-pen-line';
+  import FileX from 'lucide-svelte/icons/file-x';
   import type { Row } from '@tanstack/table-core';
   import { type DashboardPageTable } from '../data/schemas';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index';
@@ -36,7 +33,7 @@
         tableState.setShowUpdate(true);
       }}
     >
-      <NotebookPen />
+      <FilePenLine />
       Update
     </DropdownMenu.Item>
     <DropdownMenu.Item
@@ -45,7 +42,7 @@
         tableState.setShowDelete(true);
       }}
     >
-      <Delete />
+      <FileX />
       Delete
     </DropdownMenu.Item>
   </DropdownMenu.Content>
