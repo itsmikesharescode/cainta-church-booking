@@ -71,7 +71,7 @@
     const result = certificatesSchema.safeParse(eventLists.getEvents());
     if (result.success) {
       stringValue = JSON.stringify(eventLists.getEvents());
-      goto('?modal=create-church');
+      open = false;
     } else {
       const errorMessages = Object.entries(result.error.format())
         .flatMap(([_, eventErrors]) => {

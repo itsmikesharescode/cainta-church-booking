@@ -111,28 +111,28 @@
             out:fly={{ x: 100, duration: 200 }}
           >
             <div class="grid w-full max-w-sm items-center gap-1.5">
-              <Label for={event.id}>Event Name</Label>
+              <Label for="event-name-{event.id}">Event Name</Label>
               <Input
-                id={event.id}
+                id="event-name-{event.id}"
                 placeholder="Enter event name {index + 1}"
                 bind:value={event.name}
               />
             </div>
 
             <div class="grid w-full max-w-sm items-center gap-1.5">
-              <Label for="email">Description</Label>
+              <Label for="description-name-{event.id}">Description</Label>
               <Input
-                id={event.id}
+                id="description-name-{event.id}"
                 placeholder="Enter event description {index + 1}"
                 bind:value={event.description}
               />
             </div>
 
             <div class="grid w-full max-w-sm items-center gap-1.5">
-              <Label for="email">Price</Label>
+              <Label for="price-{event.id}">Price</Label>
               <Input
                 type="number"
-                id={event.id}
+                id="price-{event.id}"
                 placeholder="Enter event price {index + 1}"
                 bind:value={event.price}
               />
