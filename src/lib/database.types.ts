@@ -92,7 +92,6 @@ export type Database = {
         Row: {
           address: string
           certs: Json
-          church_id: number
           close_time: string
           created_at: string
           events: Json
@@ -104,7 +103,6 @@ export type Database = {
         Insert: {
           address: string
           certs: Json
-          church_id: number
           close_time: string
           created_at?: string
           events: Json
@@ -116,7 +114,6 @@ export type Database = {
         Update: {
           address?: string
           certs?: Json
-          church_id?: number
           close_time?: string
           created_at?: string
           events?: Json
@@ -125,15 +122,7 @@ export type Database = {
           open_time?: string
           photo_link?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "churches_tb_church_id_fkey"
-            columns: ["church_id"]
-            isOneToOne: false
-            referencedRelation: "churches_tb"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       finished_payments_tb: {
         Row: {
@@ -269,7 +258,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
+      is_user: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

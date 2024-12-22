@@ -31,6 +31,7 @@
       switch (status) {
         case 200:
           toast.success(data.msg);
+          goto('/admin');
           break;
         case 401:
           toast.error(data.msg);

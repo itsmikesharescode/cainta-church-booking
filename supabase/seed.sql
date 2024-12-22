@@ -72,6 +72,34 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA "extensions";
 
 
 
+CREATE OR REPLACE FUNCTION "public"."is_admin"() RETURNS boolean
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$
+begin
+    return exists(
+        select * from roles_tb where user_id = auth.uid() and role = 'admin'
+    );
+end;
+$$;
+
+
+ALTER FUNCTION "public"."is_admin"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."is_user"() RETURNS boolean
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$
+begin
+    return exists(
+        select * from roles_tb where user_id = auth.uid() and role = 'user'
+    );
+end;
+$$;
+
+
+ALTER FUNCTION "public"."is_user"() OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."on_auth_user_created"() RETURNS "trigger"
     LANGUAGE "plpgsql" SECURITY DEFINER
     AS $$
@@ -162,7 +190,6 @@ CREATE TABLE IF NOT EXISTS "public"."churches_tb" (
     "address" "text" NOT NULL,
     "open_time" time without time zone NOT NULL,
     "close_time" time without time zone NOT NULL,
-    "church_id" bigint NOT NULL,
     "certs" "jsonb" NOT NULL
 );
 
@@ -317,11 +344,6 @@ ALTER TABLE ONLY "public"."cert_requests_tb"
 
 
 
-ALTER TABLE ONLY "public"."churches_tb"
-    ADD CONSTRAINT "churches_tb_church_id_fkey" FOREIGN KEY ("church_id") REFERENCES "public"."churches_tb"("id") ON DELETE CASCADE;
-
-
-
 ALTER TABLE ONLY "public"."reservations_tb"
     ADD CONSTRAINT "reservations_tb_church_id_fkey" FOREIGN KEY ("church_id") REFERENCES "public"."churches_tb"("id") ON DELETE CASCADE;
 
@@ -339,6 +361,34 @@ ALTER TABLE ONLY "public"."roles_tb"
 
 ALTER TABLE ONLY "public"."users_tb"
     ADD CONSTRAINT "users_tb_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE CASCADE;
+
+
+
+CREATE POLICY "Allow all if admin" ON "public"."reservations_tb" TO "authenticated" USING ("public"."is_admin"()) WITH CHECK ("public"."is_admin"());
+
+
+
+CREATE POLICY "Allow delete if auth and exist" ON "public"."reservations_tb" FOR DELETE TO "authenticated" USING (("public"."is_user"() AND ("auth"."uid"() = "user_id")));
+
+
+
+CREATE POLICY "Allow insert if auth" ON "public"."reservations_tb" FOR INSERT TO "authenticated" WITH CHECK ("public"."is_user"());
+
+
+
+CREATE POLICY "Allow update if auth and exist" ON "public"."reservations_tb" FOR UPDATE TO "authenticated" USING (("public"."is_user"() AND ("auth"."uid"() = "user_id"))) WITH CHECK (("public"."is_user"() AND ("auth"."uid"() = "user_id")));
+
+
+
+CREATE POLICY "Select for all" ON "public"."churches_tb" FOR SELECT USING (true);
+
+
+
+CREATE POLICY "Select for auth and exist" ON "public"."reservations_tb" FOR SELECT TO "authenticated" USING (("public"."is_user"() AND ("auth"."uid"() = "user_id")));
+
+
+
+CREATE POLICY "allow all if admin" ON "public"."churches_tb" TO "authenticated" USING ("public"."is_admin"()) WITH CHECK ("public"."is_admin"());
 
 
 
@@ -555,6 +605,18 @@ GRANT USAGE ON SCHEMA "public" TO "service_role";
 
 
 
+
+
+
+GRANT ALL ON FUNCTION "public"."is_admin"() TO "anon";
+GRANT ALL ON FUNCTION "public"."is_admin"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."is_admin"() TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."is_user"() TO "anon";
+GRANT ALL ON FUNCTION "public"."is_user"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."is_user"() TO "service_role";
 
 
 
