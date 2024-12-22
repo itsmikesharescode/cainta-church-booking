@@ -8,6 +8,7 @@
   import { zodClient } from 'sveltekit-superforms/adapters';
   import LoaderCircle from 'lucide-svelte/icons/loader-circle';
   import Button from '$lib/components/ui/button/button.svelte';
+  import CreateEvents from './create-events/create-events.svelte';
 
   interface Props {
     createChurchForm: SuperValidated<Infer<CreateChurchSchema>>;
@@ -32,8 +33,6 @@
     }
   });
 
-  let showPwd = $state(false);
-
   const { form: formData, enhance, submitting } = form;
 
   let open = $state(false);
@@ -41,7 +40,12 @@
 
 <Button onclick={() => (open = true)}>Add Church</Button>
 
-<Dialog.Root bind:open>
+<Dialog.Root
+  onOpenChange={() => {
+    form.reset();
+  }}
+  bind:open
+>
   <Dialog.Content>
     <Dialog.Header>
       <Dialog.Title>Create Church</Dialog.Title>
@@ -55,7 +59,8 @@
         <Form.Control>
           {#snippet children({ props })}
             <Form.Label>Events</Form.Label>
-            <Input {...props} bind:value={$formData.events} placeholder="Enter your email" />
+            <CreateEvents bind:stringValue={$formData.events} />
+            <input type="hidden" name={props.name} bind:value={$formData.events} />
           {/snippet}
         </Form.Control>
 
