@@ -58,16 +58,85 @@
     </Dialog.Header>
 
     <form method="POST" action="?/createAccountEvent" use:enhance>
-      <!-- <Form.Field {form} name="">
+      <Form.Field {form} name="email">
         <Form.Control>
           {#snippet children({ props })}
-            <Form.Label>Church Name</Form.Label>
-            <Input {...props} bind:value={$formData.name} placeholder="Enter church name" />
+            <Form.Label>Email</Form.Label>
+            <Input {...props} bind:value={$formData.email} placeholder="Enter email" />
           {/snippet}
         </Form.Control>
 
         <Form.FieldErrors />
-      </Form.Field> -->
+      </Form.Field>
+
+      <Form.Field {form} name="firstname">
+        <Form.Control>
+          {#snippet children({ props })}
+            <Form.Label>First Name</Form.Label>
+            <Input {...props} bind:value={$formData.firstname} placeholder="Enter first name" />
+          {/snippet}
+        </Form.Control>
+
+        <Form.FieldErrors />
+      </Form.Field>
+
+      <Form.Field {form} name="lastname">
+        <Form.Control>
+          {#snippet children({ props })}
+            <Form.Label>Last Name</Form.Label>
+            <Input {...props} bind:value={$formData.lastname} placeholder="Enter last name" />
+          {/snippet}
+        </Form.Control>
+
+        <Form.FieldErrors />
+      </Form.Field>
+
+      <Form.Field {form} name="mobile_number">
+        <Form.Control>
+          {#snippet children({ props })}
+            <Form.Label>Mobile Number</Form.Label>
+            <Input
+              {...props}
+              bind:value={$formData.mobile_number}
+              placeholder="Enter mobile number"
+            />
+          {/snippet}
+        </Form.Control>
+
+        <Form.FieldErrors />
+      </Form.Field>
+
+      <Form.Field {form} name="password">
+        <Form.Control>
+          {#snippet children({ props })}
+            <Form.Label>Password</Form.Label>
+            <Input
+              type="password"
+              {...props}
+              bind:value={$formData.password}
+              placeholder="Enter password"
+            />
+          {/snippet}
+        </Form.Control>
+
+        <Form.FieldErrors />
+      </Form.Field>
+
+      <Form.Field {form} name="confirmPassword">
+        <Form.Control>
+          {#snippet children({ props })}
+            <Form.Label>Confirm Password</Form.Label>
+            <Input
+              type="password"
+              {...props}
+              bind:value={$formData.confirmPassword}
+              placeholder="Confirm password"
+            />
+          {/snippet}
+        </Form.Control>
+
+        <Form.FieldErrors />
+      </Form.Field>
 
       <div class="flex justify-end">
         <Form.Button size="sm" disabled={$submitting} class="relative">

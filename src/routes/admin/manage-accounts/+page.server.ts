@@ -11,11 +11,28 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions: Actions = {
-  createAccountEvent: async ({ locals: { supabase }, request }) => {
+  createAccountEvent: async ({ locals: { supabaseAdmin }, request }) => {
     const form = await superValidate(request, zod(createAccountSchema));
 
     if (!form.valid) return fail(400, { form });
 
-    console.log(form.data);
+    const { error } = await supabaseAdmin.auth.admin.createUser({
+      email_confirm: true,
+      email: form.data.email,
+      password: form.data.password,
+      user_metadata: {
+        role: 'user',
+        email: form.data.email,
+        firstname: form.data.firstname,
+        lastname: form.data.lastname,
+        mobile_number: form.data.mobile_number
+      }
+    });
+
+    if (error) return fail(401, { form, msg: error.message });
+    return {
+      form,
+      msg: `Account for ${form.data.firstname} ${form.data.lastname} successfully created.`
+    };
   }
 };
