@@ -5,6 +5,7 @@
   import { Skeleton } from '$lib/components/ui/skeleton/index.js';
   import UpdateChurch from './components/update-church/update-church.svelte';
   import { initTableState } from './components/table/tableState.svelte';
+  import DeleteChurch from './components/delete-church/delete-church.svelte';
 
   const { data } = $props();
 
@@ -61,3 +62,4 @@
 </main>
 
 <UpdateChurch updateChurchForm={data.updateChurchForm} />
+<DeleteChurch deleteChurchForm={data.deleteChurchForm} />

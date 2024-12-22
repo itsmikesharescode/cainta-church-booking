@@ -5,11 +5,13 @@ import { createChurchSchema } from './components/create-church/schema';
 import { fail } from '@sveltejs/kit';
 import streamChurches from '$lib/db_calls/streamChurches';
 import { updateChurchSchema } from './components/update-church/schema';
+import { deleteChurchSchema } from './components/delete-church/schema';
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   return {
     createChurchForm: await superValidate(zod(createChurchSchema)),
     updateChurchForm: await superValidate(zod(updateChurchSchema)),
+    deleteChurchForm: await superValidate(zod(deleteChurchSchema)),
     getChurches: streamChurches(supabase)
   };
 };
@@ -77,5 +79,29 @@ export const actions: Actions = {
     if (updateErr) return fail(401, withFiles({ form, msg: updateErr.message }));
 
     return withFiles({ form, msg: 'Church successfully updated.' });
+  },
+
+  deleteChurchEvent: async ({ locals: { supabase }, request }) => {
+    const form = await superValidate(request, zod(deleteChurchSchema));
+
+    if (!form.valid) return fail(400, { form });
+
+    // Run both operations in parallel
+    const [deleteStorageResult, deleteDbResult] = await Promise.all([
+      supabase.storage.from('church_bucket').remove([form.data.image_path.split('/')[1]]),
+      supabase.from('churches_tb').delete().eq('id', form.data.id)
+    ]);
+
+    // Check for errors in storage deletion
+    if (deleteStorageResult.error) {
+      return fail(401, { msg: deleteStorageResult.error.message });
+    }
+
+    // Check for errors in database deletion
+    if (deleteDbResult.error) {
+      return fail(401, { msg: deleteDbResult.error.message });
+    }
+
+    return { form, msg: 'Church successfully deleted.' };
   }
 };
