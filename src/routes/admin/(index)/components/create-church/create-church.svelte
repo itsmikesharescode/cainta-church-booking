@@ -25,13 +25,13 @@
   const form = superForm(createChurchForm, {
     validators: zodClient(createChurchSchema),
     id: 'create-church-form',
-    onUpdate: ({ result }) => {
+    onUpdate: async ({ result }) => {
       const { status, data } = result;
 
       switch (status) {
         case 200:
           toast.success(data.msg);
-          goto('/admin');
+          await goto('/admin');
           break;
         case 401:
           toast.error(data.msg);

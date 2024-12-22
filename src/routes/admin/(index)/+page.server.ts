@@ -29,8 +29,8 @@ export const actions: Actions = {
 
     const { error: insertErr } = await supabase.from('churches_tb').insert({
       name: form.data.name,
-      events: form.data.events,
-      certs: form.data.certs,
+      events: JSON.parse(form.data.events),
+      certs: JSON.parse(form.data.certs),
       photo_link: uploadedObj.fullPath,
       address: form.data.address,
       open_time: form.data.open_time,
