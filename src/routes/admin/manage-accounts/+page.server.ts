@@ -3,10 +3,12 @@ import type { Actions, PageServerLoad } from './$types';
 import { zod } from 'sveltekit-superforms/adapters';
 import { createAccountSchema } from './components/create-account/schema';
 import { fail } from '@sveltejs/kit';
+import streamAccounts from '$lib/db_calls/streamAccounts';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   return {
-    createAccountForm: await superValidate(zod(createAccountSchema))
+    createAccountForm: await superValidate(zod(createAccountSchema)),
+    getAccounts: streamAccounts(supabase)
   };
 };
 

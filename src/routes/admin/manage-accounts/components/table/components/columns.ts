@@ -3,7 +3,6 @@ import { createRawSnippet } from 'svelte';
 import type { ManageAccountPageTable } from '../data/schemas';
 import { TableColumnHeader, TableRowActions, TableDisplayFullname } from './index.js';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/render-helpers.js';
-import { format24hrTo12hrAMPM } from '$lib/utils';
 
 export const columns: ColumnDef<ManageAccountPageTable, unknown>[] = [
   {
@@ -54,7 +53,7 @@ export const columns: ColumnDef<ManageAccountPageTable, unknown>[] = [
     cell: ({ row }) => {
       const toTimeSnippet = createRawSnippet<[string]>((getMobileNumber) => {
         return {
-          render: () => `<div class="w-full">${format24hrTo12hrAMPM(getMobileNumber())}</div>`
+          render: () => `<div class="w-full">${getMobileNumber()}</div>`
         };
       });
 
