@@ -6,6 +6,7 @@
   import { Skeleton } from '$lib/components/ui/skeleton/index.js';
   import { z } from 'zod';
   import UpdateAccount from './components/update-account/update-account.svelte';
+  import DeleteAccount from './components/delete-account/delete-account.svelte';
 
   const { data } = $props();
 
@@ -50,3 +51,4 @@
   updateInfoForm={data.updateInfoForm}
   updatePasswordForm={data.updatePasswordForm}
 />
+<DeleteAccount deleteAccountForm={data.deleteAccountForm} />

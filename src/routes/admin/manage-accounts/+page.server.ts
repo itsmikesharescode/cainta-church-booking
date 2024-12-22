@@ -7,10 +7,12 @@ import streamAccounts from '$lib/db_calls/streamAccounts';
 import { updateEmailSchema } from './components/update-account/update-email/schema';
 import { updateInfoSchema } from './components/update-account/update-info/schema';
 import { updatePasswordSchema } from './components/update-account/update-password/schema';
+import { deleteAccountSchema } from './components/delete-account/schema';
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   return {
     createAccountForm: await superValidate(zod(createAccountSchema)),
+    deleteAccountForm: await superValidate(zod(deleteAccountSchema)),
     updateEmailForm: await superValidate(zod(updateEmailSchema)),
     updateInfoForm: await superValidate(zod(updateInfoSchema)),
     updatePasswordForm: await superValidate(zod(updatePasswordSchema)),
@@ -89,5 +91,26 @@ export const actions: Actions = {
     if (error) return fail(401, { msg: error.message });
 
     return { form, msg: 'Password successfully updated.' };
+  },
+
+  deleteAccountEvent: async ({ locals: { supabaseAdmin }, request }) => {
+    const form = await superValidate(request, zod(deleteAccountSchema));
+
+    if (!form.valid) return fail(400, { form });
+
+    const [deleteStorageResult, deleteUserResult] = await Promise.all([
+      supabaseAdmin.storage.from('profile_bucket').remove([form.data.image_path.split('/')[1]]),
+      supabaseAdmin.auth.admin.deleteUser(form.data.user_id)
+    ]);
+
+    if (deleteStorageResult.error) {
+      return fail(401, { msg: deleteStorageResult.error.message });
+    }
+
+    if (deleteUserResult.error) {
+      return fail(401, { msg: deleteUserResult.error.message });
+    }
+
+    return { form, msg: 'Account successfully deleted.' };
   }
 };
