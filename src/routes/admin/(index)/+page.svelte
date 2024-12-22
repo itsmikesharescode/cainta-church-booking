@@ -6,6 +6,7 @@
   import UpdateChurch from './components/update-church/update-church.svelte';
   import { initTableState } from './components/table/tableState.svelte';
   import DeleteChurch from './components/delete-church/delete-church.svelte';
+  import CreateChurch from './components/create-church/create-church.svelte';
 
   const { data } = $props();
 
@@ -56,10 +57,11 @@
         <Skeleton class="h-9 w-full" />
       </div>
     {:then churches}
-      <Table data={churches ?? []} {columns} createChurchForm={data.createChurchForm} />
+      <Table data={churches ?? []} {columns} />
     {/await}
   </section>
 </main>
 
+<CreateChurch createChurchForm={data.createChurchForm} />
 <UpdateChurch updateChurchForm={data.updateChurchForm} />
 <DeleteChurch deleteChurchForm={data.deleteChurchForm} />

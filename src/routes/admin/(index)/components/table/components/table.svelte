@@ -25,16 +25,12 @@
   import * as Table from '$lib/components/ui/table/index';
   import type { DashboardPageTable } from '../data/schemas';
 
-  import type { Infer, SuperValidated } from 'sveltekit-superforms';
-  import type { CreateChurchSchema } from '../../create-church/schema';
-
   interface Props {
-    createChurchForm: SuperValidated<Infer<CreateChurchSchema>>;
     columns: ColumnDef<DashboardPageTable, unknown>[];
     data: DashboardPageTable[];
   }
 
-  let { columns, data, createChurchForm }: Props = $props();
+  let { columns, data }: Props = $props();
 
   let rowSelection = $state<RowSelectionState>({});
   let columnVisibility = $state<VisibilityState>({});
@@ -110,7 +106,7 @@
 </script>
 
 <div class="space-y-4">
-  <TableToolbar {createChurchForm} {table} />
+  <TableToolbar {table} />
 
   <TablePagination {table} />
 

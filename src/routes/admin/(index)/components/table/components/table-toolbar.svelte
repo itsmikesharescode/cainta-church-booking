@@ -9,22 +9,18 @@
   import Button from '$lib/components/ui/button/button.svelte';
   import { Input } from '$lib/components/ui/input/index';
   import type { DashboardPageTable } from '../data/schemas.js';
-  import CreateChurch from '../../create-church/create-church.svelte';
-  import type { Infer, SuperValidated } from 'sveltekit-superforms';
-  import type { CreateChurchSchema } from '../../create-church/schema.js';
 
   interface Props {
     table: Table<DashboardPageTable>;
-    createChurchForm: SuperValidated<Infer<CreateChurchSchema>>;
   }
 
-  let { table, createChurchForm }: Props = $props();
+  let { table }: Props = $props();
 
   const isFiltered = $derived(table.getState().columnFilters.length > 0);
 </script>
 
 <div class="flex items-center justify-between gap-2">
-  <CreateChurch {createChurchForm} />
+  <Button href="?modal=create-church" size="sm">Create Church</Button>
   <div class="flex items-center gap-2">
     <div class="flex items-center space-x-2">
       <Input

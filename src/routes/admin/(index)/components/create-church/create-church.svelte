@@ -47,8 +47,6 @@
   const file = fileProxy(form, 'image');
 </script>
 
-<Button onclick={() => goto('?modal=create-church')}>Add Church</Button>
-
 <Dialog.Root
   onOpenChange={() => {
     form.reset();
