@@ -3,15 +3,11 @@
   import { page } from '$app/state';
   import * as Dialog from '$lib/components/ui/dialog/index.js';
   import * as Form from '$lib/components/ui/form/index.js';
-  import { Input } from '$lib/components/ui/input/index.js';
   import { toast } from 'svelte-sonner';
   import { deleteChurchSchema, type DeleteChurchSchema } from './schema';
   import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
-  import EyeClosed from 'lucide-svelte/icons/eye-closed';
-  import Eye from 'lucide-svelte/icons/eye';
   import LoaderCircle from 'lucide-svelte/icons/loader-circle';
-  import Button from '$lib/components/ui/button/button.svelte';
   import { useTableState } from '../table/tableState.svelte';
 
   interface Props {
@@ -26,14 +22,14 @@
   const form = superForm(deleteChurchForm, {
     validators: zodClient(deleteChurchSchema),
     id: 'delete-church-form',
-    onUpdate: ({ result }) => {
+    onUpdate: async ({ result }) => {
       const { status, data } = result;
 
       switch (status) {
         case 200:
           toast.success(data.msg);
           tableState.setActiveRow(null);
-          tableState.setShowDelete(false);
+          await goto('/admin');
           break;
         case 401:
           toast.error(data.msg);
@@ -42,18 +38,15 @@
     }
   });
 
-  let showPwd = $state(false);
-
   const { form: formData, enhance, submitting } = form;
-
+  const open = $derived(page.url.searchParams.get('modal') === 'delete-church');
   $effect(() => {
-    if (tableState.getShowDelete()) {
+    if (open) {
       $formData.id = activeRow?.id ?? 0;
       $formData.image_path = activeRow?.photo_link ?? '';
       return () => {
         form.reset();
         tableState.setActiveRow(null);
-        tableState.setShowDelete(false);
       };
     }
   });
@@ -61,12 +54,12 @@
 
 <Dialog.Root
   controlledOpen
-  onOpenChange={(alwaysFalse) => {
+  onOpenChange={() => {
     form.reset();
     tableState.setActiveRow(null);
-    tableState.setShowDelete(alwaysFalse);
+    goto('/admin');
   }}
-  open={tableState.getShowDelete()}
+  {open}
 >
   <Dialog.Content>
     <Dialog.Header>

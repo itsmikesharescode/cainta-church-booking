@@ -128,7 +128,7 @@
               emptySeachMsg="No time found"
               contentStyle="w-[300px] p-0"
               bind:selected={$formData.open_time}
-              selections={createTimeRange('00:00:00', '24:00:00')}
+              selections={createTimeRange('00:00:00', '23:45:00')}
             />
             <input type="hidden" name={props.name} bind:value={$formData.open_time} />
           {/snippet}
@@ -147,7 +147,7 @@
               emptySeachMsg="No time found"
               contentStyle="w-[300px] p-0"
               bind:selected={$formData.close_time}
-              selections={createTimeRange('00:00:00', '24:00:00')}
+              selections={createTimeRange('00:00:00', '23:45:00')}
             />
             <input type="hidden" name={props.name} bind:value={$formData.close_time} />
           {/snippet}
