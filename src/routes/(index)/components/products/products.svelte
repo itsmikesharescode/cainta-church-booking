@@ -31,7 +31,7 @@
           </div>
 
           <div class="flex items-center justify-end gap-2.5">
-            <Button href="/reserve?id=123456" size="sm">
+            <Button href="/reserve?id={church.id}" size="sm">
               <CalendarCheck />
               Reveserve Now!
             </Button>

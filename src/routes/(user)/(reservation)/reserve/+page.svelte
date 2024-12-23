@@ -20,31 +20,40 @@
   }
 </script>
 
-<main class="container grid min-h-screen gap-10 py-10 md:grid-cols-[3fr,2fr]">
-  <section class="overflow-auto">
-    <Calendar reservations={[]} />
-  </section>
+{#if data.getChurch}
+  <main class="container flex min-h-screen flex-col gap-10 py-10">
+    <span class="text-4xl">{data.getChurch?.name}</span>
 
-  <section>
-    <Tabs.Root value="reservation" class="">
-      <Tabs.List>
-        <Tabs.Trigger
-          value="reservation"
-          onclick={() => updateUrl({ key: 'forward', value: 'reservation' })}
-          >Reservation</Tabs.Trigger
-        >
-        <Tabs.Trigger
-          value="request"
-          onclick={() => updateUrl({ key: 'forward', value: 'request' })}>Request</Tabs.Trigger
-        >
-      </Tabs.List>
+    <section class="grid gap-10 md:grid-cols-[3fr,2fr]">
+      <div class="overflow-auto">
+        <!--Should fetch specific id;s from reservations_tb-->
+        <Calendar reservations={[]} />
+      </div>
 
-      <Tabs.Content value="reservation">
-        <ReservationForm reservationForm={data.reservationForm} />
-      </Tabs.Content>
-      <Tabs.Content value="request">
-        <RequestForm requestForm={data.requestForm} />
-      </Tabs.Content>
-    </Tabs.Root>
-  </section>
-</main>
+      <div>
+        <Tabs.Root value="reservation" class="">
+          <Tabs.List>
+            <Tabs.Trigger
+              value="reservation"
+              onclick={() => updateUrl({ key: 'forward', value: 'reservation' })}
+              >Reservation</Tabs.Trigger
+            >
+            <Tabs.Trigger
+              value="request"
+              onclick={() => updateUrl({ key: 'forward', value: 'request' })}>Request</Tabs.Trigger
+            >
+          </Tabs.List>
+
+          <Tabs.Content value="reservation">
+            <ReservationForm churchData={data.getChurch} reservationForm={data.reservationForm} />
+          </Tabs.Content>
+          <Tabs.Content value="request">
+            <RequestForm churchData={data.getChurch} requestForm={data.requestForm} />
+          </Tabs.Content>
+        </Tabs.Root>
+      </div>
+    </section>
+  </main>
+{:else}
+  <p>No data</p>
+{/if}

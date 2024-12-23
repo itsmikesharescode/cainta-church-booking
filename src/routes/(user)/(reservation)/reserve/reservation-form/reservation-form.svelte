@@ -11,12 +11,14 @@
   import DatePicker from '$lib/components/general/date-picker.svelte';
   import { createTimeRange } from '$lib/utils';
   import Textarea from '$lib/components/ui/textarea/textarea.svelte';
+  import type { Database } from '$lib/database.types';
 
   interface Props {
     reservationForm: SuperValidated<Infer<ReservationSchema>>;
+    churchData: Database['public']['Tables']['churches_tb']['Row'];
   }
 
-  const { reservationForm }: Props = $props();
+  const { reservationForm, churchData }: Props = $props();
 
   const form = superForm(reservationForm, {
     validators: zodClient(reservationSchema),
@@ -50,10 +52,10 @@
           hasLabel={true}
           contentStyle="w-[300px] p-0"
           bind:selected={$formData.event_name}
-          selections={[
-            { id: '1', label: 'Svelte is fun', value: 'svelte' },
-            { id: '2', label: 'React is meh', value: 'react' }
-          ]}
+          selections={(churchData.events as any)?.map((item: any) => ({
+            label: item.name,
+            value: item.price
+          }))}
         />
         <input type="hidden" name={props.name} bind:value={$formData.event_name} />
       {/snippet}

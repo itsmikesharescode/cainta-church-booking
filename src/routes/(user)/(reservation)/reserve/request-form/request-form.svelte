@@ -6,12 +6,14 @@
   import { zodClient } from 'sveltekit-superforms/adapters';
   import LoaderCircle from 'lucide-svelte/icons/loader-circle';
   import ComboBox from '$lib/components/general/combo-box.svelte';
+  import type { Database } from '$lib/database.types';
 
   interface Props {
     requestForm: SuperValidated<Infer<RequestSchema>>;
+    churchData: Database['public']['Tables']['churches_tb']['Row'];
   }
 
-  const { requestForm }: Props = $props();
+  const { requestForm, churchData }: Props = $props();
 
   const form = superForm(requestForm, {
     validators: zodClient(requestSchema),
@@ -42,6 +44,7 @@
     <Form.Control>
       {#snippet children({ props })}
         <Form.Label>Certificate Name</Form.Label>
+        <!--Must update types soon-->
         <ComboBox
           placeholder="Select certificate"
           searchPlaceholder="Search something..."
@@ -49,10 +52,10 @@
           hasLabel={true}
           contentStyle="w-[300px] sm:w-[450px] p-0"
           bind:selected={$formData.name}
-          selections={[
-            { id: '1', label: 'Svelte is fun', value: 'svelte' },
-            { id: '2', label: 'React is meh', value: 'react' }
-          ]}
+          selections={(churchData.certs as any)?.map((item: any) => ({
+            label: item.name,
+            value: item.price
+          }))}
         />
         <input type="hidden" name={props.name} bind:value={$formData.name} />
       {/snippet}
