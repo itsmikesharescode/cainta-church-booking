@@ -7,6 +7,10 @@
   import LoaderCircle from 'lucide-svelte/icons/loader-circle';
   import { updatePasswordSchema, type UpdatePasswordSchema } from './schema';
   import { useTableState } from '../../table/tableState.svelte';
+  import { page } from '$app/state';
+  import { goto } from '$app/navigation';
+  import EyeClosed from 'lucide-svelte/icons/eye-closed';
+  import Eye from 'lucide-svelte/icons/eye';
 
   interface Props {
     updatePasswordForm: SuperValidated<Infer<UpdatePasswordSchema>>;
@@ -25,7 +29,7 @@
         case 200:
           toast.success(data.msg);
           tableState.setActiveRow(null);
-          tableState.setShowUpdate(false);
+          await goto('/admin/manage-accounts');
           break;
         case 401:
           toast.error(data.msg);
@@ -36,10 +40,13 @@
 
   const { form: formData, enhance, submitting } = form;
 
+  const dependencyCheck = $derived(page.url.searchParams.get('modal') === 'update-account');
   const activeRow = $derived(tableState.getActiveRow());
 
+  let showPwd = $state(false);
+
   $effect(() => {
-    if (tableState.getShowUpdate()) {
+    if (dependencyCheck) {
       $formData.user_id = activeRow?.user_id ?? '';
 
       return () => {
@@ -56,12 +63,21 @@
     <Form.Control>
       {#snippet children({ props })}
         <Form.Label>Password</Form.Label>
-        <Input
-          type="password"
-          {...props}
-          bind:value={$formData.password}
-          placeholder="Enter new password"
-        />
+        <div class="relative flex items-center">
+          <Input
+            type={showPwd ? 'text' : 'password'}
+            {...props}
+            bind:value={$formData.password}
+            placeholder="Enter password"
+          />
+          <button type="button" onclick={() => (showPwd = !showPwd)} class="absolute right-2 p-1">
+            {#if showPwd}
+              <Eye class="size-4" />
+            {:else}
+              <EyeClosed class="size-4" />
+            {/if}
+          </button>
+        </div>
       {/snippet}
     </Form.Control>
 
@@ -72,12 +88,21 @@
     <Form.Control>
       {#snippet children({ props })}
         <Form.Label>Confirm Password</Form.Label>
-        <Input
-          type="password"
-          {...props}
-          bind:value={$formData.confirmPassword}
-          placeholder="Confirm new password"
-        />
+        <div class="relative flex items-center">
+          <Input
+            type={showPwd ? 'text' : 'password'}
+            {...props}
+            bind:value={$formData.confirmPassword}
+            placeholder="Confirm password"
+          />
+          <button type="button" onclick={() => (showPwd = !showPwd)} class="absolute right-2 p-1">
+            {#if showPwd}
+              <Eye class="size-4" />
+            {:else}
+              <EyeClosed class="size-4" />
+            {/if}
+          </button>
+        </div>
       {/snippet}
     </Form.Control>
 

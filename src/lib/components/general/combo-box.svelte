@@ -95,7 +95,7 @@
           {#each selections as selection}
             <Command.Item
               id={selection.id}
-              value={selection.value}
+              value={selection.label}
               onSelect={() => {
                 if (selected === selection.value) {
                   selected = '';

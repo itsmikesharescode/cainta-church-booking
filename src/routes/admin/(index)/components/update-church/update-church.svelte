@@ -13,6 +13,9 @@
   import ComboBox from '$lib/components/general/combo-box.svelte';
   import { createTimeRange } from '$lib/utils';
   import { useTableState } from '../table/tableState.svelte';
+  import { page } from '$app/state';
+  import { goto } from '$app/navigation';
+  import Textarea from '$lib/components/ui/textarea/textarea.svelte';
 
   interface Props {
     updateChurchForm: SuperValidated<Infer<UpdateChurchSchema>>;
@@ -31,7 +34,7 @@
         case 200:
           toast.success(data.msg);
           tableState.setActiveRow(null);
-          tableState.setShowUpdate(false);
+          await goto('/admin');
           break;
         case 401:
           toast.error(data.msg);
@@ -45,12 +48,14 @@
   const file = fileProxy(form, 'image');
 
   const activeRow = $derived(tableState.getActiveRow());
+  const open = $derived(page.url.searchParams.get('modal') === 'update-church');
 
   $effect(() => {
-    if (tableState.getShowUpdate()) {
+    if (open) {
       $formData.id = activeRow?.id ?? 0;
       $formData.image_path = activeRow?.photo_link ?? '';
       $formData.name = activeRow?.name ?? '';
+      $formData.description = activeRow?.description ?? '';
       $formData.address = activeRow?.address ?? '';
       $formData.certs = JSON.stringify(activeRow?.certs ?? '');
       $formData.events = JSON.stringify(activeRow?.events ?? '');
@@ -58,20 +63,24 @@
       $formData.close_time = activeRow?.close_time ?? '';
       return () => {
         form.reset();
+        tableState.setActiveRow(null);
       };
     }
   });
+
+  let ref = $state<HTMLElement>(null!);
 </script>
 
 <Dialog.Root
-  onOpenChange={(alwaysFalse) => {
+  onOpenChange={() => {
     form.reset();
     tableState.setActiveRow(null);
-    tableState.setShowUpdate(alwaysFalse);
+    ref.focus();
+    goto('/admin');
   }}
-  open={tableState.getShowUpdate()}
+  {open}
 >
-  <Dialog.Content>
+  <Dialog.Content bind:ref>
     <Dialog.Header>
       <Dialog.Title>Update Church</Dialog.Title>
     </Dialog.Header>
@@ -99,6 +108,21 @@
           {#snippet children({ props })}
             <Form.Label>Church Name</Form.Label>
             <Input {...props} bind:value={$formData.name} placeholder="Enter church name" />
+          {/snippet}
+        </Form.Control>
+
+        <Form.FieldErrors />
+      </Form.Field>
+
+      <Form.Field {form} name="description">
+        <Form.Control>
+          {#snippet children({ props })}
+            <Form.Label>Church Description</Form.Label>
+            <Textarea
+              {...props}
+              bind:value={$formData.description}
+              placeholder="Enter church description"
+            />
           {/snippet}
         </Form.Control>
 

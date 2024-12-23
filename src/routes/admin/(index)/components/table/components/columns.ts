@@ -18,10 +18,33 @@ export const columns: ColumnDef<DashboardPageTable, unknown>[] = [
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<DashboardPageTable, unknown>, {
         column,
-        title: 'Church Name'
+        title: 'Name'
       });
     },
     cell: ({ row }) => renderComponent(TableDisplayChurchName<DashboardPageTable>, { row }),
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
+    accessorKey: 'description',
+    id: 'description',
+    header: ({ column }) => {
+      return renderComponent(TableColumnHeader<DashboardPageTable, unknown>, {
+        column,
+        title: 'Description'
+      });
+    },
+    cell: ({ row }) => {
+      const descriptionSnippet = createRawSnippet<[string]>((getDescription) => {
+        return {
+          render: () =>
+            `<div title=${getDescription()} class="w-full line-clamp-2">${getDescription()}</div>`
+        };
+      });
+
+      return renderSnippet(descriptionSnippet, row.getValue('description'));
+    },
     enableSorting: true,
     enableHiding: true
   },
@@ -32,7 +55,7 @@ export const columns: ColumnDef<DashboardPageTable, unknown>[] = [
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<DashboardPageTable, unknown>, {
         column,
-        title: 'Available Events'
+        title: 'Events'
       });
     },
     cell: ({ row }) => renderComponent(TableDispplayEvents<DashboardPageTable>, { row }),
@@ -46,7 +69,7 @@ export const columns: ColumnDef<DashboardPageTable, unknown>[] = [
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<DashboardPageTable, unknown>, {
         column,
-        title: 'Available Certificates'
+        title: 'Certificates'
       });
     },
     cell: ({ row }) => renderComponent(TableDisplayCerts<DashboardPageTable>, { row }),

@@ -41,18 +41,19 @@
   const { form: formData, enhance, submitting } = form;
 
   let open = $derived(page.url.searchParams.get('modal') === 'create-account');
-</script>
 
-<Button onclick={() => goto('?modal=create-church')}>Add Church</Button>
+  let ref = $state<HTMLElement>(null!);
+</script>
 
 <Dialog.Root
   onOpenChange={() => {
     form.reset();
+    ref.focus();
     goto('/admin/manage-accounts', { noScroll: true });
   }}
   {open}
 >
-  <Dialog.Content>
+  <Dialog.Content bind:ref>
     <Dialog.Header>
       <Dialog.Title>Create Account</Dialog.Title>
     </Dialog.Header>

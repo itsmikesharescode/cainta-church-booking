@@ -1,7 +1,9 @@
 import type { LayoutServerLoad } from './$types';
+import streamChurches from '$lib/db_calls/streamChurches';
+import streamAccounts from '$lib/db_calls/streamAccounts';
 
 export const load: LayoutServerLoad = async ({
-  locals: { safeGetSession, supabaseAdmin },
+  locals: { safeGetSession, supabaseAdmin, supabase },
   cookies
 }) => {
   const { session } = await safeGetSession();
@@ -20,6 +22,8 @@ export const load: LayoutServerLoad = async ({
   console.log(data, error?.message); */
   return {
     session,
-    cookies: cookies.getAll()
+    cookies: cookies.getAll(),
+    getChurches: streamChurches(supabase),
+    getAccounts: streamAccounts(supabase)
   };
 };

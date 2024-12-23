@@ -94,6 +94,7 @@ export type Database = {
           certs: Json
           close_time: string
           created_at: string
+          description: string
           events: Json
           id: number
           name: string
@@ -105,6 +106,7 @@ export type Database = {
           certs: Json
           close_time: string
           created_at?: string
+          description: string
           events: Json
           id?: number
           name: string
@@ -116,6 +118,7 @@ export type Database = {
           certs?: Json
           close_time?: string
           created_at?: string
+          description?: string
           events?: Json
           id?: number
           name?: string
@@ -165,7 +168,7 @@ export type Database = {
           initial_time: string
           message: string
           number_of_guest: number
-          price: number
+          price: number | null
           reference_id: string
           status: string
           user_id: string
@@ -180,9 +183,9 @@ export type Database = {
           initial_time: string
           message: string
           number_of_guest: number
-          price: number
+          price?: number | null
           reference_id: string
-          status: string
+          status?: string
           user_id: string
         }
         Update: {
@@ -195,7 +198,7 @@ export type Database = {
           initial_time?: string
           message?: string
           number_of_guest?: number
-          price?: number
+          price?: number | null
           reference_id?: string
           status?: string
           user_id?: string
@@ -265,6 +268,19 @@ export type Database = {
       is_user: {
         Args: Record<PropertyKey, never>
         Returns: boolean
+      }
+      reservation: {
+        Args: {
+          p_church_id: number
+          p_reference_id: string
+          p_event_name: string
+          p_number_of_guest: number
+          p_date: string
+          p_initial_time: string
+          p_final_time: string
+          p_message: string
+        }
+        Returns: undefined
       }
     }
     Enums: {

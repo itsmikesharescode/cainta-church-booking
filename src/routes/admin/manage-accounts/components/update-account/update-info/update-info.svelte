@@ -7,6 +7,8 @@
   import LoaderCircle from 'lucide-svelte/icons/loader-circle';
   import { updateInfoSchema, type UpdateInfoSchema } from './schema';
   import { useTableState } from '../../table/tableState.svelte';
+  import { page } from '$app/state';
+  import { goto } from '$app/navigation';
 
   interface Props {
     updateInfoForm: SuperValidated<Infer<UpdateInfoSchema>>;
@@ -25,7 +27,7 @@
         case 200:
           toast.success(data.msg);
           tableState.setActiveRow(null);
-          tableState.setShowUpdate(false);
+          await goto('/admin/manage-accounts');
           break;
         case 401:
           toast.error(data.msg);
@@ -36,10 +38,12 @@
 
   const { form: formData, enhance, submitting } = form;
 
+  const dependencyCheck = $derived(page.url.searchParams.get('modal') === 'update-account');
+
   const activeRow = $derived(tableState.getActiveRow());
 
   $effect(() => {
-    if (tableState.getShowUpdate()) {
+    if (dependencyCheck) {
       $formData.user_id = activeRow?.user_id ?? '';
       $formData.firstname = activeRow?.user_meta_data.firstname ?? '';
       $formData.lastname = activeRow?.user_meta_data.lastname ?? '';

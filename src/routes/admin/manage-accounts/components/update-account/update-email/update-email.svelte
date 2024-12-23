@@ -7,6 +7,8 @@
   import LoaderCircle from 'lucide-svelte/icons/loader-circle';
   import { updateEmailSchema, type UpdateEmailSchema } from './schema';
   import { useTableState } from '../../table/tableState.svelte';
+  import { page } from '$app/state';
+  import { goto } from '$app/navigation';
 
   interface Props {
     updateEmailForm: SuperValidated<Infer<UpdateEmailSchema>>;
@@ -24,8 +26,9 @@
       switch (status) {
         case 200:
           toast.success(data.msg);
+          form.reset();
           tableState.setActiveRow(null);
-          tableState.setShowUpdate(false);
+          await goto('/admin/manage-accounts');
           break;
         case 401:
           toast.error(data.msg);
@@ -36,10 +39,12 @@
 
   const { form: formData, enhance, submitting } = form;
 
+  const dependencyCheck = $derived(page.url.searchParams.get('modal') === 'update-account');
+
   const activeRow = $derived(tableState.getActiveRow());
 
   $effect(() => {
-    if (tableState.getShowUpdate()) {
+    if (dependencyCheck) {
       $formData.user_id = activeRow?.user_id ?? '';
       $formData.email = activeRow?.email ?? '';
 

@@ -19,7 +19,7 @@ export const createTimeRange = (initial: string, final: string) => {
   const endTime = new Date(`1970-01-01T${final}`);
   let id = 1;
 
-  // Loop until currentTime exceeds endTime
+  // Loop until currentTime reaches endTime
   while (currentTime <= endTime) {
     const hours = currentTime.getHours();
     const minutes = currentTime.getMinutes();
@@ -33,9 +33,25 @@ export const createTimeRange = (initial: string, final: string) => {
       value: currentTime.toTimeString().split(' ')[0]
     });
 
-    currentTime.setMinutes(currentTime.getMinutes() + 75); // Increment by 1 hour and 15 minutes
+    currentTime.setMinutes(currentTime.getMinutes() + 15); // Changed to 15-minute intervals
     id++;
   }
 
-  return timeArray;
+  return timeArray.sort((a, b) => {
+    const timeA = new Date(`1970-01-01T${a.value}`);
+    const timeB = new Date(`1970-01-01T${b.value}`);
+    return timeA.getTime() - timeB.getTime();
+  });
+};
+
+export const createRefID = (length: number) => {
+  const charset = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+  let result = '';
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * charset.length);
+    result += charset[randomIndex];
+  }
+
+  return result;
 };

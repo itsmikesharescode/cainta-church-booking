@@ -76,7 +76,7 @@ const authGuard: Handle = async ({ event, resolve }) => {
     if (role !== 'user') redirect(303, '/admin');
   }
 
-  if (!user && matchingUserRoutes) redirect(303, '/');
+  if ((!user && matchingUserRoutes) || (!user && path.startsWith('/admin'))) redirect(303, '/');
 
   if (!user && matchingRequestReserve) redirect(303, '/?auth=login');
 

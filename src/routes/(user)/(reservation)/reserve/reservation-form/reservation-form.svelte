@@ -6,27 +6,30 @@
   import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import LoaderCircle from 'lucide-svelte/icons/loader-circle';
-  import Button from '$lib/components/ui/button/button.svelte';
   import ComboBox from '$lib/components/general/combo-box.svelte';
   import DatePicker from '$lib/components/general/date-picker.svelte';
   import { createTimeRange } from '$lib/utils';
   import Textarea from '$lib/components/ui/textarea/textarea.svelte';
+  import type { Database } from '$lib/database.types';
+  import { goto } from '$app/navigation';
 
   interface Props {
     reservationForm: SuperValidated<Infer<ReservationSchema>>;
+    churchData: Database['public']['Tables']['churches_tb']['Row'];
   }
 
-  const { reservationForm }: Props = $props();
+  const { reservationForm, churchData }: Props = $props();
 
   const form = superForm(reservationForm, {
     validators: zodClient(reservationSchema),
     id: 'reservation-form',
-    onUpdate: ({ result }) => {
+    onUpdate: async ({ result }) => {
       const { status, data } = result;
 
       switch (status) {
         case 200:
           toast.success(data.msg);
+          await goto('/reservations');
           break;
         case 401:
           toast.error(data.msg);
@@ -38,7 +41,8 @@
   const { form: formData, enhance, submitting } = form;
 </script>
 
-<form method="POST" action="?/loginEvent" use:enhance>
+<form method="POST" action="?/reservationEvent" use:enhance>
+  <input type="hidden" name="church_id" value={churchData.id} />
   <Form.Field {form} name="event_name">
     <Form.Control>
       {#snippet children({ props })}
@@ -50,10 +54,10 @@
           hasLabel={true}
           contentStyle="w-[300px] p-0"
           bind:selected={$formData.event_name}
-          selections={[
-            { id: '1', label: 'Svelte is fun', value: 'svelte' },
-            { id: '2', label: 'React is meh', value: 'react' }
-          ]}
+          selections={(churchData.events as any)?.map((item: any) => ({
+            label: item.name,
+            value: `${item.name}/${item.price}`
+          }))}
         />
         <input type="hidden" name={props.name} bind:value={$formData.event_name} />
       {/snippet}
@@ -103,7 +107,7 @@
             emptySeachMsg="No available time found"
             contentStyle="w-[300px] p-0"
             bind:selected={$formData.initial_time}
-            selections={createTimeRange('10:00:00', '14:00:00')}
+            selections={createTimeRange(churchData.open_time, churchData.close_time)}
           />
           <input type="hidden" name={props.name} bind:value={$formData.initial_time} />
         {/snippet}
@@ -122,7 +126,7 @@
             emptySeachMsg="No available time found"
             contentStyle="w-[300px] p-0"
             bind:selected={$formData.final_time}
-            selections={createTimeRange('10:00:00', '14:00:00')}
+            selections={createTimeRange(churchData.open_time, churchData.close_time)}
           />
           <input type="hidden" name={props.name} bind:value={$formData.final_time} />
         {/snippet}
@@ -137,7 +141,7 @@
       {#snippet children({ props })}
         <Form.Label>Message</Form.Label>
 
-        <Textarea bind:value={$formData.message} placeholder="Enter your message ..." />
+        <Textarea {...props} bind:value={$formData.message} placeholder="Enter your message ..." />
       {/snippet}
     </Form.Control>
 
