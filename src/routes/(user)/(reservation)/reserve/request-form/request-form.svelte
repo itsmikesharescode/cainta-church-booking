@@ -54,7 +54,7 @@
           bind:selected={$formData.name}
           selections={(churchData.certs as any)?.map((item: any) => ({
             label: item.name,
-            value: item.price
+            value: `${item.name}/${item.price}`
           }))}
         />
         <input type="hidden" name={props.name} bind:value={$formData.name} />
