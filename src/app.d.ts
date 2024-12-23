@@ -18,11 +18,11 @@ declare global {
       ) => Promise<File | null>;
     }
     interface PageData {
-      session: Session | null;
+      session?: Session | null;
       user?: User | null;
       supabase?: SupabaseClient<Database>;
-      getChurches?: typeof streamChurches;
-      getAccounts?: typeof streamAccounts;
+      getChurches?: Awaited<ReturnType<typeof streamChurches>>;
+      getAccounts?: Awaited<ReturnType<typeof streamAccounts>>;
     }
     // interface PageState {}
     // interface Platform {}

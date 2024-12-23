@@ -3,20 +3,18 @@ import type { Actions, PageServerLoad } from './$types';
 import { zod } from 'sveltekit-superforms/adapters';
 import { createAccountSchema } from './components/create-account/schema';
 import { fail } from '@sveltejs/kit';
-import streamAccounts from '$lib/db_calls/streamAccounts';
 import { updateEmailSchema } from './components/update-account/update-email/schema';
 import { updateInfoSchema } from './components/update-account/update-info/schema';
 import { updatePasswordSchema } from './components/update-account/update-password/schema';
 import { deleteAccountSchema } from './components/delete-account/schema';
 
-export const load: PageServerLoad = async ({ locals: { supabase } }) => {
+export const load: PageServerLoad = async () => {
   return {
     createAccountForm: await superValidate(zod(createAccountSchema)),
     deleteAccountForm: await superValidate(zod(deleteAccountSchema)),
     updateEmailForm: await superValidate(zod(updateEmailSchema)),
     updateInfoForm: await superValidate(zod(updateInfoSchema)),
-    updatePasswordForm: await superValidate(zod(updatePasswordSchema)),
-    getAccounts: streamAccounts(supabase)
+    updatePasswordForm: await superValidate(zod(updatePasswordSchema))
   };
 };
 
