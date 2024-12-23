@@ -144,6 +144,52 @@ $$;
 
 ALTER FUNCTION "public"."on_auth_user_updated"() OWNER TO "postgres";
 
+
+CREATE OR REPLACE FUNCTION "public"."reservation"("p_church_id" numeric, "p_reference_id" "text", "p_event_name" "text", "p_number_of_guest" numeric, "p_date" "date", "p_initial_time" time without time zone, "p_final_time" time without time zone, "p_message" "text") RETURNS "void"
+    LANGUAGE "plpgsql"
+    AS $$
+begin
+    -- Check for existing reservations in the same time range for the same church
+    if exists (
+        select 1 
+        from reservations_tb
+        where church_id = p_church_id
+        and date = p_date
+        and (
+            (initial_time, final_time) OVERLAPS (p_initial_time, p_final_time)
+        )
+    ) then
+        raise exception 'Time slot is already taken for the selected date at this church';
+    end if;
+
+    -- If no collision, insert the new reservation
+    insert into reservations_tb (
+        user_id,
+        church_id,
+        reference_id,
+        event_name,
+        number_of_guest,
+        date,
+        initial_time,
+        final_time,
+        message
+    ) values (
+        auth.uid(),
+        p_church_id,
+        p_reference_id,
+        p_event_name,
+        p_number_of_guest,
+        p_date,
+        p_initial_time,
+        p_final_time,
+        p_message    
+    );
+end;
+$$;
+
+
+ALTER FUNCTION "public"."reservation"("p_church_id" numeric, "p_reference_id" "text", "p_event_name" "text", "p_number_of_guest" numeric, "p_date" "date", "p_initial_time" time without time zone, "p_final_time" time without time zone, "p_message" "text") OWNER TO "postgres";
+
 SET default_tablespace = '';
 
 SET default_table_access_method = "heap";
@@ -252,8 +298,8 @@ CREATE TABLE IF NOT EXISTS "public"."reservations_tb" (
     "final_time" time without time zone NOT NULL,
     "reference_id" character varying NOT NULL,
     "user_id" "uuid" NOT NULL,
-    "status" character varying NOT NULL,
-    "price" numeric NOT NULL,
+    "status" character varying DEFAULT 'pending'::character varying NOT NULL,
+    "price" numeric,
     "church_id" bigint NOT NULL,
     "message" "text" NOT NULL
 );
@@ -634,6 +680,12 @@ GRANT ALL ON FUNCTION "public"."on_auth_user_created"() TO "service_role";
 GRANT ALL ON FUNCTION "public"."on_auth_user_updated"() TO "anon";
 GRANT ALL ON FUNCTION "public"."on_auth_user_updated"() TO "authenticated";
 GRANT ALL ON FUNCTION "public"."on_auth_user_updated"() TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."reservation"("p_church_id" numeric, "p_reference_id" "text", "p_event_name" "text", "p_number_of_guest" numeric, "p_date" "date", "p_initial_time" time without time zone, "p_final_time" time without time zone, "p_message" "text") TO "anon";
+GRANT ALL ON FUNCTION "public"."reservation"("p_church_id" numeric, "p_reference_id" "text", "p_event_name" "text", "p_number_of_guest" numeric, "p_date" "date", "p_initial_time" time without time zone, "p_final_time" time without time zone, "p_message" "text") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."reservation"("p_church_id" numeric, "p_reference_id" "text", "p_event_name" "text", "p_number_of_guest" numeric, "p_date" "date", "p_initial_time" time without time zone, "p_final_time" time without time zone, "p_message" "text") TO "service_role";
 
 
 

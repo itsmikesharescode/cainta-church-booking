@@ -43,3 +43,15 @@ export const createTimeRange = (initial: string, final: string) => {
     return timeA.getTime() - timeB.getTime();
   });
 };
+
+export const createRefID = (length: number) => {
+  const charset = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+  let result = '';
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * charset.length);
+    result += charset[randomIndex];
+  }
+
+  return result;
+};

@@ -5,6 +5,7 @@
   import * as Tabs from '$lib/components/ui/tabs/index.js';
   import { page } from '$app/state';
   import { goto } from '$app/navigation';
+  import { format24hrTo12hrAMPM } from '$lib/utils';
 
   const { data } = $props();
 
@@ -22,8 +23,14 @@
 
 {#if data.getChurch}
   <main class="container flex min-h-screen flex-col gap-10 py-10">
-    <span class="text-4xl">{data.getChurch?.name}</span>
-
+    <section class="flex flex-col">
+      <span class="text-4xl">{data.getChurch?.name}</span>
+      <span class="text-sm text-muted-foreground">
+        Open everyday: {format24hrTo12hrAMPM(data.getChurch?.open_time)} - {format24hrTo12hrAMPM(
+          data.getChurch?.close_time
+        )}
+      </span>
+    </section>
     <section class="grid gap-10 md:grid-cols-[3fr,2fr]">
       <div class="overflow-auto">
         <!--Should fetch specific id;s from reservations_tb-->

@@ -27,7 +27,10 @@
         <div class="flex flex-col gap-2.5">
           <div class="flex flex-col">
             <span class="text-xl">{church.name}</span>
-            <span class="line-clamp-3 text-muted-foreground">{church.address}</span>
+            <span class="line-clamp-3 font-light italic text-muted-foreground"
+              >{church.address}</span
+            >
+            <span class="line-clamp-3 text-muted-foreground">{church.description}</span>
           </div>
 
           <div class="flex items-center justify-end gap-2.5">
