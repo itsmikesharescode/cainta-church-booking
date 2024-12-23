@@ -11,6 +11,7 @@
   import { createTimeRange } from '$lib/utils';
   import Textarea from '$lib/components/ui/textarea/textarea.svelte';
   import type { Database } from '$lib/database.types';
+  import { goto } from '$app/navigation';
 
   interface Props {
     reservationForm: SuperValidated<Infer<ReservationSchema>>;
@@ -22,12 +23,13 @@
   const form = superForm(reservationForm, {
     validators: zodClient(reservationSchema),
     id: 'reservation-form',
-    onUpdate: ({ result }) => {
+    onUpdate: async ({ result }) => {
       const { status, data } = result;
 
       switch (status) {
         case 200:
           toast.success(data.msg);
+          await goto('/reservations');
           break;
         case 401:
           toast.error(data.msg);
