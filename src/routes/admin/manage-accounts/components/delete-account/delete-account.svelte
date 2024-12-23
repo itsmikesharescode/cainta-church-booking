@@ -7,6 +7,8 @@
   import { zodClient } from 'sveltekit-superforms/adapters';
   import LoaderCircle from 'lucide-svelte/icons/loader-circle';
   import { useTableState } from '../table/tableState.svelte';
+  import { page } from '$app/state';
+  import { goto } from '$app/navigation';
 
   interface Props {
     deleteAccountForm: SuperValidated<Infer<DeleteAccountSchema>>;
@@ -20,14 +22,14 @@
   const form = superForm(deleteAccountForm, {
     validators: zodClient(deleteAccountSchema),
     id: 'delete-account-form',
-    onUpdate: ({ result }) => {
+    onUpdate: async ({ result }) => {
       const { status, data } = result;
 
       switch (status) {
         case 200:
           toast.success(data.msg);
           tableState.setActiveRow(null);
-          tableState.setShowDelete(false);
+          await goto('/admin/manage-accounts');
           break;
         case 401:
           toast.error(data.msg);
@@ -38,15 +40,16 @@
 
   const { form: formData, enhance, submitting } = form;
 
+  const open = $derived(page.url.searchParams.get('modal') === 'delete-account');
+
   $effect(() => {
-    if (tableState.getShowDelete()) {
+    if (open) {
       $formData.user_id = activeRow?.user_id ?? '';
       $formData.image_path = activeRow?.user_meta_data.avatar_link ?? '';
 
       return () => {
         form.reset();
         tableState.setActiveRow(null);
-        tableState.setShowDelete(false);
       };
     }
   });
@@ -57,9 +60,9 @@
   onOpenChange={(alwaysFalse) => {
     form.reset();
     tableState.setActiveRow(null);
-    tableState.setShowDelete(alwaysFalse);
+    goto('/admin/manage-accounts');
   }}
-  open={tableState.getShowDelete()}
+  {open}
 >
   <Dialog.Content>
     <Dialog.Header>

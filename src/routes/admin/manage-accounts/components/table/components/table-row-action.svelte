@@ -11,6 +11,7 @@
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index';
   import Button from '$lib/components/ui/button/button.svelte';
   import { useTableState } from '../tableState.svelte';
+  import { goto } from '$app/navigation';
 
   let { row }: { row: Row<ManageAccountPageTable> } = $props();
 
@@ -30,7 +31,7 @@
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
-        tableState.setShowUpdate(true);
+        goto('?modal=update-account');
       }}
     >
       <FilePenLine />
@@ -39,7 +40,7 @@
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
-        tableState.setShowDelete(true);
+        goto('?modal=delete-account');
       }}
     >
       <FileX />

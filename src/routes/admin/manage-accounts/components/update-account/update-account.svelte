@@ -10,6 +10,8 @@
   import type { UpdateInfoSchema } from './update-info/schema';
   import UpdatePassword from './update-password/update-password.svelte';
   import type { UpdatePasswordSchema } from './update-password/schema';
+  import { page } from '$app/state';
+  import { goto } from '$app/navigation';
 
   interface Props {
     updateEmailForm: SuperValidated<Infer<UpdateEmailSchema>>;
@@ -21,24 +23,23 @@
 
   const tableState = useTableState();
 
-  const activeRow = $derived(tableState.getActiveRow());
-
   $effect(() => {
     if (tableState.getShowUpdate()) {
       return () => {
         tableState.setActiveRow(null);
-        tableState.setShowUpdate(false);
       };
     }
   });
+
+  const open = $derived(page.url.searchParams.get('modal') === 'update-account');
 </script>
 
 <Dialog.Root
-  onOpenChange={(alwaysFalse) => {
+  onOpenChange={() => {
     tableState.setActiveRow(null);
-    tableState.setShowUpdate(alwaysFalse);
+    goto('/admin/manage-accounts');
   }}
-  open={tableState.getShowUpdate()}
+  {open}
 >
   <Dialog.Content>
     <Dialog.Header>
