@@ -32,16 +32,18 @@
   });
 
   const open = $derived(page.url.searchParams.get('modal') === 'update-account');
+  let ref = $state<HTMLElement>(null!);
 </script>
 
 <Dialog.Root
   onOpenChange={() => {
     tableState.setActiveRow(null);
+    ref.focus();
     goto('/admin/manage-accounts');
   }}
   {open}
 >
-  <Dialog.Content>
+  <Dialog.Content bind:ref>
     <Dialog.Header>
       <Dialog.Title>Update Account</Dialog.Title>
     </Dialog.Header>

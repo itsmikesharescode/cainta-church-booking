@@ -94,6 +94,7 @@ export type Database = {
           certs: Json
           close_time: string
           created_at: string
+          description: string
           events: Json
           id: number
           name: string
@@ -105,6 +106,7 @@ export type Database = {
           certs: Json
           close_time: string
           created_at?: string
+          description: string
           events: Json
           id?: number
           name: string
@@ -116,6 +118,7 @@ export type Database = {
           certs?: Json
           close_time?: string
           created_at?: string
+          description?: string
           events?: Json
           id?: number
           name?: string

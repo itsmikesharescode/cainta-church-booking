@@ -15,6 +15,7 @@
   import PhotoUploader from '$lib/components/general/photo-uploader.svelte';
   import ComboBox from '$lib/components/general/combo-box.svelte';
   import { createTimeRange } from '$lib/utils';
+  import Textarea from '$lib/components/ui/textarea/textarea.svelte';
 
   interface Props {
     createChurchForm: SuperValidated<Infer<CreateChurchSchema>>;
@@ -45,16 +46,19 @@
   let open = $derived(page.url.searchParams.get('modal') === 'create-church');
 
   const file = fileProxy(form, 'image');
+
+  let ref = $state<HTMLElement>(null!);
 </script>
 
 <Dialog.Root
   onOpenChange={() => {
     form.reset();
-    goto('/admin', { noScroll: true });
+    ref.focus();
+    goto('/admin');
   }}
   {open}
 >
-  <Dialog.Content>
+  <Dialog.Content bind:ref class="max-h-screen overflow-auto">
     <Dialog.Header>
       <Dialog.Title>Create Church</Dialog.Title>
     </Dialog.Header>
@@ -77,6 +81,21 @@
           {#snippet children({ props })}
             <Form.Label>Church Name</Form.Label>
             <Input {...props} bind:value={$formData.name} placeholder="Enter church name" />
+          {/snippet}
+        </Form.Control>
+
+        <Form.FieldErrors />
+      </Form.Field>
+
+      <Form.Field {form} name="description">
+        <Form.Control>
+          {#snippet children({ props })}
+            <Form.Label>Church Description</Form.Label>
+            <Textarea
+              {...props}
+              bind:value={$formData.description}
+              placeholder="Enter church description"
+            />
           {/snippet}
         </Form.Control>
 

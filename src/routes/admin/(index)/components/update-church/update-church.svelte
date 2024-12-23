@@ -15,6 +15,7 @@
   import { useTableState } from '../table/tableState.svelte';
   import { page } from '$app/state';
   import { goto } from '$app/navigation';
+  import Textarea from '$lib/components/ui/textarea/textarea.svelte';
 
   interface Props {
     updateChurchForm: SuperValidated<Infer<UpdateChurchSchema>>;
@@ -54,6 +55,7 @@
       $formData.id = activeRow?.id ?? 0;
       $formData.image_path = activeRow?.photo_link ?? '';
       $formData.name = activeRow?.name ?? '';
+      $formData.description = activeRow?.description ?? '';
       $formData.address = activeRow?.address ?? '';
       $formData.certs = JSON.stringify(activeRow?.certs ?? '');
       $formData.events = JSON.stringify(activeRow?.events ?? '');
@@ -65,17 +67,20 @@
       };
     }
   });
+
+  let ref = $state<HTMLElement>(null!);
 </script>
 
 <Dialog.Root
   onOpenChange={() => {
     form.reset();
     tableState.setActiveRow(null);
+    ref.focus();
     goto('/admin');
   }}
   {open}
 >
-  <Dialog.Content>
+  <Dialog.Content bind:ref>
     <Dialog.Header>
       <Dialog.Title>Update Church</Dialog.Title>
     </Dialog.Header>
@@ -103,6 +108,21 @@
           {#snippet children({ props })}
             <Form.Label>Church Name</Form.Label>
             <Input {...props} bind:value={$formData.name} placeholder="Enter church name" />
+          {/snippet}
+        </Form.Control>
+
+        <Form.FieldErrors />
+      </Form.Field>
+
+      <Form.Field {form} name="description">
+        <Form.Control>
+          {#snippet children({ props })}
+            <Form.Label>Church Description</Form.Label>
+            <Textarea
+              {...props}
+              bind:value={$formData.description}
+              placeholder="Enter church description"
+            />
           {/snippet}
         </Form.Control>
 

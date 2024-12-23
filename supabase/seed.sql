@@ -190,7 +190,8 @@ CREATE TABLE IF NOT EXISTS "public"."churches_tb" (
     "address" "text" NOT NULL,
     "open_time" time without time zone NOT NULL,
     "close_time" time without time zone NOT NULL,
-    "certs" "jsonb" NOT NULL
+    "certs" "jsonb" NOT NULL,
+    "description" "text" NOT NULL
 );
 
 

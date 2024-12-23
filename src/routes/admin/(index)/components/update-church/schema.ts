@@ -7,6 +7,7 @@ export const updateChurchSchema = z.object({
     .instanceof(File, { message: 'Please upload a file.' })
     .refine((f) => f.size < 3_000_000, 'Max 3 MB upload size.'),
   name: z.string().min(1, { message: 'Must enter a church name.' }),
+  description: z.string().min(1, { message: 'Must enter a church description.' }),
   events: z.string().min(1, { message: 'Must enter an event name.' }),
   certs: z.string().min(1, { message: 'Must enter a certificate.' }),
   address: z.string().min(1, { message: 'Must enter a church address.' }),
