@@ -41,7 +41,7 @@
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
-        goto('?modal=cancel-reservation');
+        goto('?modal=delete-reservation');
       }}
     >
       <X />
