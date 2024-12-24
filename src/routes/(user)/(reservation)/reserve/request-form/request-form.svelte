@@ -7,6 +7,7 @@
   import LoaderCircle from 'lucide-svelte/icons/loader-circle';
   import ComboBox from '$lib/components/general/combo-box.svelte';
   import type { Database } from '$lib/database.types';
+  import { goto } from '$app/navigation';
 
   interface Props {
     requestForm: SuperValidated<Infer<RequestSchema>>;
@@ -18,12 +19,13 @@
   const form = superForm(requestForm, {
     validators: zodClient(requestSchema),
     id: 'request-form',
-    onUpdate: ({ result }) => {
+    onUpdate: async ({ result }) => {
       const { status, data } = result;
 
       switch (status) {
         case 200:
           toast.success(data.msg);
+          await goto('/cert-requests');
           break;
         case 401:
           toast.error(data.msg);
@@ -33,13 +35,10 @@
   });
 
   const { form: formData, enhance, submitting } = form;
-
-  $effect(() => {
-    return () => console.log('CLEANED REQ');
-  });
 </script>
 
 <form method="POST" action="?/requestEvent" use:enhance>
+  <input type="hidden" name="church_id" value={churchData.id} />
   <Form.Field {form} name="name">
     <Form.Control>
       {#snippet children({ props })}

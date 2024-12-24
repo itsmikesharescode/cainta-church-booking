@@ -200,7 +200,7 @@ CREATE TABLE IF NOT EXISTS "public"."cert_requests_tb" (
     "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
     "user_id" "uuid" NOT NULL,
     "name" "text" NOT NULL,
-    "price" numeric NOT NULL,
+    "price" numeric,
     "church_id" bigint NOT NULL,
     "reference_id" "text" NOT NULL,
     "date_available" "date",
@@ -411,11 +411,23 @@ ALTER TABLE ONLY "public"."users_tb"
 
 
 
+CREATE POLICY "Allow all if admin" ON "public"."cert_requests_tb" TO "authenticated" USING ("public"."is_admin"()) WITH CHECK ("public"."is_admin"());
+
+
+
 CREATE POLICY "Allow all if admin" ON "public"."reservations_tb" TO "authenticated" USING ("public"."is_admin"()) WITH CHECK ("public"."is_admin"());
 
 
 
+CREATE POLICY "Allow delete if auth and exist" ON "public"."cert_requests_tb" FOR DELETE TO "authenticated" USING (("public"."is_user"() AND ("auth"."uid"() = "user_id")));
+
+
+
 CREATE POLICY "Allow delete if auth and exist" ON "public"."reservations_tb" FOR DELETE TO "authenticated" USING (("public"."is_user"() AND ("auth"."uid"() = "user_id")));
+
+
+
+CREATE POLICY "Allow insert if auth" ON "public"."cert_requests_tb" FOR INSERT TO "authenticated" WITH CHECK ("public"."is_user"());
 
 
 
@@ -424,6 +436,14 @@ CREATE POLICY "Allow insert if auth" ON "public"."reservations_tb" FOR INSERT TO
 
 
 CREATE POLICY "Allow select if admin" ON "public"."users_tb" FOR SELECT TO "authenticated" USING ("public"."is_admin"());
+
+
+
+CREATE POLICY "Allow select if auth and exist" ON "public"."cert_requests_tb" FOR SELECT TO "authenticated" USING (("public"."is_user"() AND ("auth"."uid"() = "user_id")));
+
+
+
+CREATE POLICY "Allow update if auth and exist" ON "public"."cert_requests_tb" FOR UPDATE TO "authenticated" USING (("public"."is_user"() AND ("auth"."uid"() = "user_id"))) WITH CHECK (("public"."is_user"() AND ("auth"."uid"() = "user_id")));
 
 
 
