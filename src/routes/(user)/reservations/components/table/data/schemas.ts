@@ -5,10 +5,13 @@ export const reservationSchema = z.object({
   created_at: z.string(),
   reference_id: z.string(),
   event_name: z.string(),
-  number_of_guest: z.string(),
+  number_of_guest: z.number(),
   date: z.string(),
   initial_time: z.string(),
-  final_time: z.string()
+  final_time: z.string(),
+  price: z.number(),
+  status: z.string(),
+  message: z.string()
 });
 
 export type ReservationsPageTable = z.output<typeof reservationSchema>;
