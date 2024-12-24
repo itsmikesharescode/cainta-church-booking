@@ -26,12 +26,14 @@
 
   $effect(() => {
     if (dependency) {
+      $formData.id = tableState.getActiveRow()?.id ?? 0;
       $formData.price = Number(tableState.getActiveRow()?.event_name.split('/')[1]) ?? 0;
     }
   });
 </script>
 
 <form method="POST" action="?/approveReservationEvent" use:enhance>
+  <input type="hidden" name="id" bind:value={$formData.id} />
   <Form.Field {form} name="price">
     <Form.Control>
       {#snippet children({ props })}
