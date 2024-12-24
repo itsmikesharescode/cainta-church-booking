@@ -12,6 +12,7 @@
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index';
   import Button from '$lib/components/ui/button/button.svelte';
   import { useTableState } from '../tableState.svelte';
+  import { goto } from '$app/navigation';
 
   let { row }: { row: Row<ReservationsPageTable> } = $props();
 
@@ -39,6 +40,7 @@
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
+        goto('?modal=cancel-reservation');
       }}
     >
       <X />

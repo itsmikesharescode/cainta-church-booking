@@ -2,8 +2,12 @@
   import Table from './components/table/components/table.svelte';
   import { columns } from './components/table/components/columns';
   import { Skeleton } from '$lib/components/ui/skeleton/index.js';
+  import { initTableState } from './components/table/tableState.svelte';
+  import CancelReservation from './components/cancel-reservation/cancel-reservation.svelte';
 
   const { data } = $props();
+
+  initTableState();
 </script>
 
 <main class="container min-h-screen py-10">
@@ -41,3 +45,5 @@
     />
   {/await}
 </main>
+
+<CancelReservation cancelReservationForm={data.cancelReservationForm} />
