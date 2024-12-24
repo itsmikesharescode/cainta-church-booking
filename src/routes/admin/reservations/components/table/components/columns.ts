@@ -61,8 +61,14 @@ export const columns: ColumnDef<AdminReservationsPageTable, unknown>[] = [
     },
     cell: ({ row }) => {
       const statusSnippet = createRawSnippet<[string]>((getStatus) => {
+        const detectColor = (v: string) => {
+          if (v === 'pending') return 'text-red-500';
+          if (v === 'accepted') return 'text-yellow-500';
+          return 'text-green-500';
+        };
+
         return {
-          render: () => `<div class="w-full">${getStatus()}</div>`
+          render: () => `<div class="w-full ${detectColor(getStatus())}">${getStatus()}</div>`
         };
       });
 
