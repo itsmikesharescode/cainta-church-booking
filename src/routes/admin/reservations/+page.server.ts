@@ -3,6 +3,7 @@ import type { Actions, PageServerLoad } from './$types';
 import { adminDeleteReservationSchema } from './components/delete-reservation/schema';
 import { zod } from 'sveltekit-superforms/adapters';
 import { fail } from '@sveltejs/kit';
+import { adminApproveResSchema } from './components/view-user/components/approve-reservation/schema';
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   const getReservations = async () => {
@@ -16,6 +17,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   };
 
   return {
+    adminApproveReservationForm: await superValidate(zod(adminApproveResSchema)),
     adminDeleteReservationForm: await superValidate(zod(adminDeleteReservationSchema)),
     reservations: getReservations()
   };
@@ -32,5 +34,12 @@ export const actions: Actions = {
     if (error) return fail(401, { form, msg: error.message });
 
     return { form, msg: 'Sucessfully deleted a reservation.' };
+  },
+
+  approveReservationEvent: async ({ locals: { supabase }, request }) => {
+    const form = await superValidate(request, zod(adminApproveResSchema));
+
+    if (!form.valid) return fail(400, { form });
+    console.log(form.data);
   }
 };

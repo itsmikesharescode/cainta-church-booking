@@ -4,6 +4,7 @@
   import { Skeleton } from '$lib/components/ui/skeleton/index.js';
   import { initTableState } from './components/table/tableState.svelte';
   import DeleteReservation from './components/delete-reservation/delete-reservation.svelte';
+  import ViewUser from './components/view-user/view-user.svelte';
 
   const { data } = $props();
 
@@ -31,4 +32,5 @@
   {/await}
 </main>
 
+<ViewUser adminApproveReservationForm={data.adminApproveReservationForm} />
 <DeleteReservation adminDeleteReservationForm={data.adminDeleteReservationForm} />
