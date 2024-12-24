@@ -3,6 +3,7 @@ import { createRawSnippet } from 'svelte';
 import type { CertRequestsPageTable } from '../data/schemas';
 import { TableColumnHeader, TableRowActions } from './index.js';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/render-helpers.js';
+import { format24hrTo12hrAMPM } from '$lib/utils';
 
 export const columns: ColumnDef<CertRequestsPageTable, unknown>[] = [
   {
@@ -43,7 +44,7 @@ export const columns: ColumnDef<CertRequestsPageTable, unknown>[] = [
         };
       });
 
-      return renderSnippet(certNameSnippet, row.getValue('event_name'));
+      return renderSnippet(certNameSnippet, row.getValue('name'));
     },
     enableSorting: true,
     enableHiding: true
@@ -61,7 +62,7 @@ export const columns: ColumnDef<CertRequestsPageTable, unknown>[] = [
     cell: ({ row }) => {
       const priceSnippet = createRawSnippet<[string]>((getPrice) => {
         return {
-          render: () => `<div class="w-full">${getPrice()}</div>`
+          render: () => `<div class="w-full">${getPrice() || 'Not available'}</div>`
         };
       });
 
@@ -83,7 +84,7 @@ export const columns: ColumnDef<CertRequestsPageTable, unknown>[] = [
     cell: ({ row }) => {
       const dateSnippet = createRawSnippet<[string]>((getDateAvailable) => {
         return {
-          render: () => `<div class="w-full">${getDateAvailable()}</div>`
+          render: () => `<div class="w-full">${getDateAvailable() || 'Not available'}</div>`
         };
       });
 
@@ -105,7 +106,8 @@ export const columns: ColumnDef<CertRequestsPageTable, unknown>[] = [
     cell: ({ row }) => {
       const fromTimeSnippet = createRawSnippet<[string]>((getFromTime) => {
         return {
-          render: () => `<div class="w-full truncate">${getFromTime()}</div>`
+          render: () =>
+            `<div class="w-full truncate">${getFromTime() ? format24hrTo12hrAMPM(getFromTime()) : 'Not available'}</div>`
         };
       });
 
@@ -127,7 +129,8 @@ export const columns: ColumnDef<CertRequestsPageTable, unknown>[] = [
     cell: ({ row }) => {
       const toTimeSnippet = createRawSnippet<[string]>((getToTime) => {
         return {
-          render: () => `<div class="w-full">${getToTime()}</div>`
+          render: () =>
+            `<div class="w-full">${getToTime() ? format24hrTo12hrAMPM(getToTime()) : 'Not available'}</div>`
         };
       });
 
@@ -149,7 +152,8 @@ export const columns: ColumnDef<CertRequestsPageTable, unknown>[] = [
     cell: ({ row }) => {
       const createdAtSnippet = createRawSnippet<[string]>((getCreatedAt) => {
         return {
-          render: () => `<div class="w-full">${getCreatedAt()}</div>`
+          render: () =>
+            `<div class="w-full">${new Date(getCreatedAt()).toLocaleDateString()} @ ${new Date(getCreatedAt()).toLocaleTimeString()}</div>`
         };
       });
 

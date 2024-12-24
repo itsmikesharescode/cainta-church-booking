@@ -3,6 +3,7 @@ import { createRawSnippet } from 'svelte';
 import type { ReservationsPageTable } from '../data/schemas';
 import { TableColumnHeader, TableRowActions } from './index.js';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/render-helpers.js';
+import { format24hrTo12hrAMPM } from '$lib/utils';
 
 export const columns: ColumnDef<ReservationsPageTable, unknown>[] = [
   {
@@ -50,12 +51,56 @@ export const columns: ColumnDef<ReservationsPageTable, unknown>[] = [
   },
 
   {
+    accessorKey: 'status',
+    id: 'status',
+    header: ({ column }) => {
+      return renderComponent(TableColumnHeader<ReservationsPageTable, unknown>, {
+        column,
+        title: 'Status'
+      });
+    },
+    cell: ({ row }) => {
+      const statusSnippet = createRawSnippet<[string]>((getStatus) => {
+        return {
+          render: () => `<div class="w-full">${getStatus()}</div>`
+        };
+      });
+
+      return renderSnippet(statusSnippet, row.getValue('status'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
+    accessorKey: 'price',
+    id: 'price',
+    header: ({ column }) => {
+      return renderComponent(TableColumnHeader<ReservationsPageTable, unknown>, {
+        column,
+        title: 'Price'
+      });
+    },
+    cell: ({ row }) => {
+      const priceSnippet = createRawSnippet<[string]>((getPrice) => {
+        return {
+          render: () => `<div class="w-full">${getPrice() ? getPrice() : 'Not available'}</div>`
+        };
+      });
+
+      return renderSnippet(priceSnippet, row.getValue('price'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
     accessorKey: 'number_of_guest',
     id: 'number_of_guest',
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<ReservationsPageTable, unknown>, {
         column,
-        title: 'Number Of Guest'
+        title: 'Guest'
       });
     },
     cell: ({ row }) => {
@@ -105,7 +150,8 @@ export const columns: ColumnDef<ReservationsPageTable, unknown>[] = [
     cell: ({ row }) => {
       const initialTimeSnippet = createRawSnippet<[string]>((getInitialTime) => {
         return {
-          render: () => `<div class="w-full truncate">${getInitialTime()}</div>`
+          render: () =>
+            `<div class="w-full truncate">${format24hrTo12hrAMPM(getInitialTime())}</div>`
         };
       });
 
@@ -127,11 +173,11 @@ export const columns: ColumnDef<ReservationsPageTable, unknown>[] = [
     cell: ({ row }) => {
       const finalTimeSnippet = createRawSnippet<[string]>((getFinalTime) => {
         return {
-          render: () => `<div class="w-full">${getFinalTime()}</div>`
+          render: () => `<div class="w-full">${format24hrTo12hrAMPM(getFinalTime())}</div>`
         };
       });
 
-      return renderSnippet(finalTimeSnippet, row.getValue('room'));
+      return renderSnippet(finalTimeSnippet, row.getValue('final_time'));
     },
     enableSorting: true,
     enableHiding: true
@@ -149,7 +195,8 @@ export const columns: ColumnDef<ReservationsPageTable, unknown>[] = [
     cell: ({ row }) => {
       const createdAtSnippet = createRawSnippet<[string]>((getCreatedAt) => {
         return {
-          render: () => `<div class="w-full">${getCreatedAt()}</div>`
+          render: () =>
+            `<div class="w-full">${new Date(getCreatedAt()).toLocaleDateString()} @ ${new Date(getCreatedAt()).toLocaleTimeString()}</div>`
         };
       });
 

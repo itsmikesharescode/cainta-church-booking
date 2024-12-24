@@ -41,7 +41,7 @@ export type Database = {
           date_available: string | null
           id: number
           name: string
-          price: number
+          price: number | null
           reference_id: string
           time_available_end: string | null
           time_available_start: string | null
@@ -53,7 +53,7 @@ export type Database = {
           date_available?: string | null
           id?: number
           name: string
-          price: number
+          price?: number | null
           reference_id: string
           time_available_end?: string | null
           time_available_start?: string | null
@@ -65,7 +65,7 @@ export type Database = {
           date_available?: string | null
           id?: number
           name?: string
-          price?: number
+          price?: number | null
           reference_id?: string
           time_available_end?: string | null
           time_available_start?: string | null

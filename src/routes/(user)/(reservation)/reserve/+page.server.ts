@@ -59,6 +59,15 @@ export const actions: Actions = {
 
     if (!form.valid) return fail(400, { form });
 
-    console.log(`${supabase}, ${user}`);
+    const { error } = await supabase.from('cert_requests_tb').insert({
+      church_id: form.data.church_id,
+      user_id: user?.id ?? '',
+      name: form.data.name,
+      reference_id: createRefID(8)
+    });
+
+    if (error) return fail(401, { form, msg: error.message });
+
+    return { form, msg: `You have successfully request ${form.data.name}` };
   }
 };

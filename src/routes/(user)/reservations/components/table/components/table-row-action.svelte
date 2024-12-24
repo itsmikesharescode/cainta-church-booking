@@ -4,16 +4,15 @@
 
 <script lang="ts" generics="TData">
   import Ellipsis from 'lucide-svelte/icons/ellipsis';
-  import FileMinus from 'lucide-svelte/icons/file-minus';
-  import Delete from 'lucide-svelte/icons/delete';
-  import NotebookPen from 'lucide-svelte/icons/notebook-pen';
-  import Pen from 'lucide-svelte/icons/pen';
-  import Check from 'lucide-svelte/icons/check';
+  import X from 'lucide-svelte/icons/x';
+  import SquareArrowUpRight from 'lucide-svelte/icons/square-arrow-up-right';
+
   import type { Row } from '@tanstack/table-core';
   import { type ReservationsPageTable } from '../data/schemas';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index';
   import Button from '$lib/components/ui/button/button.svelte';
   import { useTableState } from '../tableState.svelte';
+  import { goto } from '$app/navigation';
 
   let { row }: { row: Row<ReservationsPageTable> } = $props();
 
@@ -33,29 +32,19 @@
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
-        tableState.setShowUpdateStatus(true);
       }}
     >
-      <NotebookPen />
-      Update Status
+      <SquareArrowUpRight />
+      Proceed Payment?
     </DropdownMenu.Item>
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
-        tableState.setShowUpdate(true);
+        goto('?modal=cancel-reservation');
       }}
     >
-      <NotebookPen />
-      Modify
-    </DropdownMenu.Item>
-    <DropdownMenu.Item
-      onclick={() => {
-        tableState.setActiveRow(row.original);
-        tableState.setShowDelete(true);
-      }}
-    >
-      <Delete />
-      Remove
+      <X />
+      Cancel
     </DropdownMenu.Item>
   </DropdownMenu.Content>
 </DropdownMenu.Root>
