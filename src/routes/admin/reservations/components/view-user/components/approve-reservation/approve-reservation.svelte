@@ -30,6 +30,8 @@
       $formData.price = Number(tableState.getActiveRow()?.event_name.split('/')[1]) ?? 0;
     }
   });
+
+  // TODO: Implement functionality to update the reservation status from pending to accepted. The user will also update it to paid when payment is made. Additionally, hide the approval form when the status is already approved or paid.
 </script>
 
 <form method="POST" action="?/approveReservationEvent" use:enhance>
