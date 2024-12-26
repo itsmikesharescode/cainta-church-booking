@@ -151,7 +151,7 @@ export const columns: ColumnDef<ReservationsPageTable, unknown>[] = [
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<ReservationsPageTable, unknown>, {
         column,
-        title: 'Initial Time'
+        title: 'From'
       });
     },
     cell: ({ row }) => {
@@ -174,7 +174,7 @@ export const columns: ColumnDef<ReservationsPageTable, unknown>[] = [
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<ReservationsPageTable, unknown>, {
         column,
-        title: 'Final Time'
+        title: 'To'
       });
     },
     cell: ({ row }) => {
