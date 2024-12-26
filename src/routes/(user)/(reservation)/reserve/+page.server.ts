@@ -63,7 +63,10 @@ export const actions: Actions = {
       church_id: form.data.church_id,
       user_id: user?.id ?? '',
       name: form.data.name,
-      reference_id: createRefID(8)
+      reference_id: createRefID(8),
+      date: form.data.date,
+      initial_time: form.data.initial_time,
+      final_time: form.data.final_time
     });
 
     if (error) return fail(401, { form, msg: error.message });

@@ -8,9 +8,10 @@ export const certRequestSchema = z.object({
   church_id: z.number(),
   name: z.string(),
   price: z.number().nullable(),
-  date_available: z.string().nullable(),
-  time_available_start: z.string().nullable(),
-  time_available_end: z.string().nullable()
+  status: z.string(),
+  date: z.string(),
+  initial_time: z.string(),
+  final_time: z.string()
 });
 
 export type CertRequestsPageTable = z.output<typeof certRequestSchema>;

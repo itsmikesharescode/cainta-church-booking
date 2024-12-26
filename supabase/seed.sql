@@ -203,9 +203,10 @@ CREATE TABLE IF NOT EXISTS "public"."cert_requests_tb" (
     "price" numeric,
     "church_id" bigint NOT NULL,
     "reference_id" "text" NOT NULL,
-    "date_available" "date",
-    "time_available_start" time without time zone,
-    "time_available_end" time without time zone
+    "date" "date" NOT NULL,
+    "initial_time" time without time zone NOT NULL,
+    "final_time" time without time zone NOT NULL,
+    "status" character varying DEFAULT 'pending'::character varying NOT NULL
 );
 
 
