@@ -102,28 +102,6 @@ export const columns: ColumnDef<AdminCertRequestsPageTable, unknown>[] = [
   },
 
   {
-    accessorKey: 'number_of_guest',
-    id: 'number_of_guest',
-    header: ({ column }) => {
-      return renderComponent(TableColumnHeader<AdminCertRequestsPageTable, unknown>, {
-        column,
-        title: 'Guest'
-      });
-    },
-    cell: ({ row }) => {
-      const numberOfGuestSnippet = createRawSnippet<[string]>((getNumberOfGuest) => {
-        return {
-          render: () => `<div class="w-full">${getNumberOfGuest()}</div>`
-        };
-      });
-
-      return renderSnippet(numberOfGuestSnippet, row.getValue('number_of_guest'));
-    },
-    enableSorting: true,
-    enableHiding: true
-  },
-
-  {
     accessorKey: 'date',
     id: 'date',
     header: ({ column }) => {
@@ -151,7 +129,7 @@ export const columns: ColumnDef<AdminCertRequestsPageTable, unknown>[] = [
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<AdminCertRequestsPageTable, unknown>, {
         column,
-        title: 'Initial Time'
+        title: 'From'
       });
     },
     cell: ({ row }) => {
@@ -174,7 +152,7 @@ export const columns: ColumnDef<AdminCertRequestsPageTable, unknown>[] = [
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<AdminCertRequestsPageTable, unknown>, {
         column,
-        title: 'Final Time'
+        title: 'To'
       });
     },
     cell: ({ row }) => {
