@@ -40,6 +40,17 @@ export const actions: Actions = {
     const form = await superValidate(request, zod(adminApproveResSchema));
 
     if (!form.valid) return fail(400, { form });
-    console.log(form.data);
+
+    const { error } = await supabase
+      .from('reservations_tb')
+      .update({
+        status: 'approved',
+        price: form.data.price
+      })
+      .eq('id', form.data.id);
+
+    if (error) return fail(401, { form, msg: error.message });
+
+    return { form, msg: 'Reservation approved.' };
   }
 };

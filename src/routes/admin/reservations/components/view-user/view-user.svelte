@@ -59,27 +59,30 @@
       </div>
 
       <Separator />
+      {#if activeRow.status !== 'approved'}
+        <div class="">
+          <span class="text-sm text-muted-foreground">
+            The user wants to reserve at
+            <i class="underline">
+              {format24hrTo12hrAMPM(activeRow?.initial_time ?? '')} -
+              {format24hrTo12hrAMPM(activeRow?.final_time ?? '')} @
+              {activeRow?.date}
+            </i>
+          </span>
+          <span class="text-sm text-muted-foreground">
+            With event name of
+            <i class="underline">{activeRow?.event_name.split('/')[0]}</i>
+            at price of ₱
+            <i class="underline">{Number(activeRow?.event_name.split('/')[1]).toLocaleString()}</i>
+          </span>
+        </div>
 
-      <div class="">
-        <span class="text-sm text-muted-foreground">
-          The user wants to reserve at
-          <i class="underline">
-            {format24hrTo12hrAMPM(activeRow?.initial_time ?? '')} -
-            {format24hrTo12hrAMPM(activeRow?.final_time ?? '')} @
-            {activeRow?.date}
-          </i>
-        </span>
-        <span class="text-sm text-muted-foreground">
-          With event name of
-          <i class="underline">{activeRow?.event_name.split('/')[0]}</i>
-          at price of ₱
-          <i class="underline">{Number(activeRow?.event_name.split('/')[1]).toLocaleString()}</i>
-        </span>
-      </div>
-
-      <div class="">
-        <ApproveReservation {adminApproveReservationForm} />
-      </div>
+        <div class="">
+          <ApproveReservation {adminApproveReservationForm} />
+        </div>
+      {:else}
+        <span class="text-base text-muted-foreground">This reservation is already approved.</span>
+      {/if}
     </Dialog.Content>
   </Dialog.Root>
 {/if}

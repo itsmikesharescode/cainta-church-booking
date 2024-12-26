@@ -7,6 +7,8 @@
   import LoaderCircle from 'lucide-svelte/icons/loader-circle';
   import { page } from '$app/state';
   import { useTableState } from '../../../table/tableState.svelte';
+  import { toast } from 'svelte-sonner';
+  import { goto } from '$app/navigation';
 
   interface Props {
     adminApproveReservationForm: SuperValidated<Infer<AdminApproveResSchema>>;
@@ -17,7 +19,21 @@
   const tableState = useTableState();
 
   const form = superForm(adminApproveReservationForm, {
-    validators: zodClient(adminApproveResSchema)
+    validators: zodClient(adminApproveResSchema),
+    id: 'update-reservation-form',
+    onUpdate: async ({ result }) => {
+      const { status, data } = result;
+      switch (status) {
+        case 200:
+          toast.success(data.msg);
+          await goto('/admin/reservations');
+          break;
+
+        case 401:
+          toast.error(data.msg);
+          break;
+      }
+    }
   });
 
   const { form: formData, enhance, submitting } = form;
