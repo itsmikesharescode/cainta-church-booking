@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   const getReservations = async () => {
     const { data, error } = await supabase
       .from('reservations_tb')
-      .select('*, users_tb(*)')
+      .select('*, users_tb(*), churches_tb(*)')
       .order('created_at');
 
     if (error) return null;

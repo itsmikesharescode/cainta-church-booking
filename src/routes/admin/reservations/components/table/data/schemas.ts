@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { Database } from '$lib/database.types';
 
 export const adminReservationSchema = z.object({
   user_id: z.string(),
@@ -13,7 +14,8 @@ export const adminReservationSchema = z.object({
   price: z.number().nullable(),
   status: z.string(),
   message: z.string(),
-  users_tb: z.any()
+  users_tb: z.any(),
+  churches_tb: z.custom<Database['public']['Tables']['churches_tb']['Row']>()
 });
 
 export type AdminReservationsPageTable = z.output<typeof adminReservationSchema>;
