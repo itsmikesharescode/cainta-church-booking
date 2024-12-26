@@ -72,6 +72,36 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA "extensions";
 
 
 
+CREATE OR REPLACE FUNCTION "public"."get_admin_dashboard_counts"() RETURNS "jsonb"
+    LANGUAGE "plpgsql"
+    AS $$
+begin
+  return (
+    select jsonb_agg(result)
+    from (
+      select 
+        r.date,
+        count(r.id) as total_reservations,
+        count(c.id) as total_cert_requests
+      from 
+        reservations_tb r
+      full outer join 
+        cert_requests_tb c on r.date = c.date
+      where 
+        r.date >= date_trunc('month', current_date) and r.date < date_trunc('month', current_date) + interval '1 month'
+      group by 
+        r.date
+      order by 
+        r.date
+    ) as result
+  );
+end;
+$$;
+
+
+ALTER FUNCTION "public"."get_admin_dashboard_counts"() OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."is_admin"() RETURNS boolean
     LANGUAGE "plpgsql" SECURITY DEFINER
     AS $$
@@ -677,6 +707,12 @@ GRANT USAGE ON SCHEMA "public" TO "service_role";
 
 
 
+
+
+
+GRANT ALL ON FUNCTION "public"."get_admin_dashboard_counts"() TO "anon";
+GRANT ALL ON FUNCTION "public"."get_admin_dashboard_counts"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_admin_dashboard_counts"() TO "service_role";
 
 
 

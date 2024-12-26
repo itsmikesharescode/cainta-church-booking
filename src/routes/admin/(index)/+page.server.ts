@@ -5,9 +5,27 @@ import { createChurchSchema } from './components/create-church/schema';
 import { fail } from '@sveltejs/kit';
 import { updateChurchSchema } from './components/update-church/schema';
 import { deleteChurchSchema } from './components/delete-church/schema';
+import type { PostgrestSingleResponse } from '@supabase/supabase-js';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals: { supabase } }) => {
+  const getDashboardCounts = async () => {
+    const { data, error } = (await supabase.rpc(
+      'get_admin_dashboard_counts'
+    )) as PostgrestSingleResponse<
+      {
+        date: string;
+        total_reservations: number;
+        total_cert_requests: number;
+      }[]
+    >;
+
+    if (error) return null;
+
+    return data;
+  };
+
   return {
+    adminDashboardCounts: getDashboardCounts(),
     createChurchForm: await superValidate(zod(createChurchSchema)),
     updateChurchForm: await superValidate(zod(updateChurchSchema)),
     deleteChurchForm: await superValidate(zod(deleteChurchSchema))
