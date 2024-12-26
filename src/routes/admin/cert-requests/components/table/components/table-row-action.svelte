@@ -5,16 +5,15 @@
 <script lang="ts" generics="TData">
   import Ellipsis from 'lucide-svelte/icons/ellipsis';
   import X from 'lucide-svelte/icons/x';
-  import SquareArrowUpRight from 'lucide-svelte/icons/square-arrow-up-right';
-
+  import ScanSearch from 'lucide-svelte/icons/scan-search';
   import type { Row } from '@tanstack/table-core';
-  import { type ReservationsPageTable } from '../data/schemas';
+  import { type AdminCertRequestsPageTable } from '../data/schemas';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index';
   import Button from '$lib/components/ui/button/button.svelte';
   import { useTableState } from '../tableState.svelte';
   import { goto } from '$app/navigation';
 
-  let { row }: { row: Row<ReservationsPageTable> } = $props();
+  let { row }: { row: Row<AdminCertRequestsPageTable> } = $props();
 
   const tableState = useTableState();
 </script>
@@ -29,24 +28,23 @@
     {/snippet}
   </DropdownMenu.Trigger>
   <DropdownMenu.Content class="w-fit" align="end">
-    {#if row.original.status === 'approved'}
-      <DropdownMenu.Item
-        onclick={() => {
-          tableState.setActiveRow(row.original);
-        }}
-      >
-        <SquareArrowUpRight />
-        Proceed Payment?
-      </DropdownMenu.Item>
-    {/if}
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
-        goto('?modal=cancel-reservation');
+        goto('?modal=view-user');
+      }}
+    >
+      <ScanSearch />
+      View User
+    </DropdownMenu.Item>
+    <DropdownMenu.Item
+      onclick={() => {
+        tableState.setActiveRow(row.original);
+        goto('?modal=delete-certificate');
       }}
     >
       <X />
-      Cancel
+      Delete
     </DropdownMenu.Item>
   </DropdownMenu.Content>
 </DropdownMenu.Root>

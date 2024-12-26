@@ -61,8 +61,14 @@ export const columns: ColumnDef<ReservationsPageTable, unknown>[] = [
     },
     cell: ({ row }) => {
       const statusSnippet = createRawSnippet<[string]>((getStatus) => {
+        const detectColor = (v: string) => {
+          if (v === 'pending') return 'text-red-500';
+          if (v === 'accepted') return 'text-yellow-500';
+          return 'text-green-500';
+        };
+
         return {
-          render: () => `<div class="w-full">${getStatus()}</div>`
+          render: () => `<div class="w-full ${detectColor(getStatus())}">${getStatus()}</div>`
         };
       });
 
@@ -84,7 +90,8 @@ export const columns: ColumnDef<ReservationsPageTable, unknown>[] = [
     cell: ({ row }) => {
       const priceSnippet = createRawSnippet<[string]>((getPrice) => {
         return {
-          render: () => `<div class="w-full">${getPrice() ? getPrice() : 'Not available'}</div>`
+          render: () =>
+            `<div class="w-full">${getPrice() ? `₱ ${Number(getPrice()).toLocaleString()}` : 'Not available'}</div>`
         };
       });
 
@@ -144,7 +151,7 @@ export const columns: ColumnDef<ReservationsPageTable, unknown>[] = [
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<ReservationsPageTable, unknown>, {
         column,
-        title: 'Initial Time'
+        title: 'From'
       });
     },
     cell: ({ row }) => {
@@ -167,7 +174,7 @@ export const columns: ColumnDef<ReservationsPageTable, unknown>[] = [
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<ReservationsPageTable, unknown>, {
         column,
-        title: 'Final Time'
+        title: 'To'
       });
     },
     cell: ({ row }) => {

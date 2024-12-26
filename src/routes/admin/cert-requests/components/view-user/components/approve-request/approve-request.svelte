@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as Form from '$lib/components/ui/form/index.js';
   import { Input } from '$lib/components/ui/input/index.js';
-  import { adminApproveResSchema, type AdminApproveResSchema } from './schema';
+  import { adminApproveCertSchema, type AdminApproveCertSchema } from './schema';
   import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import LoaderCircle from 'lucide-svelte/icons/loader-circle';
@@ -11,22 +11,22 @@
   import { goto } from '$app/navigation';
 
   interface Props {
-    adminApproveReservationForm: SuperValidated<Infer<AdminApproveResSchema>>;
+    adminApproveCertForm: SuperValidated<Infer<AdminApproveCertSchema>>;
   }
 
-  const { adminApproveReservationForm }: Props = $props();
+  const { adminApproveCertForm }: Props = $props();
 
   const tableState = useTableState();
 
-  const form = superForm(adminApproveReservationForm, {
-    validators: zodClient(adminApproveResSchema),
-    id: 'update-reservation-form',
+  const form = superForm(adminApproveCertForm, {
+    validators: zodClient(adminApproveCertSchema),
+    id: 'update-cert-form',
     onUpdate: async ({ result }) => {
       const { status, data } = result;
       switch (status) {
         case 200:
           toast.success(data.msg);
-          await goto('/admin/reservations');
+          await goto('/admin/cert-requests');
           break;
 
         case 401:
@@ -43,14 +43,14 @@
   $effect(() => {
     if (dependency) {
       $formData.id = tableState.getActiveRow()?.id ?? 0;
-      $formData.price = Number(tableState.getActiveRow()?.event_name.split('/')[1]) ?? 0;
+      $formData.price = Number(tableState.getActiveRow()?.name.split('/')[1]) ?? 0;
     }
   });
 
   // TODO: Implement functionality to update the reservation status from pending to accepted. The user will also update it to paid when payment is made. Additionally, hide the approval form when the status is already approved or paid.
 </script>
 
-<form method="POST" action="?/approveReservationEvent" use:enhance>
+<form method="POST" action="?/approveCertEvent" use:enhance>
   <input type="hidden" name="id" bind:value={$formData.id} />
   <Form.Field {form} name="price">
     <Form.Control>

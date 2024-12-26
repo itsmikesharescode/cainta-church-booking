@@ -6,16 +6,16 @@
   import * as Avatar from '$lib/components/ui/avatar/index.js';
   import { PUBLIC_SUPABASE_STORAGE } from '$env/static/public';
   import type { Infer, SuperValidated } from 'sveltekit-superforms';
-  import type { AdminApproveResSchema } from './components/approve-reservation/schema';
-  import ApproveReservation from './components/approve-reservation/approve-reservation.svelte';
+  import type { AdminApproveCertSchema } from './components/approve-request/schema';
+  import ApproveRequest from './components/approve-request/approve-request.svelte';
   import { Separator } from '$lib/components/ui/separator/index.js';
   import { format24hrTo12hrAMPM } from '$lib/utils';
 
   interface Props {
-    adminApproveReservationForm: SuperValidated<Infer<AdminApproveResSchema>>;
+    adminApproveCertForm: SuperValidated<Infer<AdminApproveCertSchema>>;
   }
 
-  const { adminApproveReservationForm }: Props = $props();
+  const { adminApproveCertForm }: Props = $props();
 
   const tableState = useTableState();
   const activeRow = $derived(tableState.getActiveRow());
@@ -28,7 +28,7 @@
     controlledOpen
     onOpenChange={() => {
       tableState.setActiveRow(null);
-      goto('/admin/reservations');
+      goto('/admin/cert-requests');
     }}
     {open}
   >
@@ -62,7 +62,7 @@
       {#if activeRow.status === 'pending'}
         <div class="">
           <span class="text-sm text-muted-foreground">
-            The user wants to reserve at
+            The user wants to request a certificate at
             <i class="underline">
               {format24hrTo12hrAMPM(activeRow?.initial_time ?? '')} -
               {format24hrTo12hrAMPM(activeRow?.final_time ?? '')} @
@@ -70,19 +70,19 @@
             </i>
           </span>
           <span class="text-sm text-muted-foreground">
-            With event name of
-            <i class="underline">{activeRow?.event_name.split('/')[0]}</i>
+            With certificate name of
+            <i class="underline">{activeRow?.name.split('/')[0]}</i>
             at price of ₱
-            <i class="underline">{Number(activeRow?.event_name.split('/')[1]).toLocaleString()}</i>
+            <i class="underline">{Number(activeRow?.name.split('/')[1]).toLocaleString()}</i>
           </span>
         </div>
 
         <div class="">
-          <ApproveReservation {adminApproveReservationForm} />
+          <ApproveRequest {adminApproveCertForm} />
         </div>
       {:else}
         <span class="text-base text-muted-foreground">
-          This reservation is already
+          This certificate request is already
           <span class="font-semibold italic">{activeRow.status}</span>.
         </span>
       {/if}

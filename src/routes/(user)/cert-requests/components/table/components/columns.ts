@@ -51,6 +51,34 @@ export const columns: ColumnDef<CertRequestsPageTable, unknown>[] = [
   },
 
   {
+    accessorKey: 'status',
+    id: 'status',
+    header: ({ column }) => {
+      return renderComponent(TableColumnHeader<CertRequestsPageTable, unknown>, {
+        column,
+        title: 'Status'
+      });
+    },
+    cell: ({ row }) => {
+      const statusSnippet = createRawSnippet<[string]>((getStatus) => {
+        const detectColor = (v: string) => {
+          if (v === 'pending') return 'text-red-500';
+          if (v === 'accepted') return 'text-yellow-500';
+          return 'text-green-500';
+        };
+
+        return {
+          render: () => `<div class="w-full ${detectColor(getStatus())}">${getStatus()}</div>`
+        };
+      });
+
+      return renderSnippet(statusSnippet, row.getValue('status'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
     accessorKey: 'price',
     id: 'price',
     header: ({ column }) => {
@@ -73,30 +101,30 @@ export const columns: ColumnDef<CertRequestsPageTable, unknown>[] = [
   },
 
   {
-    accessorKey: 'date_available',
-    id: 'date_available',
+    accessorKey: 'date',
+    id: 'date',
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<CertRequestsPageTable, unknown>, {
         column,
-        title: 'Date Available'
+        title: 'Requested Date'
       });
     },
     cell: ({ row }) => {
-      const dateSnippet = createRawSnippet<[string]>((getDateAvailable) => {
+      const dateSnippet = createRawSnippet<[string]>((getDate) => {
         return {
-          render: () => `<div class="w-full">${getDateAvailable() || 'Not available'}</div>`
+          render: () => `<div class="w-full">${getDate() || 'Not available'}</div>`
         };
       });
 
-      return renderSnippet(dateSnippet, row.getValue('date_available'));
+      return renderSnippet(dateSnippet, row.getValue('date'));
     },
     enableSorting: true,
     enableHiding: true
   },
 
   {
-    accessorKey: 'time_available_start',
-    id: 'time_available_start',
+    accessorKey: 'initial_time',
+    id: 'initial_time',
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<CertRequestsPageTable, unknown>, {
         column,
@@ -104,22 +132,22 @@ export const columns: ColumnDef<CertRequestsPageTable, unknown>[] = [
       });
     },
     cell: ({ row }) => {
-      const fromTimeSnippet = createRawSnippet<[string]>((getFromTime) => {
+      const fromTimeSnippet = createRawSnippet<[string]>((getInitialTime) => {
         return {
           render: () =>
-            `<div class="w-full truncate">${getFromTime() ? format24hrTo12hrAMPM(getFromTime()) : 'Not available'}</div>`
+            `<div class="w-full truncate">${getInitialTime() ? format24hrTo12hrAMPM(getInitialTime()) : 'Not available'}</div>`
         };
       });
 
-      return renderSnippet(fromTimeSnippet, row.getValue('time_available_start'));
+      return renderSnippet(fromTimeSnippet, row.getValue('initial_time'));
     },
     enableSorting: true,
     enableHiding: true
   },
 
   {
-    accessorKey: 'time_available_end',
-    id: 'time_available_end',
+    accessorKey: 'final_time',
+    id: 'final_time',
     header: ({ column }) => {
       return renderComponent(TableColumnHeader<CertRequestsPageTable, unknown>, {
         column,
@@ -127,14 +155,14 @@ export const columns: ColumnDef<CertRequestsPageTable, unknown>[] = [
       });
     },
     cell: ({ row }) => {
-      const toTimeSnippet = createRawSnippet<[string]>((getToTime) => {
+      const toTimeSnippet = createRawSnippet<[string]>((getFinalTime) => {
         return {
           render: () =>
-            `<div class="w-full">${getToTime() ? format24hrTo12hrAMPM(getToTime()) : 'Not available'}</div>`
+            `<div class="w-full">${getFinalTime() ? format24hrTo12hrAMPM(getFinalTime()) : 'Not available'}</div>`
         };
       });
 
-      return renderSnippet(toTimeSnippet, row.getValue('time_available_start'));
+      return renderSnippet(toTimeSnippet, row.getValue('final_time'));
     },
     enableSorting: true,
     enableHiding: true

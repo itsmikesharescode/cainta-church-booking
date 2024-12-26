@@ -38,37 +38,40 @@ export type Database = {
         Row: {
           church_id: number
           created_at: string
-          date_available: string | null
+          date: string
+          final_time: string
           id: number
+          initial_time: string
           name: string
           price: number | null
           reference_id: string
-          time_available_end: string | null
-          time_available_start: string | null
+          status: string
           user_id: string
         }
         Insert: {
           church_id: number
           created_at?: string
-          date_available?: string | null
+          date: string
+          final_time: string
           id?: number
+          initial_time: string
           name: string
           price?: number | null
           reference_id: string
-          time_available_end?: string | null
-          time_available_start?: string | null
+          status?: string
           user_id: string
         }
         Update: {
           church_id?: number
           created_at?: string
-          date_available?: string | null
+          date?: string
+          final_time?: string
           id?: number
+          initial_time?: string
           name?: string
           price?: number | null
           reference_id?: string
-          time_available_end?: string | null
-          time_available_start?: string | null
+          status?: string
           user_id?: string
         }
         Relationships: [
@@ -261,6 +264,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_admin_dashboard_counts: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
       is_admin: {
         Args: Record<PropertyKey, never>
         Returns: boolean

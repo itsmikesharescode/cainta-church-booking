@@ -38,7 +38,7 @@
       </div>
 
       <div>
-        <Tabs.Root value="reservation" class="">
+        <Tabs.Root value={page.url.searchParams.get('forward') || 'reservation'} class="">
           <Tabs.List>
             <Tabs.Trigger
               value="reservation"

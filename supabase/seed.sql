@@ -72,6 +72,36 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA "extensions";
 
 
 
+CREATE OR REPLACE FUNCTION "public"."get_admin_dashboard_counts"() RETURNS "jsonb"
+    LANGUAGE "plpgsql"
+    AS $$
+begin
+  return (
+    select jsonb_agg(result)
+    from (
+      select 
+        r.date,
+        count(r.id) as total_reservations,
+        count(c.id) as total_cert_requests
+      from 
+        reservations_tb r
+      full outer join 
+        cert_requests_tb c on r.date = c.date
+      where 
+        r.date >= date_trunc('month', current_date) and r.date < date_trunc('month', current_date) + interval '1 month'
+      group by 
+        r.date
+      order by 
+        r.date
+    ) as result
+  );
+end;
+$$;
+
+
+ALTER FUNCTION "public"."get_admin_dashboard_counts"() OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."is_admin"() RETURNS boolean
     LANGUAGE "plpgsql" SECURITY DEFINER
     AS $$
@@ -203,9 +233,10 @@ CREATE TABLE IF NOT EXISTS "public"."cert_requests_tb" (
     "price" numeric,
     "church_id" bigint NOT NULL,
     "reference_id" "text" NOT NULL,
-    "date_available" "date",
-    "time_available_start" time without time zone,
-    "time_available_end" time without time zone
+    "date" "date" NOT NULL,
+    "initial_time" time without time zone NOT NULL,
+    "final_time" time without time zone NOT NULL,
+    "status" character varying DEFAULT 'pending'::character varying NOT NULL
 );
 
 
@@ -676,6 +707,12 @@ GRANT USAGE ON SCHEMA "public" TO "service_role";
 
 
 
+
+
+
+GRANT ALL ON FUNCTION "public"."get_admin_dashboard_counts"() TO "anon";
+GRANT ALL ON FUNCTION "public"."get_admin_dashboard_counts"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_admin_dashboard_counts"() TO "service_role";
 
 
 

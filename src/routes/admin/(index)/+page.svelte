@@ -23,21 +23,38 @@
     return data;
   };
 
-  const sampleData = generateRandomData(100);
-
   initTableState();
 </script>
 
 <main class="container flex min-h-screen flex-col gap-10 py-10">
-  <section class="grid grid-cols-2">
-    <div class="relative max-h-[30dvh]">
-      <LineChart title="Reservation this month" data={sampleData} />
+  {#await data.adminDashboardCounts}
+    <div class="grid grid-cols-2 gap-2.5">
+      <Skeleton class="h-[30dvh]" />
+      <Skeleton class="h-[30dvh]" />
     </div>
+  {:then counts}
+    <section class="grid grid-cols-2">
+      <div class="relative max-h-[30dvh]">
+        <LineChart
+          title="Reservation this month"
+          data={counts?.map((count) => ({
+            date: count.date,
+            value: count.total_reservations
+          })) ?? []}
+        />
+      </div>
 
-    <div class="relative max-h-[30dvh]">
-      <LineChart title="Request this month" data={sampleData} />
-    </div>
-  </section>
+      <div class="relative max-h-[30dvh]">
+        <LineChart
+          title="Request this month"
+          data={counts?.map((count) => ({
+            date: count.date,
+            value: count.total_cert_requests
+          })) ?? []}
+        />
+      </div>
+    </section>
+  {/await}
 
   <section>
     {#await data.getChurches}

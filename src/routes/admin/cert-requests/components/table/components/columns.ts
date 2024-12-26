@@ -1,16 +1,16 @@
 import type { ColumnDef } from '@tanstack/table-core';
 import { createRawSnippet } from 'svelte';
-import type { AdminReservationsPageTable } from '../data/schemas';
+import type { AdminCertRequestsPageTable } from '../data/schemas';
 import { TableColumnHeader, TableRowActions } from './index.js';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/render-helpers.js';
 import { format24hrTo12hrAMPM } from '$lib/utils';
 
-export const columns: ColumnDef<AdminReservationsPageTable, unknown>[] = [
+export const columns: ColumnDef<AdminCertRequestsPageTable, unknown>[] = [
   {
     accessorKey: 'reference_id',
     id: 'reference_id',
     header: ({ column }) => {
-      return renderComponent(TableColumnHeader<AdminReservationsPageTable, unknown>, {
+      return renderComponent(TableColumnHeader<AdminCertRequestsPageTable, unknown>, {
         column,
         title: 'Reference ID'
       });
@@ -29,22 +29,22 @@ export const columns: ColumnDef<AdminReservationsPageTable, unknown>[] = [
   },
 
   {
-    accessorKey: 'event_name',
-    id: 'event_name',
+    accessorKey: 'name',
+    id: 'name',
     header: ({ column }) => {
-      return renderComponent(TableColumnHeader<AdminReservationsPageTable, unknown>, {
+      return renderComponent(TableColumnHeader<AdminCertRequestsPageTable, unknown>, {
         column,
-        title: 'Event Name'
+        title: 'Certificate Name'
       });
     },
     cell: ({ row }) => {
-      const eventNameSnippet = createRawSnippet<[string]>((getEventName) => {
+      const nameSnippet = createRawSnippet<[string]>((getName) => {
         return {
-          render: () => `<div class="w-full">${getEventName()}</div>`
+          render: () => `<div class="w-full">${getName()}</div>`
         };
       });
 
-      return renderSnippet(eventNameSnippet, row.getValue('event_name'));
+      return renderSnippet(nameSnippet, row.getValue('name'));
     },
     enableSorting: true,
     enableHiding: true
@@ -54,7 +54,7 @@ export const columns: ColumnDef<AdminReservationsPageTable, unknown>[] = [
     accessorKey: 'status',
     id: 'status',
     header: ({ column }) => {
-      return renderComponent(TableColumnHeader<AdminReservationsPageTable, unknown>, {
+      return renderComponent(TableColumnHeader<AdminCertRequestsPageTable, unknown>, {
         column,
         title: 'Status'
       });
@@ -82,7 +82,7 @@ export const columns: ColumnDef<AdminReservationsPageTable, unknown>[] = [
     accessorKey: 'price',
     id: 'price',
     header: ({ column }) => {
-      return renderComponent(TableColumnHeader<AdminReservationsPageTable, unknown>, {
+      return renderComponent(TableColumnHeader<AdminCertRequestsPageTable, unknown>, {
         column,
         title: 'Price'
       });
@@ -102,32 +102,10 @@ export const columns: ColumnDef<AdminReservationsPageTable, unknown>[] = [
   },
 
   {
-    accessorKey: 'number_of_guest',
-    id: 'number_of_guest',
-    header: ({ column }) => {
-      return renderComponent(TableColumnHeader<AdminReservationsPageTable, unknown>, {
-        column,
-        title: 'Guest'
-      });
-    },
-    cell: ({ row }) => {
-      const numberOfGuestSnippet = createRawSnippet<[string]>((getNumberOfGuest) => {
-        return {
-          render: () => `<div class="w-full">${getNumberOfGuest()}</div>`
-        };
-      });
-
-      return renderSnippet(numberOfGuestSnippet, row.getValue('number_of_guest'));
-    },
-    enableSorting: true,
-    enableHiding: true
-  },
-
-  {
     accessorKey: 'date',
     id: 'date',
     header: ({ column }) => {
-      return renderComponent(TableColumnHeader<AdminReservationsPageTable, unknown>, {
+      return renderComponent(TableColumnHeader<AdminCertRequestsPageTable, unknown>, {
         column,
         title: 'Date'
       });
@@ -149,7 +127,7 @@ export const columns: ColumnDef<AdminReservationsPageTable, unknown>[] = [
     accessorKey: 'initial_time',
     id: 'initial_time',
     header: ({ column }) => {
-      return renderComponent(TableColumnHeader<AdminReservationsPageTable, unknown>, {
+      return renderComponent(TableColumnHeader<AdminCertRequestsPageTable, unknown>, {
         column,
         title: 'From'
       });
@@ -172,7 +150,7 @@ export const columns: ColumnDef<AdminReservationsPageTable, unknown>[] = [
     accessorKey: 'final_time',
     id: 'final_time',
     header: ({ column }) => {
-      return renderComponent(TableColumnHeader<AdminReservationsPageTable, unknown>, {
+      return renderComponent(TableColumnHeader<AdminCertRequestsPageTable, unknown>, {
         column,
         title: 'To'
       });
@@ -194,7 +172,7 @@ export const columns: ColumnDef<AdminReservationsPageTable, unknown>[] = [
     accessorKey: 'created_at',
     id: 'created_at',
     header: ({ column }) => {
-      return renderComponent(TableColumnHeader<AdminReservationsPageTable, unknown>, {
+      return renderComponent(TableColumnHeader<AdminCertRequestsPageTable, unknown>, {
         column,
         title: 'Created At'
       });
@@ -215,6 +193,6 @@ export const columns: ColumnDef<AdminReservationsPageTable, unknown>[] = [
 
   {
     id: 'actions',
-    cell: ({ row }) => renderComponent(TableRowActions<AdminReservationsPageTable>, { row })
+    cell: ({ row }) => renderComponent(TableRowActions<AdminCertRequestsPageTable>, { row })
   }
 ];
