@@ -90,7 +90,8 @@ export const columns: ColumnDef<AdminReservationsPageTable, unknown>[] = [
     cell: ({ row }) => {
       const priceSnippet = createRawSnippet<[string]>((getPrice) => {
         return {
-          render: () => `<div class="w-full">${getPrice() ? getPrice() : 'Not available'}</div>`
+          render: () =>
+            `<div class="w-full">${getPrice() ? `₱ ${Number(getPrice()).toLocaleString()}` : 'Not available'}</div>`
         };
       });
 

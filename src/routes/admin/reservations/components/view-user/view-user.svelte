@@ -59,7 +59,7 @@
       </div>
 
       <Separator />
-      {#if activeRow.status !== 'approved'}
+      {#if activeRow.status === 'pending'}
         <div class="">
           <span class="text-sm text-muted-foreground">
             The user wants to reserve at
@@ -81,7 +81,10 @@
           <ApproveReservation {adminApproveReservationForm} />
         </div>
       {:else}
-        <span class="text-base text-muted-foreground">This reservation is already approved.</span>
+        <span class="text-base text-muted-foreground">
+          This reservation is already
+          <span class="font-semibold italic">{activeRow.status}</span>.
+        </span>
       {/if}
     </Dialog.Content>
   </Dialog.Root>
