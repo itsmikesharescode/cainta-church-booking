@@ -28,14 +28,16 @@
     {/snippet}
   </DropdownMenu.Trigger>
   <DropdownMenu.Content class="w-fit" align="end">
-    <DropdownMenu.Item
-      onclick={() => {
-        tableState.setActiveRow(row.original);
-      }}
-    >
-      <SquareArrowUpRight />
-      Proceed Payment?
-    </DropdownMenu.Item>
+    {#if row.original.status === 'approved'}
+      <DropdownMenu.Item
+        onclick={() => {
+          tableState.setActiveRow(row.original);
+        }}
+      >
+        <SquareArrowUpRight />
+        Proceed Payment?
+      </DropdownMenu.Item>
+    {/if}
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
