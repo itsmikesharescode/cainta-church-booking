@@ -280,9 +280,9 @@ export type Database = {
         Args: {
           user_id: string
           church_id: number
-          reservation_id: number
-          cert_request_id: number
           xendit_callback: Json
+          reservation_id?: number
+          cert_request_id?: number
         }
         Returns: undefined
       }

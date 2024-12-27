@@ -175,7 +175,7 @@ $$;
 ALTER FUNCTION "public"."on_auth_user_updated"() OWNER TO "postgres";
 
 
-CREATE OR REPLACE FUNCTION "public"."process_payment"("user_id" "uuid", "church_id" numeric, "reservation_id" numeric, "cert_request_id" numeric, "xendit_callback" "jsonb") RETURNS "void"
+CREATE OR REPLACE FUNCTION "public"."process_payment"("user_id" "uuid", "church_id" numeric, "xendit_callback" "jsonb", "reservation_id" numeric DEFAULT NULL::numeric, "cert_request_id" numeric DEFAULT NULL::numeric) RETURNS "void"
     LANGUAGE "plpgsql"
     AS $$
 begin
@@ -199,7 +199,7 @@ end;
 $$;
 
 
-ALTER FUNCTION "public"."process_payment"("user_id" "uuid", "church_id" numeric, "reservation_id" numeric, "cert_request_id" numeric, "xendit_callback" "jsonb") OWNER TO "postgres";
+ALTER FUNCTION "public"."process_payment"("user_id" "uuid", "church_id" numeric, "xendit_callback" "jsonb", "reservation_id" numeric, "cert_request_id" numeric) OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."reservation"("p_church_id" numeric, "p_reference_id" "text", "p_event_name" "text", "p_number_of_guest" numeric, "p_date" "date", "p_initial_time" time without time zone, "p_final_time" time without time zone, "p_message" "text") RETURNS "void"
@@ -775,9 +775,9 @@ GRANT ALL ON FUNCTION "public"."on_auth_user_updated"() TO "service_role";
 
 
 
-GRANT ALL ON FUNCTION "public"."process_payment"("user_id" "uuid", "church_id" numeric, "reservation_id" numeric, "cert_request_id" numeric, "xendit_callback" "jsonb") TO "anon";
-GRANT ALL ON FUNCTION "public"."process_payment"("user_id" "uuid", "church_id" numeric, "reservation_id" numeric, "cert_request_id" numeric, "xendit_callback" "jsonb") TO "authenticated";
-GRANT ALL ON FUNCTION "public"."process_payment"("user_id" "uuid", "church_id" numeric, "reservation_id" numeric, "cert_request_id" numeric, "xendit_callback" "jsonb") TO "service_role";
+GRANT ALL ON FUNCTION "public"."process_payment"("user_id" "uuid", "church_id" numeric, "xendit_callback" "jsonb", "reservation_id" numeric, "cert_request_id" numeric) TO "anon";
+GRANT ALL ON FUNCTION "public"."process_payment"("user_id" "uuid", "church_id" numeric, "xendit_callback" "jsonb", "reservation_id" numeric, "cert_request_id" numeric) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."process_payment"("user_id" "uuid", "church_id" numeric, "xendit_callback" "jsonb", "reservation_id" numeric, "cert_request_id" numeric) TO "service_role";
 
 
 

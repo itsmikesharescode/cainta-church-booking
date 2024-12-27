@@ -1,9 +1,9 @@
 create or replace function process_payment(
     user_id uuid,
     church_id numeric,
-    reservation_id numeric,
-    cert_request_id numeric,
-    xendit_callback jsonb
+    xendit_callback jsonb,
+    reservation_id numeric default null,
+    cert_request_id numeric default null
 ) returns void as $$
 begin
     insert into finished_payments_tb (user_id, church_id, reservation_id, cert_request_id, xendit_callback)

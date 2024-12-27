@@ -17,12 +17,12 @@ export const POST: RequestHandler = async ({ locals: { supabaseAdmin }, request 
       certRequestId = parts[2].split(':')[1] as string;
     }
 
-    const { error } = await supabaseAdmin.from('finished_payments_tb').insert({
+    const { error } = await supabaseAdmin.rpc('process_payment', {
       user_id: userId,
-      church_id: churchId,
-      reservation_id: reservationId,
-      xendit_callback: body,
-      cert_request_id: certRequestId
+      church_id: Number(churchId),
+      reservation_id: reservationId ? Number(reservationId) : null,
+      cert_request_id: certRequestId ? Number(certRequestId) : null,
+      xendit_callback: body
     });
 
     if (error) console.log(error);
