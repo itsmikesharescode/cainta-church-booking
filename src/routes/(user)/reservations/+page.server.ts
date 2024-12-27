@@ -43,7 +43,7 @@ export const actions: Actions = {
     if (!user) return fail(401, { form, msg: 'User not found' });
 
     const invoice: CreateInvoiceRequest = {
-      externalId: `${user.id}/${form.data.activeRow?.id}/${form.data.activeRow?.church_id}`,
+      externalId: `user_id:${user.id}/reservation_id=${form.data.activeRow?.id}/church_id:${form.data.activeRow?.church_id}`,
       description: `Paying reservation for ${form.data.activeRow?.event_name.split('/')[0]} `,
       amount: form.data.activeRow?.price ?? 0,
       currency: 'PHP',
