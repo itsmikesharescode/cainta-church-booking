@@ -23,4 +23,4 @@ begin
         when others then
             raise notice 'Error processing payment: %', sqlerrm;
 end;
-$$ language plpgsql;
+$$ language plpgsql security definer;
