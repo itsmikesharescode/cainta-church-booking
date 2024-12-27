@@ -4,8 +4,10 @@ import { sequence } from '@sveltejs/kit/hooks';
 
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
 import { PRIVATE_SUPABASE_ADMIN_KEY } from '$env/static/private';
+import { PRIVATE_XENDIT_KEY } from '$env/static/private';
 import { userRoutes } from '$lib';
 import sharp from 'sharp';
+import { Xendit } from 'xendit-node';
 
 const supabase: Handle = async ({ event, resolve }) => {
   event.locals.supabase = createServerClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
@@ -149,6 +151,8 @@ const auxilary: Handle = async ({ event, resolve }) => {
       return null;
     }
   };
+
+  event.locals.xenditClient = new Xendit({ secretKey: PRIVATE_XENDIT_KEY });
 
   return resolve(event);
 };
