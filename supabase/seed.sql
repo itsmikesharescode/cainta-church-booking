@@ -446,6 +446,10 @@ CREATE POLICY "Allow all if admin" ON "public"."cert_requests_tb" TO "authentica
 
 
 
+CREATE POLICY "Allow all if admin" ON "public"."finished_payments_tb" TO "authenticated" USING ("public"."is_admin"()) WITH CHECK ("public"."is_admin"());
+
+
+
 CREATE POLICY "Allow all if admin" ON "public"."reservations_tb" TO "authenticated" USING ("public"."is_admin"()) WITH CHECK ("public"."is_admin"());
 
 
@@ -471,6 +475,10 @@ CREATE POLICY "Allow select if admin" ON "public"."users_tb" FOR SELECT TO "auth
 
 
 CREATE POLICY "Allow select if auth and exist" ON "public"."cert_requests_tb" FOR SELECT TO "authenticated" USING (("public"."is_user"() AND ("auth"."uid"() = "user_id")));
+
+
+
+CREATE POLICY "Allow select if auth and exist" ON "public"."finished_payments_tb" FOR SELECT TO "authenticated" USING (("public"."is_user"() AND ("auth"."uid"() = "user_id")));
 
 
 
