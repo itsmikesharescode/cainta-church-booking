@@ -1,11 +1,17 @@
 create or replace function process_payment(
-    user_id uuid,
-    church_id numeric,
-    xendit_callback jsonb,
-    reservation_id numeric default null,
-    cert_request_id numeric default null
+    external_id text,
+    xendit_callback jsonb
 ) returns void as $$
+declare
+    user_id uuid;
+    reservation_id numeric;
+    church_id numeric;
 begin
+    -- Extract user_id, reservation_id, and church_id from external_id
+    user_id := split_part(external_id, '/', 1)::uuid;
+    reservation_id := split_part(external_id, '/', 2)::numeric;
+    church_id := split_part(external_id, '/', 3)::numeric;
+
     insert into finished_payments_tb (user_id, church_id, reservation_id, cert_request_id, xendit_callback)
     values (user_id, church_id, reservation_id, cert_request_id, xendit_callback);
     
