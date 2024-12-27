@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const adminPaymentSchema = z.object({
+export const paymentSchema = z.object({
   id: z.number(),
   created_at: z.string(),
   church_id: z.number(),
@@ -11,4 +11,4 @@ export const adminPaymentSchema = z.object({
   price: z.number()
 });
 
-export type AdminPaymentPageTable = z.output<typeof adminPaymentSchema>;
+export type PaymentPageTable = z.output<typeof paymentSchema>;

@@ -1,15 +1,15 @@
 import type { ColumnDef } from '@tanstack/table-core';
 import { createRawSnippet } from 'svelte';
-import type { AdminPaymentPageTable } from '../data/schemas';
+import type { PaymentPageTable } from '../data/schemas';
 import { TableColumnHeader, TableRowActions } from './index.js';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/render-helpers.js';
 
-export const columns: ColumnDef<AdminPaymentPageTable, unknown>[] = [
+export const columns: ColumnDef<PaymentPageTable, unknown>[] = [
   {
     accessorKey: 'payment_channel',
     id: 'payment_channel',
     header: ({ column }) => {
-      return renderComponent(TableColumnHeader<AdminPaymentPageTable, unknown>, {
+      return renderComponent(TableColumnHeader<PaymentPageTable, unknown>, {
         column,
         title: 'Payment Channel'
       });
@@ -31,7 +31,7 @@ export const columns: ColumnDef<AdminPaymentPageTable, unknown>[] = [
     accessorKey: 'price',
     id: 'price',
     header: ({ column }) => {
-      return renderComponent(TableColumnHeader<AdminPaymentPageTable, unknown>, {
+      return renderComponent(TableColumnHeader<PaymentPageTable, unknown>, {
         column,
         title: 'Price'
       });
@@ -53,7 +53,7 @@ export const columns: ColumnDef<AdminPaymentPageTable, unknown>[] = [
     accessorKey: 'created_at',
     id: 'created_at',
     header: ({ column }) => {
-      return renderComponent(TableColumnHeader<AdminPaymentPageTable, unknown>, {
+      return renderComponent(TableColumnHeader<PaymentPageTable, unknown>, {
         column,
         title: 'Created At'
       });
@@ -73,6 +73,6 @@ export const columns: ColumnDef<AdminPaymentPageTable, unknown>[] = [
 
   {
     id: 'actions',
-    cell: ({ row }) => renderComponent(TableRowActions<AdminPaymentPageTable>, { row })
+    cell: ({ row }) => renderComponent(TableRowActions<PaymentPageTable>, { row })
   }
 ];

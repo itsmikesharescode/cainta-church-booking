@@ -6,12 +6,12 @@
   import Ellipsis from 'lucide-svelte/icons/ellipsis';
   import Delete from 'lucide-svelte/icons/delete';
   import type { Row } from '@tanstack/table-core';
-  import { type AdminPaymentPageTable } from '../data/schemas';
+  import { type PaymentPageTable } from '../data/schemas';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index';
   import Button from '$lib/components/ui/button/button.svelte';
   import { useTableState } from '../tableState.svelte';
 
-  let { row }: { row: Row<AdminPaymentPageTable> } = $props();
+  let { row }: { row: Row<PaymentPageTable> } = $props();
 
   const tableState = useTableState();
 </script>
