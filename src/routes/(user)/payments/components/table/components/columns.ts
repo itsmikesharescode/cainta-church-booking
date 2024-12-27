@@ -1,49 +1,27 @@
 import type { ColumnDef } from '@tanstack/table-core';
 import { createRawSnippet } from 'svelte';
-import type { PaymentPageTable } from '../data/schemas';
+import type { AdminPaymentPageTable } from '../data/schemas';
 import { TableColumnHeader, TableRowActions } from './index.js';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/render-helpers.js';
 
-export const columns: ColumnDef<PaymentPageTable, unknown>[] = [
+export const columns: ColumnDef<AdminPaymentPageTable, unknown>[] = [
   {
-    accessorKey: 'reference_id',
-    id: 'reference_id',
+    accessorKey: 'payment_channel',
+    id: 'payment_channel',
     header: ({ column }) => {
-      return renderComponent(TableColumnHeader<PaymentPageTable, unknown>, {
-        column,
-        title: 'Reference ID'
-      });
-    },
-    cell: ({ row }) => {
-      const referenceIdSnippet = createRawSnippet<[string]>((getReferenceID) => {
-        return {
-          render: () => `<div class="w-full">${getReferenceID()}</div>`
-        };
-      });
-
-      return renderSnippet(referenceIdSnippet, row.getValue('reference_id'));
-    },
-    enableSorting: true,
-    enableHiding: true
-  },
-
-  {
-    accessorKey: 'name',
-    id: 'name',
-    header: ({ column }) => {
-      return renderComponent(TableColumnHeader<PaymentPageTable, unknown>, {
+      return renderComponent(TableColumnHeader<AdminPaymentPageTable, unknown>, {
         column,
         title: 'Payment Channel'
       });
     },
     cell: ({ row }) => {
-      const certNameSnippet = createRawSnippet<[string]>((getCertName) => {
+      const paymentChannelSnippet = createRawSnippet<[string]>((getPaymentChannel) => {
         return {
-          render: () => `<div class="w-full">${getCertName()}</div>`
+          render: () => `<div class="w-full">${getPaymentChannel()}</div>`
         };
       });
 
-      return renderSnippet(certNameSnippet, row.getValue('event_name'));
+      return renderSnippet(paymentChannelSnippet, row.getValue('payment_channel'));
     },
     enableSorting: true,
     enableHiding: true
@@ -53,7 +31,7 @@ export const columns: ColumnDef<PaymentPageTable, unknown>[] = [
     accessorKey: 'price',
     id: 'price',
     header: ({ column }) => {
-      return renderComponent(TableColumnHeader<PaymentPageTable, unknown>, {
+      return renderComponent(TableColumnHeader<AdminPaymentPageTable, unknown>, {
         column,
         title: 'Price'
       });
@@ -72,76 +50,10 @@ export const columns: ColumnDef<PaymentPageTable, unknown>[] = [
   },
 
   {
-    accessorKey: 'date_available',
-    id: 'date_available',
-    header: ({ column }) => {
-      return renderComponent(TableColumnHeader<PaymentPageTable, unknown>, {
-        column,
-        title: 'Date Available'
-      });
-    },
-    cell: ({ row }) => {
-      const dateSnippet = createRawSnippet<[string]>((getDateAvailable) => {
-        return {
-          render: () => `<div class="w-full">${getDateAvailable()}</div>`
-        };
-      });
-
-      return renderSnippet(dateSnippet, row.getValue('date_available'));
-    },
-    enableSorting: true,
-    enableHiding: true
-  },
-
-  {
-    accessorKey: 'time_available_start',
-    id: 'time_available_start',
-    header: ({ column }) => {
-      return renderComponent(TableColumnHeader<PaymentPageTable, unknown>, {
-        column,
-        title: 'From'
-      });
-    },
-    cell: ({ row }) => {
-      const fromTimeSnippet = createRawSnippet<[string]>((getFromTime) => {
-        return {
-          render: () => `<div class="w-full truncate">${getFromTime()}</div>`
-        };
-      });
-
-      return renderSnippet(fromTimeSnippet, row.getValue('time_available_start'));
-    },
-    enableSorting: true,
-    enableHiding: true
-  },
-
-  {
-    accessorKey: 'time_available_end',
-    id: 'time_available_end',
-    header: ({ column }) => {
-      return renderComponent(TableColumnHeader<PaymentPageTable, unknown>, {
-        column,
-        title: 'To'
-      });
-    },
-    cell: ({ row }) => {
-      const toTimeSnippet = createRawSnippet<[string]>((getToTime) => {
-        return {
-          render: () => `<div class="w-full">${getToTime()}</div>`
-        };
-      });
-
-      return renderSnippet(toTimeSnippet, row.getValue('time_available_start'));
-    },
-    enableSorting: true,
-    enableHiding: true
-  },
-
-  {
     accessorKey: 'created_at',
     id: 'created_at',
     header: ({ column }) => {
-      return renderComponent(TableColumnHeader<PaymentPageTable, unknown>, {
+      return renderComponent(TableColumnHeader<AdminPaymentPageTable, unknown>, {
         column,
         title: 'Created At'
       });
@@ -161,6 +73,6 @@ export const columns: ColumnDef<PaymentPageTable, unknown>[] = [
 
   {
     id: 'actions',
-    cell: ({ row }) => renderComponent(TableRowActions<PaymentPageTable>, { row })
+    cell: ({ row }) => renderComponent(TableRowActions<AdminPaymentPageTable>, { row })
   }
 ];

@@ -5,14 +5,13 @@
 <script lang="ts" generics="TData">
   import Ellipsis from 'lucide-svelte/icons/ellipsis';
   import Delete from 'lucide-svelte/icons/delete';
-  import NotebookPen from 'lucide-svelte/icons/notebook-pen';
   import type { Row } from '@tanstack/table-core';
-  import { type PaymentPageTable } from '../data/schemas';
+  import { type AdminPaymentPageTable } from '../data/schemas';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index';
   import Button from '$lib/components/ui/button/button.svelte';
   import { useTableState } from '../tableState.svelte';
 
-  let { row }: { row: Row<PaymentPageTable> } = $props();
+  let { row }: { row: Row<AdminPaymentPageTable> } = $props();
 
   const tableState = useTableState();
 </script>

@@ -8,10 +8,10 @@
   import { TableViewOptions } from './index.js';
   import Button from '$lib/components/ui/button/button.svelte';
   import { Input } from '$lib/components/ui/input/index';
-  import type { PaymentPageTable } from '../data/schemas.js';
+  import type { AdminPaymentPageTable } from '../data/schemas.js';
 
   interface Props {
-    table: Table<PaymentPageTable>;
+    table: Table<AdminPaymentPageTable>;
   }
 
   let { table }: Props = $props();
