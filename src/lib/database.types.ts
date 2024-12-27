@@ -276,6 +276,16 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: boolean
       }
+      process_payment: {
+        Args: {
+          user_id: string
+          church_id: number
+          xendit_callback: Json
+          reservation_id?: number
+          cert_request_id?: number
+        }
+        Returns: undefined
+      }
       reservation: {
         Args: {
           p_church_id: number

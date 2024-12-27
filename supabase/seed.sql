@@ -175,6 +175,33 @@ $$;
 ALTER FUNCTION "public"."on_auth_user_updated"() OWNER TO "postgres";
 
 
+CREATE OR REPLACE FUNCTION "public"."process_payment"("user_id" "uuid", "church_id" numeric, "xendit_callback" "jsonb", "reservation_id" numeric DEFAULT NULL::numeric, "cert_request_id" numeric DEFAULT NULL::numeric) RETURNS "void"
+    LANGUAGE "plpgsql"
+    AS $$
+begin
+    insert into finished_payments_tb (user_id, church_id, reservation_id, cert_request_id, xendit_callback)
+    values (user_id, church_id, reservation_id, cert_request_id, xendit_callback);
+    
+    if(cert_request_id is not null) then
+        update cert_requests_tb
+        set status = 'paid'
+        where id = cert_request_id;
+    elsif(reservation_id is not null) then
+        update reservations_tb
+        set status = 'paid'
+        where id = reservation_id;
+    end if;
+
+    exception
+        when others then
+            raise notice 'Error processing payment: %', sqlerrm;
+end;
+$$;
+
+
+ALTER FUNCTION "public"."process_payment"("user_id" "uuid", "church_id" numeric, "xendit_callback" "jsonb", "reservation_id" numeric, "cert_request_id" numeric) OWNER TO "postgres";
+
+
 CREATE OR REPLACE FUNCTION "public"."reservation"("p_church_id" numeric, "p_reference_id" "text", "p_event_name" "text", "p_number_of_guest" numeric, "p_date" "date", "p_initial_time" time without time zone, "p_final_time" time without time zone, "p_message" "text") RETURNS "void"
     LANGUAGE "plpgsql"
     AS $$
@@ -745,6 +772,12 @@ GRANT ALL ON FUNCTION "public"."on_auth_user_created"() TO "service_role";
 GRANT ALL ON FUNCTION "public"."on_auth_user_updated"() TO "anon";
 GRANT ALL ON FUNCTION "public"."on_auth_user_updated"() TO "authenticated";
 GRANT ALL ON FUNCTION "public"."on_auth_user_updated"() TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."process_payment"("user_id" "uuid", "church_id" numeric, "xendit_callback" "jsonb", "reservation_id" numeric, "cert_request_id" numeric) TO "anon";
+GRANT ALL ON FUNCTION "public"."process_payment"("user_id" "uuid", "church_id" numeric, "xendit_callback" "jsonb", "reservation_id" numeric, "cert_request_id" numeric) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."process_payment"("user_id" "uuid", "church_id" numeric, "xendit_callback" "jsonb", "reservation_id" numeric, "cert_request_id" numeric) TO "service_role";
 
 
 
