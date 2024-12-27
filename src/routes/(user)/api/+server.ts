@@ -20,8 +20,8 @@ export const POST: RequestHandler = async ({ locals: { supabaseAdmin }, request 
     const { error } = await supabaseAdmin.rpc('process_payment', {
       user_id: userId,
       church_id: Number(churchId),
-      reservation_id: reservationId ? Number(reservationId) : null,
-      cert_request_id: certRequestId ? Number(certRequestId) : null,
+      reservation_id: reservationId ? Number(reservationId) : undefined,
+      cert_request_id: certRequestId ? Number(certRequestId) : undefined,
       xendit_callback: body
     });
 
