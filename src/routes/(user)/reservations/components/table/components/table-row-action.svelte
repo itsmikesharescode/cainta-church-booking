@@ -6,7 +6,6 @@
   import Ellipsis from 'lucide-svelte/icons/ellipsis';
   import X from 'lucide-svelte/icons/x';
   import SquareArrowUpRight from 'lucide-svelte/icons/square-arrow-up-right';
-
   import type { Row } from '@tanstack/table-core';
   import { type ReservationsPageTable } from '../data/schemas';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index';
@@ -33,6 +32,7 @@
       <DropdownMenu.Item
         onclick={() => {
           tableState.setActiveRow(row.original);
+          goto('?modal=proceed-payment');
         }}
       >
         <SquareArrowUpRight />

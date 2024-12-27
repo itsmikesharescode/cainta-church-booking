@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 export const reservationSchema = z.object({
   id: z.number(),
+  church_id: z.number(),
   created_at: z.string(),
   reference_id: z.string(),
   event_name: z.string(),

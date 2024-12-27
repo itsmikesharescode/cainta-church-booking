@@ -4,7 +4,7 @@
   import { Skeleton } from '$lib/components/ui/skeleton/index.js';
   import { initTableState } from './components/table/tableState.svelte';
   import CancelReservation from './components/cancel-reservation/cancel-reservation.svelte';
-
+  import ProceedPayment from './components/proceed-payment/proceed-payment.svelte';
   const { data } = $props();
 
   initTableState();
@@ -30,6 +30,7 @@
     <Table
       data={reservations?.map((res) => ({
         id: res.id ?? 0,
+        church_id: res.church_id ?? 0,
         created_at: res.created_at ?? '',
         reference_id: res.reference_id ?? '',
         event_name: res.event_name ?? '',
@@ -47,3 +48,4 @@
 </main>
 
 <CancelReservation cancelReservationForm={data.cancelReservationForm} />
+<ProceedPayment proceedPaymentForm={data.proceedPaymentForm} />
