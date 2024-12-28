@@ -32,6 +32,7 @@
       <DropdownMenu.Item
         onclick={() => {
           tableState.setActiveRow(row.original);
+          goto('?modal=proceed-payment');
         }}
       >
         <SquareArrowUpRight />

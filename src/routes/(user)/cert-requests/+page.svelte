@@ -4,6 +4,7 @@
   import { Skeleton } from '$lib/components/ui/skeleton/index.js';
   import { initTableState } from './components/table/tableState.svelte';
   import CancelRequest from './components/cancel-request/cancel-request.svelte';
+  import ProceedPayment from './components/proceed-payment/proceed-payment.svelte';
 
   const { data } = $props();
   initTableState();
@@ -30,4 +31,5 @@
   {/await}
 </main>
 
+<ProceedPayment proceedPaymentForm={data.proceedPaymentForm} />
 <CancelRequest cancelRequestForm={data.cancelRequestForm} />
