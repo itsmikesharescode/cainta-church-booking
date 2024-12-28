@@ -32,9 +32,15 @@
       </span>
     </section>
     <section class="grid gap-10 md:grid-cols-[3fr,2fr]">
-      <div class="overflow-auto">
+      <div class="overflow-auto p-2">
         <!--Should fetch specific id;s from reservations_tb-->
-        <Calendar reservations={[]} />
+        <Calendar
+          reservations={data.getChurchReservations ?? []}
+          churchTime={{
+            open_time: data.getChurch?.open_time,
+            close_time: data.getChurch?.close_time
+          }}
+        />
       </div>
 
       <div>
