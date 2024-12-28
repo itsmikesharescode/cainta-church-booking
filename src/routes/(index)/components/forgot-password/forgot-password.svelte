@@ -20,9 +20,9 @@
   const form = superForm(forgotPasswordForm, {
     validators: zodClient(forgotPasswordSchema),
     id: 'forgot-password-form',
+    invalidateAll: false,
     onUpdate: async ({ result }) => {
       const { status, data } = result;
-
       switch (status) {
         case 200:
           toast.success(data.msg);
