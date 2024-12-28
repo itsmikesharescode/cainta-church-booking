@@ -22,10 +22,21 @@ export const load: PageServerLoad = async ({ url, locals: { supabase } }) => {
     return data;
   };
 
+  const getChurchReservations = async () => {
+    const { data, error } = await supabase.rpc('get_user_church_reservations_data', {
+      church_id: Number(params ?? 0)
+    });
+
+    if (error) return null;
+
+    return data;
+  };
+
   return {
     reservationForm: await superValidate(zod(reservationSchema)),
     requestForm: await superValidate(zod(requestSchema)),
-    getChurch: await getChurch()
+    getChurch: await getChurch(),
+    getChurchReservations: await getChurchReservations()
   };
 };
 

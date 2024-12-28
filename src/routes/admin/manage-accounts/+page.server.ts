@@ -56,7 +56,7 @@ export const actions: Actions = {
     });
 
     if (error) return fail(401, { form, msg: error.message });
-    return { form, msg: 'Email successfully updated.' };
+    return { form, msg: 'An email has been sent to confirm the change.' };
   },
 
   updateInfoEvent: async ({ locals: { supabaseAdmin }, request }) => {

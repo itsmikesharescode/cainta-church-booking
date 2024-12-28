@@ -36,10 +36,17 @@ export const actions: Actions = {
     return { form, msg: 'Sucessfully deleted a reservation.' };
   },
 
-  approveReservationEvent: async ({ locals: { supabase }, request }) => {
+  approveReservationEvent: async ({ locals: { supabase, sendEmail }, request }) => {
     const form = await superValidate(request, zod(adminApproveResSchema));
 
     if (!form.valid) return fail(400, { form });
+    const { success } = await sendEmail({
+      to: form.data.email,
+      subject: 'Reservation Approved',
+      html: `<p>Your Reservation has been approved. The price is ₱ ${form.data.price.toLocaleString()}. kindly visit <a href="https://cainta-church-booking.vercel.app">https://cainta-church-booking.vercel.app</a> to view your booking.</p>`
+    });
+
+    if (!success) return fail(401, { form, msg: 'There is something wrong with mailer.' });
 
     const { error } = await supabase
       .from('reservations_tb')

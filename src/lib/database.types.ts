@@ -264,6 +264,26 @@ export type Database = {
         Args: Record<PropertyKey, never>;
         Returns: Json;
       };
+      get_user_church_reservations_data: {
+        Args: {
+          church_id: number;
+        };
+        Returns: {
+          church_id: number;
+          created_at: string;
+          date: string;
+          event_name: string;
+          final_time: string;
+          id: number;
+          initial_time: string;
+          message: string;
+          number_of_guest: number;
+          price: number | null;
+          reference_id: string;
+          status: string;
+          user_id: string;
+        }[];
+      };
       is_admin: {
         Args: Record<PropertyKey, never>;
         Returns: boolean;
@@ -274,11 +294,8 @@ export type Database = {
       };
       process_payment: {
         Args: {
-          user_id: string;
-          church_id: number;
-          xendit_callback: XenditCallback;
-          reservation_id?: number;
-          cert_request_id?: number;
+          external_id: string;
+          xendit_callback: Json;
         };
         Returns: undefined;
       };

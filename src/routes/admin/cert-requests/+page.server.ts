@@ -36,10 +36,16 @@ export const actions: Actions = {
     return { form, msg: 'Sucessfully deleted a certificate request.' };
   },
 
-  approveCertEvent: async ({ locals: { supabase }, request }) => {
+  approveCertEvent: async ({ locals: { supabase, sendEmail }, request }) => {
     const form = await superValidate(request, zod(adminApproveCertSchema));
 
     if (!form.valid) return fail(400, { form });
+    const { success } = await sendEmail({
+      to: form.data.email,
+      subject: 'Certificate Approved',
+      html: `<p>Your Certificate has been approved. The price is ₱ ${form.data.price.toLocaleString()}. kindly visit <a href="https://cainta-church-booking.vercel.app">https://cainta-church-booking.vercel.app</a> to view your booking.</p>`
+    });
+    if (!success) return fail(401, { form, msg: 'There is something wrong with mailer.' });
 
     const { error } = await supabase
       .from('cert_requests_tb')

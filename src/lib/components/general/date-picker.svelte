@@ -1,6 +1,12 @@
 <script lang="ts">
   import CalendarIcon from 'lucide-svelte/icons/calendar';
-  import { DateFormatter, getLocalTimeZone, type DateValue } from '@internationalized/date';
+  import {
+    CalendarDate,
+    DateFormatter,
+    getLocalTimeZone,
+    type DateValue,
+    parseDate
+  } from '@internationalized/date';
   import { cn } from '$lib/utils.js';
   import { Button } from '$lib/components/ui/button/index.js';
   import { Calendar } from '$lib/components/ui/calendar/index.js';
@@ -56,6 +62,11 @@
         selected = String(v);
       }}
       type="single"
+      isDateDisabled={(date) => {
+        const today = new Date();
+        const todayValue = parseDate(today.toISOString().split('T')[0]);
+        return date.compare(todayValue) < 0;
+      }}
     />
   </DropdownMenu.Content>
 </DropdownMenu.Root>

@@ -7,6 +7,7 @@
   import ViewCertificate from './components/view-certificate/view-certicate.svelte';
   import ViewReservation from './components/view-reservation/view-reservation.svelte';
   import ViewUser from './components/view-user/view-user.svelte';
+  import DeletePayment from './components/delete-payment/delete-payment.svelte';
 
   const { data } = $props();
   initTableState();
@@ -52,3 +53,4 @@
 <ViewCertificate />
 <ViewReservation />
 <ViewUser />
+<DeletePayment deletePaymentForm={data.deletePaymentForm} />

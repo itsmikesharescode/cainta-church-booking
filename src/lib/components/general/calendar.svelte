@@ -6,12 +6,17 @@
   import timeGridPlugin from '@fullcalendar/timegrid'; // For detailed time grid view
   import listPlugin from '@fullcalendar/list'; // Import the list plugin
   import type { Database } from '$lib/database.types';
+  import { format24hrTo12hrAMPM } from '$lib/utils';
 
   interface Props {
+    churchTime: {
+      open_time: string;
+      close_time: string;
+    };
     reservations: Database['public']['Tables']['reservations_tb']['Row'][];
   }
 
-  let { reservations }: Props = $props();
+  let { reservations, churchTime }: Props = $props();
 
   // Calendar instance and DOM element references
   let calendar: Calendar;
@@ -33,7 +38,7 @@
   const transformReservationsToEvents = (reservations: Props['reservations']) =>
     reservations.map((reservation) => ({
       id: reservation.id.toString(),
-      title: reservation.event_name,
+      title: reservation.event_name.split('/')[0],
       start: `${reservation.date}T${reservation.initial_time}`,
       end: `${reservation.date}T${reservation.final_time}`,
       backgroundColor: generatePastelColor(reservation.event_name),
@@ -58,8 +63,8 @@
       },
       initialDate: new Date(),
       nowIndicator: true,
-      slotMinTime: '06:00:00',
-      slotMaxTime: '22:00:00',
+      slotMinTime: churchTime.open_time,
+      slotMaxTime: churchTime.close_time,
       height: 'auto',
       allDayText: '',
       slotDuration: '00:15:00',
@@ -75,22 +80,26 @@
         minute: '2-digit',
         meridiem: 'short'
       },
-      events: transformReservationsToEvents(reservations),
-      // Custom event rendering for conflicting events
-      eventDidMount: (info) => {
-        if (info.event.extendedProps.status === 'conflict') {
-          info.el.style.border = '2px solid red';
+      eventContent: (arg) => {
+        if (arg.view.type === 'dayGridMonth') {
+          // Only show title in month view
+          return {
+            html: `<div title="${format24hrTo12hrAMPM(new Date(arg.event.start ?? '').toLocaleTimeString())} - ${format24hrTo12hrAMPM(new Date(arg.event.end ?? '').toLocaleTimeString())}" class="fc-event-title cursor-pointer flex flex-col items-center justify-center">
+          <span  class="text-xs line-clamp-1">${arg.event.title}</span>
+          
+          </div>`
+          };
         }
-        const tooltip = document.createElement('div');
-        tooltip.innerHTML = `
-          <strong>${info.event.title}</strong><br>
-          Status: ${info.event.extendedProps.status}<br>
-          Guests: ${info.event.extendedProps.number_of_guest}<br>
-          Message: ${info.event.extendedProps.message}<br>
-          Price: ${info.event.extendedProps.price}`;
-        tooltip.classList.add('tooltip');
-        info.el.appendChild(tooltip);
-      }
+        // Return the default content structure for other views
+        return {
+          html: `
+            <div class="fc-event-time">${arg.timeText}</div>
+            <div class="fc-event-title">${arg.event.title}</div>
+          `
+        };
+      },
+      events: transformReservationsToEvents(reservations)
+      // Custom event rendering for conflicting events
     });
   };
 
