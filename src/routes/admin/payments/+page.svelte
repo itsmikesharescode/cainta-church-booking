@@ -25,6 +25,21 @@
       <Skeleton class="h-9 w-full" />
     </div>
   {:then payments}
-    <Table data={payments ?? []} {columns} />
+    <Table
+      data={payments?.map((p) => ({
+        id: p.id,
+        user_id: p.user_id,
+        church_id: Number(p.church_id),
+        reservation_id: Number(p.reservation_id),
+        cert_request_id: Number(p.cert_request_id),
+        reference_id: p.xendit_callback.payment_id,
+        created_at: p.created_at,
+        xendit_callback: p.xendit_callback,
+        payment_channel: p.xendit_callback.payment_channel,
+        price: p.xendit_callback.amount,
+        type: p.reservation_id ? 'Reservation' : 'Certificate'
+      })) ?? []}
+      {columns}
+    />
   {/await}
 </main>
