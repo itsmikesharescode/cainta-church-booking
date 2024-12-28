@@ -17,7 +17,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, url }) => {
 };
 
 export const actions: Actions = {
-  recUpdatePwdEvent: async ({ locals: { supabase }, request }) => {
+  resetPasswordEvent: async ({ locals: { supabase }, request }) => {
     const form = await superValidate(request, zod(resetPasswordSchema));
 
     if (!form.valid) return fail(400, { form });
