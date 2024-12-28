@@ -3,6 +3,10 @@
   import { columns } from './components/table/components/columns';
   import { Skeleton } from '$lib/components/ui/skeleton/index.js';
   import { initTableState } from './components/table/tableState.svelte';
+  import ViewChurch from './components/view-church/view-church.svelte';
+  import ViewCertificate from './components/view-certificate/view-certicate.svelte';
+  import ViewReservation from './components/view-reservation/view-reservation.svelte';
+  import ViewUser from './components/view-user/view-user.svelte';
 
   const { data } = $props();
   initTableState();
@@ -43,3 +47,8 @@
     />
   {/await}
 </main>
+
+<ViewChurch />
+<ViewCertificate />
+<ViewReservation />
+<ViewUser />
