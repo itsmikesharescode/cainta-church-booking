@@ -3,7 +3,9 @@
   import { columns } from './components/table/components/columns';
   import { Skeleton } from '$lib/components/ui/skeleton/index.js';
   import { initTableState } from './components/table/tableState.svelte';
-
+  import DeletePayment from './components/delete-payment/delete-payment.svelte';
+  import ViewChurch from './components/view-church/view-church.svelte';
+  import ViewReservation from './components/view-reservation/view-reservation.svelte';
   const { data } = $props();
   initTableState();
 </script>
@@ -25,6 +27,24 @@
       <Skeleton class="h-9 w-full" />
     </div>
   {:then payments}
-    <Table data={payments ?? []} {columns} />
+    <Table
+      data={payments?.map((p) => ({
+        id: p.id ?? 0,
+        created_at: p.created_at ?? '',
+        church_id: Number(p.church_id) ?? 0,
+        reservation_id: Number(p.reservation_id) ?? 0,
+        cert_request_id: Number(p.cert_request_id) ?? 0,
+        xendit_callback: p.xendit_callback ?? {},
+        payment_channel: p.xendit_callback.payment_channel ?? '',
+        price: p.xendit_callback.amount ?? 0,
+        reference_id: p.xendit_callback.payment_id ?? '',
+        type: p.reservation_id ? 'Reservation' : 'Certificate'
+      })) ?? []}
+      {columns}
+    />
   {/await}
 </main>
+
+<ViewReservation />
+<ViewChurch />
+<DeletePayment deletePaymentForm={data.deletePaymentForm} />
