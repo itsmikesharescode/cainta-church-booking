@@ -36,7 +36,8 @@
         xendit_callback: p.xendit_callback ?? {},
         payment_channel: p.xendit_callback.payment_channel ?? '',
         price: p.xendit_callback.amount ?? 0,
-        reference_id: p.xendit_callback.payment_id ?? ''
+        reference_id: p.xendit_callback.payment_id ?? '',
+        type: p.reservation_id ? 'Reservation' : 'Certificate'
       })) ?? []}
       {columns}
     />

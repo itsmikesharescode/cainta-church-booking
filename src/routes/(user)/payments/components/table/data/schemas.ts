@@ -10,7 +10,8 @@ export const paymentSchema = z.object({
   xendit_callback: z.custom<XenditCallback>(),
   payment_channel: z.string(),
   price: z.number(),
-  reference_id: z.string()
+  reference_id: z.string(),
+  type: z.string()
 });
 
 export type PaymentPageTable = z.output<typeof paymentSchema>;

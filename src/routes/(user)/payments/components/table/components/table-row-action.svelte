@@ -36,7 +36,7 @@
         }}
       >
         <SearchCheck />
-        View Reservation
+        Reservation Record
       </DropdownMenu.Item>
     {:else if row.original.cert_request_id}
       <DropdownMenu.Item
@@ -46,7 +46,7 @@
         }}
       >
         <SearchCheck />
-        View Certificate
+        Certificate Record
       </DropdownMenu.Item>
     {/if}
     <DropdownMenu.Item
@@ -56,7 +56,7 @@
       }}
     >
       <SearchCheck />
-      View Church
+      Church Record
     </DropdownMenu.Item>
     <!-- <DropdownMenu.Item
       onclick={() => {

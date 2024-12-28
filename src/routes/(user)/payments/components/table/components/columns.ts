@@ -50,6 +50,28 @@ export const columns: ColumnDef<PaymentPageTable, unknown>[] = [
   },
 
   {
+    accessorKey: 'type',
+    id: 'type',
+    header: ({ column }) => {
+      return renderComponent(TableColumnHeader<PaymentPageTable, unknown>, {
+        column,
+        title: 'Type'
+      });
+    },
+    cell: ({ row }) => {
+      const typeSnippet = createRawSnippet<[string]>((getType) => {
+        return {
+          render: () => `<div class="w-full">${getType()}</div>`
+        };
+      });
+
+      return renderSnippet(typeSnippet, row.getValue('type'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
     accessorKey: 'price',
     id: 'price',
     header: ({ column }) => {
