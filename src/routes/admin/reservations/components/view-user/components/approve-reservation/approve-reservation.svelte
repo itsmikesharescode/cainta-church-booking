@@ -44,6 +44,7 @@
     if (dependency) {
       $formData.id = tableState.getActiveRow()?.id ?? 0;
       $formData.price = Number(tableState.getActiveRow()?.event_name.split('/')[1]) ?? 0;
+      $formData.email = tableState.getActiveRow()?.users_tb.user_meta_data.email ?? '';
     }
   });
 
@@ -52,6 +53,7 @@
 
 <form method="POST" action="?/approveReservationEvent" use:enhance>
   <input type="hidden" name="id" bind:value={$formData.id} />
+  <input type="hidden" name="email" bind:value={$formData.email} />
   <Form.Field {form} name="price">
     <Form.Control>
       {#snippet children({ props })}

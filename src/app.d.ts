@@ -18,6 +18,14 @@ declare global {
         file: File,
         options?: { maxSizeInMB?: number; maxWidth?: number; maxHeight?: number; quality?: number }
       ) => Promise<File | null>;
+      gemini: (prompt: string) => Promise<{ error?: string; result?: string }>;
+      xenditClient: Xendit;
+      mailer: Mailer;
+      sendEmail: (params: {
+        to: string;
+        subject: string;
+        html: string;
+      }) => Promise<{ success: boolean; error?: string }>;
     }
     interface PageData {
       session?: Session | null;

@@ -1,9 +1,16 @@
 import { createServerClient } from '@supabase/ssr';
 import { type Handle, redirect } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
-
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import nodemailer from 'nodemailer';
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
-import { PRIVATE_SUPABASE_ADMIN_KEY, PRIVATE_XENDIT_KEY } from '$env/static/private';
+import {
+  PRIVATE_SUPABASE_ADMIN_KEY,
+  PRIVATE_XENDIT_KEY,
+  PRIVATE_MAILER_KEY,
+  PRIVATE_MAILER_USER,
+  PRIVATE_GEMINI_KEY
+} from '$env/static/private';
 
 import { userRoutes } from '$lib';
 import sharp from 'sharp';
@@ -153,6 +160,72 @@ const auxilary: Handle = async ({ event, resolve }) => {
   };
 
   event.locals.xenditClient = new Xendit({ secretKey: PRIVATE_XENDIT_KEY });
+
+  event.locals.gemini = async (prompt: string): Promise<{ error?: string; result?: string }> => {
+    try {
+      if (!prompt?.trim()) {
+        return { error: 'Prompt is required' };
+      }
+
+      const genAI = new GoogleGenerativeAI(PRIVATE_GEMINI_KEY);
+      const model = genAI.getGenerativeModel({
+        model: 'gemini-1.0-pro'
+      });
+
+      const generationConfig = {
+        temperature: 0.9,
+        topP: 1,
+        maxOutputTokens: 2048,
+        responseMimeType: 'text/plain'
+      };
+
+      const chatSession = model.startChat({
+        generationConfig,
+        history: []
+      });
+
+      const response = await chatSession.sendMessage(prompt);
+      const result = response.response.text();
+
+      return { result };
+    } catch (error) {
+      console.error('Gemini API error:', error);
+      return { error: 'Failed to process your request' };
+    }
+  };
+
+  event.locals.mailer = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
+    auth: {
+      user: PRIVATE_MAILER_USER,
+      pass: PRIVATE_MAILER_KEY
+    }
+  });
+
+  event.locals.sendEmail = async ({
+    to,
+    subject,
+    html
+  }: {
+    to: string;
+    subject: string;
+    html: string;
+  }) => {
+    try {
+      await event.locals.mailer.sendMail({
+        from: PRIVATE_MAILER_USER,
+        to,
+        subject,
+        html
+      });
+      return { success: true };
+    } catch (error) {
+      console.error('Email sending failed:', error);
+      return { success: false, error: String(error) };
+    }
+  };
 
   return resolve(event);
 };
