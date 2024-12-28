@@ -6,6 +6,28 @@ import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/re
 
 export const columns: ColumnDef<AdminPaymentPageTable, unknown>[] = [
   {
+    accessorKey: 'reference_id',
+    id: 'reference_id',
+    header: ({ column }) => {
+      return renderComponent(TableColumnHeader<AdminPaymentPageTable, unknown>, {
+        column,
+        title: 'Reference ID'
+      });
+    },
+    cell: ({ row }) => {
+      const referenceIdSnippet = createRawSnippet<[string]>((getReferenceId) => {
+        return {
+          render: () => `<div class="w-full">${getReferenceId()}</div>`
+        };
+      });
+
+      return renderSnippet(referenceIdSnippet, row.getValue('reference_id'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
     accessorKey: 'payment_channel',
     id: 'payment_channel',
     header: ({ column }) => {
@@ -39,11 +61,33 @@ export const columns: ColumnDef<AdminPaymentPageTable, unknown>[] = [
     cell: ({ row }) => {
       const priceSnippet = createRawSnippet<[string]>((getPrice) => {
         return {
-          render: () => `<div class="w-full">${getPrice()}</div>`
+          render: () => `<div class="w-full">₱ ${Number(getPrice()).toLocaleString()}</div>`
         };
       });
 
       return renderSnippet(priceSnippet, row.getValue('price'));
+    },
+    enableSorting: true,
+    enableHiding: true
+  },
+
+  {
+    accessorKey: 'type',
+    id: 'type',
+    header: ({ column }) => {
+      return renderComponent(TableColumnHeader<AdminPaymentPageTable, unknown>, {
+        column,
+        title: 'Type'
+      });
+    },
+    cell: ({ row }) => {
+      const typeSnippet = createRawSnippet<[string]>((getType) => {
+        return {
+          render: () => `<div class="w-full">${getType()}</div>`
+        };
+      });
+
+      return renderSnippet(typeSnippet, row.getValue('type'));
     },
     enableSorting: true,
     enableHiding: true
@@ -61,7 +105,8 @@ export const columns: ColumnDef<AdminPaymentPageTable, unknown>[] = [
     cell: ({ row }) => {
       const createdAtSnippet = createRawSnippet<[string]>((getCreatedAt) => {
         return {
-          render: () => `<div class="w-full">${getCreatedAt()}</div>`
+          render: () =>
+            `<div class="w-full">${new Date(getCreatedAt()).toLocaleTimeString()} @ ${new Date(getCreatedAt()).toLocaleDateString()}</div>`
         };
       });
 

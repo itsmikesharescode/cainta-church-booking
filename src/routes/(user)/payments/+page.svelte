@@ -6,6 +6,8 @@
   import DeletePayment from './components/delete-payment/delete-payment.svelte';
   import ViewChurch from './components/view-church/view-church.svelte';
   import ViewReservation from './components/view-reservation/view-reservation.svelte';
+  import ViewCertificate from './components/view-certificate/view-certicate.svelte';
+
   const { data } = $props();
   initTableState();
 </script>
@@ -45,6 +47,7 @@
   {/await}
 </main>
 
+<ViewCertificate />
 <ViewReservation />
 <ViewChurch />
 <DeletePayment deletePaymentForm={data.deletePaymentForm} />
