@@ -58,7 +58,7 @@
       <SearchCheck />
       View Church
     </DropdownMenu.Item>
-    <DropdownMenu.Item
+    <!-- <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
         goto(`?modal=delete-payment`);
@@ -66,6 +66,6 @@
     >
       <Delete />
       Delete
-    </DropdownMenu.Item>
+    </DropdownMenu.Item> -->
   </DropdownMenu.Content>
 </DropdownMenu.Root>

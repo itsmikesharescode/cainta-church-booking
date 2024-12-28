@@ -3,6 +3,7 @@
   import { columns } from './components/table/components/columns';
   import { Skeleton } from '$lib/components/ui/skeleton/index.js';
   import { initTableState } from './components/table/tableState.svelte';
+  import DeletePayment from './components/table/delete-payment/delete-payment.svelte';
 
   const { data } = $props();
   initTableState();
@@ -41,3 +42,5 @@
     />
   {/await}
 </main>
+
+<DeletePayment deletePaymentForm={data.deletePaymentForm} />
