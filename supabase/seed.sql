@@ -175,18 +175,39 @@ $$;
 ALTER FUNCTION "public"."on_auth_user_updated"() OWNER TO "postgres";
 
 
-CREATE OR REPLACE FUNCTION "public"."process_payment"("user_id" "uuid", "church_id" numeric, "xendit_callback" "jsonb", "reservation_id" numeric DEFAULT NULL::numeric, "cert_request_id" numeric DEFAULT NULL::numeric) RETURNS "void"
-    LANGUAGE "plpgsql"
+CREATE OR REPLACE FUNCTION "public"."process_payment"("external_id" "text", "xendit_callback" "jsonb") RETURNS "void"
+    LANGUAGE "plpgsql" SECURITY DEFINER
     AS $$
+declare
+    user_id uuid;
+    reservation_id numeric;
+    cert_request_id numeric;
+    church_id numeric;
+    id_part text;
 begin
-    insert into finished_payments_tb (user_id, church_id, reservation_id, cert_request_id, xendit_callback)
-    values (user_id, church_id, reservation_id, cert_request_id, xendit_callback);
+    -- Extract user_id and church_id from external_id
+    user_id := split_part(external_id, '/', 1)::uuid;
+    id_part := split_part(external_id, '/', 2);
+    church_id := split_part(external_id, '/', 3)::numeric;
+
+    -- Check if it's a reservation or certificate request
+    if position('res_id=' in id_part) > 0 then
+        reservation_id := replace(id_part, 'res_id=', '')::numeric;
+        cert_request_id := null;
+    elsif position('cert_id=' in id_part) > 0 then
+        cert_request_id := replace(id_part, 'cert_id=', '')::numeric;
+        reservation_id := null;
+    end if;
     
-    if(cert_request_id is not null) then
+    if cert_request_id is not null then
+        insert into finished_payments_tb (user_id, church_id, cert_request_id, xendit_callback)
+        values (user_id, church_id, cert_request_id, xendit_callback);
         update cert_requests_tb
         set status = 'paid'
         where id = cert_request_id;
-    elsif(reservation_id is not null) then
+    elsif reservation_id is not null then
+        insert into finished_payments_tb (user_id, church_id, reservation_id, xendit_callback)
+        values (user_id, church_id, reservation_id, xendit_callback);
         update reservations_tb
         set status = 'paid'
         where id = reservation_id;
@@ -199,7 +220,7 @@ end;
 $$;
 
 
-ALTER FUNCTION "public"."process_payment"("user_id" "uuid", "church_id" numeric, "xendit_callback" "jsonb", "reservation_id" numeric, "cert_request_id" numeric) OWNER TO "postgres";
+ALTER FUNCTION "public"."process_payment"("external_id" "text", "xendit_callback" "jsonb") OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."reservation"("p_church_id" numeric, "p_reference_id" "text", "p_event_name" "text", "p_number_of_guest" numeric, "p_date" "date", "p_initial_time" time without time zone, "p_final_time" time without time zone, "p_message" "text") RETURNS "void"
@@ -775,9 +796,9 @@ GRANT ALL ON FUNCTION "public"."on_auth_user_updated"() TO "service_role";
 
 
 
-GRANT ALL ON FUNCTION "public"."process_payment"("user_id" "uuid", "church_id" numeric, "xendit_callback" "jsonb", "reservation_id" numeric, "cert_request_id" numeric) TO "anon";
-GRANT ALL ON FUNCTION "public"."process_payment"("user_id" "uuid", "church_id" numeric, "xendit_callback" "jsonb", "reservation_id" numeric, "cert_request_id" numeric) TO "authenticated";
-GRANT ALL ON FUNCTION "public"."process_payment"("user_id" "uuid", "church_id" numeric, "xendit_callback" "jsonb", "reservation_id" numeric, "cert_request_id" numeric) TO "service_role";
+GRANT ALL ON FUNCTION "public"."process_payment"("external_id" "text", "xendit_callback" "jsonb") TO "anon";
+GRANT ALL ON FUNCTION "public"."process_payment"("external_id" "text", "xendit_callback" "jsonb") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."process_payment"("external_id" "text", "xendit_callback" "jsonb") TO "service_role";
 
 
 

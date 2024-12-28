@@ -278,11 +278,8 @@ export type Database = {
       }
       process_payment: {
         Args: {
-          user_id: string
-          church_id: number
+          external_id: string
           xendit_callback: Json
-          reservation_id?: number
-          cert_request_id?: number
         }
         Returns: undefined
       }
