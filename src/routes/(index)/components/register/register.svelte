@@ -22,12 +22,13 @@
   const form = superForm(registerForm, {
     validators: zodClient(registerSchema),
     id: 'register-form',
-    onUpdate: ({ result }) => {
+    onUpdate: async ({ result }) => {
       const { status, data } = result;
 
       switch (status) {
         case 200:
           toast.success(data.msg);
+          goto('/');
           break;
         case 401:
           toast.error(data.msg);

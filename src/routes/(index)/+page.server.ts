@@ -38,7 +38,7 @@ export const actions: Actions = {
 
     if (!form.valid) return fail(400, { form });
 
-    const { data, error } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signUp({
       email: form.data.email,
       password: form.data.password,
       options: {
@@ -53,7 +53,7 @@ export const actions: Actions = {
     });
 
     if (error) return fail(401, { msg: error.message });
-    return { form, msg: `Welcome ${data.user?.user_metadata.firstname}!` };
+    return { form, msg: `Please check your email ${form.data.email} for a verification link.` };
   },
 
   forgotPasswordEvent: async ({ locals: { supabase }, request }) => {
