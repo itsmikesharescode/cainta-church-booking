@@ -1,3 +1,4 @@
+import type { XenditCallback } from '$lib/types';
 import { z } from 'zod';
 
 export const paymentSchema = z.object({
@@ -6,9 +7,10 @@ export const paymentSchema = z.object({
   church_id: z.number(),
   reservation_id: z.number().nullable(),
   cert_request_id: z.number().nullable(),
-  xendit_callback: z.any(),
+  xendit_callback: z.custom<XenditCallback>(),
   payment_channel: z.string(),
-  price: z.number()
+  price: z.number(),
+  reference_id: z.string()
 });
 
 export type PaymentPageTable = z.output<typeof paymentSchema>;

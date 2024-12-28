@@ -5,11 +5,13 @@
 <script lang="ts" generics="TData">
   import Ellipsis from 'lucide-svelte/icons/ellipsis';
   import Delete from 'lucide-svelte/icons/delete';
+  import SearchCheck from 'lucide-svelte/icons/search-check';
   import type { Row } from '@tanstack/table-core';
   import { type PaymentPageTable } from '../data/schemas';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index';
   import Button from '$lib/components/ui/button/button.svelte';
   import { useTableState } from '../tableState.svelte';
+  import { goto } from '$app/navigation';
 
   let { row }: { row: Row<PaymentPageTable> } = $props();
 
@@ -26,10 +28,40 @@
     {/snippet}
   </DropdownMenu.Trigger>
   <DropdownMenu.Content class="w-fit" align="end">
+    {#if row.original.reservation_id}
+      <DropdownMenu.Item
+        onclick={() => {
+          tableState.setActiveRow(row.original);
+          goto(`?modal=delete-payment`);
+        }}
+      >
+        <SearchCheck />
+        View Reservation
+      </DropdownMenu.Item>
+    {:else if row.original.cert_request_id}
+      <DropdownMenu.Item
+        onclick={() => {
+          tableState.setActiveRow(row.original);
+          goto(`?modal=delete-payment`);
+        }}
+      >
+        <SearchCheck />
+        View Certificate
+      </DropdownMenu.Item>
+    {/if}
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
-        tableState.setShowDelete(true);
+        goto(`?modal=delete-payment`);
+      }}
+    >
+      <SearchCheck />
+      View Church
+    </DropdownMenu.Item>
+    <DropdownMenu.Item
+      onclick={() => {
+        tableState.setActiveRow(row.original);
+        goto(`?modal=delete-payment`);
       }}
     >
       <Delete />
