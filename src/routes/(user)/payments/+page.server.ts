@@ -1,7 +1,7 @@
 import { superValidate } from 'sveltekit-superforms';
 import type { PageServerLoad } from './$types';
 import { zod } from 'sveltekit-superforms/adapters';
-import { deletePaymentSchema } from './components/table/delete-payment/schema';
+import { deletePaymentSchema } from './components/delete-payment/schema';
 import { fail, type Actions } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ locals: { supabase, user } }) => {

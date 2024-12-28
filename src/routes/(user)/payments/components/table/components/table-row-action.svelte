@@ -32,7 +32,7 @@
       <DropdownMenu.Item
         onclick={() => {
           tableState.setActiveRow(row.original);
-          goto(`?modal=delete-payment`);
+          goto(`?modal=view-reservation`);
         }}
       >
         <SearchCheck />
@@ -42,7 +42,7 @@
       <DropdownMenu.Item
         onclick={() => {
           tableState.setActiveRow(row.original);
-          goto(`?modal=delete-payment`);
+          goto(`?modal=view-certificate`);
         }}
       >
         <SearchCheck />
@@ -52,7 +52,7 @@
     <DropdownMenu.Item
       onclick={() => {
         tableState.setActiveRow(row.original);
-        goto(`?modal=delete-payment`);
+        goto(`?modal=view-church`);
       }}
     >
       <SearchCheck />

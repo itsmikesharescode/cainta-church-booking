@@ -3,8 +3,9 @@
   import { columns } from './components/table/components/columns';
   import { Skeleton } from '$lib/components/ui/skeleton/index.js';
   import { initTableState } from './components/table/tableState.svelte';
-  import DeletePayment from './components/table/delete-payment/delete-payment.svelte';
-
+  import DeletePayment from './components/delete-payment/delete-payment.svelte';
+  import ViewChurch from './components/view-church/view-church.svelte';
+  import ViewReservation from './components/view-reservation/view-reservation.svelte';
   const { data } = $props();
   initTableState();
 </script>
@@ -44,4 +45,6 @@
   {/await}
 </main>
 
+<ViewReservation />
+<ViewChurch />
 <DeletePayment deletePaymentForm={data.deletePaymentForm} />

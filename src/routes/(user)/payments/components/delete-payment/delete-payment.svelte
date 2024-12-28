@@ -6,7 +6,7 @@
   import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
   import LoaderCircle from 'lucide-svelte/icons/loader-circle';
-  import { useTableState } from '../tableState.svelte';
+  import { useTableState } from '../table/tableState.svelte';
   import { page } from '$app/state';
   import { goto } from '$app/navigation';
 
