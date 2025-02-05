@@ -49,8 +49,8 @@
         {...props}
       >
         <CalendarIcon />
-        <span class={cn(!value && 'text-muted-foreground')}>
-          {value ? df.format(value?.toDate(getLocalTimeZone())) : 'Pick a date'}
+        <span class={cn(!selected && 'text-muted-foreground')}>
+          {selected ? selected : 'Pick a date'}
         </span>
       </Button>
     {/snippet}

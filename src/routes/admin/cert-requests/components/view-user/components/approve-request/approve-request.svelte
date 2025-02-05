@@ -9,6 +9,9 @@
   import { useTableState } from '../../../table/tableState.svelte';
   import { toast } from 'svelte-sonner';
   import { goto } from '$app/navigation';
+  import ComboBox from '$lib/components/general/combo-box.svelte';
+  import DatePicker from '$lib/components/general/date-picker.svelte';
+  import { createTimeRange } from '$lib/utils';
 
   interface Props {
     adminApproveCertForm: SuperValidated<Infer<AdminApproveCertSchema>>;
@@ -40,11 +43,16 @@
 
   const dependency = $derived(page.url.searchParams.get('modal') === 'view-user');
 
+  const activeRow = tableState.getActiveRow();
+
   $effect(() => {
     if (dependency) {
-      $formData.id = tableState.getActiveRow()?.id ?? 0;
-      $formData.price = Number(tableState.getActiveRow()?.name.split('/')[1]) ?? 0;
-      $formData.email = tableState.getActiveRow()?.users_tb.user_meta_data.email ?? '';
+      $formData.id = activeRow?.id ?? 0;
+      $formData.price = Number(activeRow?.name.split('/')[1]) ?? 0;
+      $formData.email = activeRow?.users_tb.user_meta_data.email ?? '';
+      $formData.date = activeRow?.date ?? '';
+      $formData.initial_time = activeRow?.initial_time ?? '';
+      $formData.final_time = activeRow?.final_time ?? '';
     }
   });
 
@@ -66,6 +74,62 @@
     </Form.Description>
     <Form.FieldErrors />
   </Form.Field>
+
+  <Form.Field {form} name="date">
+    <Form.Control>
+      {#snippet children({ props })}
+        <Form.Label>Request Date</Form.Label>
+        <!--Must update types soon-->
+        <DatePicker bind:selected={$formData.date} />
+        <input type="hidden" name={props.name} bind:value={$formData.date} />
+      {/snippet}
+    </Form.Control>
+
+    <Form.FieldErrors />
+  </Form.Field>
+
+  <Form.Field {form} name="initial_time">
+    <Form.Control>
+      {#snippet children({ props })}
+        <Form.Label>Initial Time</Form.Label>
+
+        <ComboBox
+          placeholder="Select initial time"
+          searchPlaceholder="Search your time..."
+          emptySeachMsg="No time found"
+          contentStyle="w-[300px] p-0"
+          bind:selected={$formData.initial_time}
+          selections={createTimeRange(
+            activeRow?.churches_tb.open_time ?? '',
+            activeRow?.churches_tb.close_time ?? ''
+          )}
+        />
+        <input type="hidden" name={props.name} bind:value={$formData.initial_time} />
+      {/snippet}
+    </Form.Control>
+  </Form.Field>
+
+  <Form.Field {form} name="final_time">
+    <Form.Control>
+      {#snippet children({ props })}
+        <Form.Label>Initial Time</Form.Label>
+
+        <ComboBox
+          placeholder="Select final time"
+          searchPlaceholder="Search your time..."
+          emptySeachMsg="No time found"
+          contentStyle="w-[300px] p-0"
+          bind:selected={$formData.final_time}
+          selections={createTimeRange(
+            activeRow?.churches_tb.open_time ?? '',
+            activeRow?.churches_tb.close_time ?? ''
+          )}
+        />
+        <input type="hidden" name={props.name} bind:value={$formData.final_time} />
+      {/snippet}
+    </Form.Control>
+  </Form.Field>
+
   <div class="flex justify-end">
     <Form.Button size="sm" disabled={$submitting} class="relative">
       {#if $submitting}

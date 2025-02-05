@@ -51,7 +51,10 @@ export const actions: Actions = {
       .from('cert_requests_tb')
       .update({
         status: 'approved',
-        price: form.data.price
+        price: form.data.price,
+        date: form.data.date,
+        initial_time: form.data.initial_time,
+        final_time: form.data.final_time
       })
       .eq('id', form.data.id);
 

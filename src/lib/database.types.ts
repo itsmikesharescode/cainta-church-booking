@@ -1,5 +1,3 @@
-import type { UserProfile, XenditCallback } from './types';
-
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type Database = {
@@ -134,7 +132,7 @@ export type Database = {
           id: number;
           reservation_id: string | null;
           user_id: string;
-          xendit_callback: XenditCallback;
+          xendit_callback: Json;
         };
         Insert: {
           cert_request_id?: string | null;
@@ -143,7 +141,7 @@ export type Database = {
           id?: number;
           reservation_id?: string | null;
           user_id: string;
-          xendit_callback: XenditCallback;
+          xendit_callback: Json;
         };
         Update: {
           cert_request_id?: string | null;
@@ -152,7 +150,7 @@ export type Database = {
           id?: number;
           reservation_id?: string | null;
           user_id?: string;
-          xendit_callback?: XenditCallback;
+          xendit_callback?: Json;
         };
         Relationships: [];
       };
@@ -241,17 +239,17 @@ export type Database = {
         Row: {
           created_at: string;
           user_id: string;
-          user_meta_data: UserProfile;
+          user_meta_data: Json;
         };
         Insert: {
           created_at?: string;
           user_id: string;
-          user_meta_data: UserProfile;
+          user_meta_data: Json;
         };
         Update: {
           created_at?: string;
           user_id?: string;
-          user_meta_data?: UserProfile;
+          user_meta_data?: Json;
         };
         Relationships: [];
       };
